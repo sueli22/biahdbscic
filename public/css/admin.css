@@ -1,0 +1,126 @@
+ .admin-btn{
+    background-color: rgb(4, 19, 133);
+    color: white;
+}
+.main{
+    padding: 40px;
+}
+.list-group-flush>.list-group-item{
+    color: rgb(4, 19, 133);;
+}
+
+.staff-list{
+   margin: 40px 20px;
+}
+
+.staff-list-container{
+
+}
+table .dropdown-menu {
+  z-index: 1055 !important; /* higher than Bootstrap modal (1050) */
+}
+
+.table-responsive {
+  overflow: visible; /* if you wrap table in responsive div */
+}
+
+div.dataTables_wrapper {
+  padding: 20px;
+}
+
+.dataTables_wrapper .dataTables_length{
+    padding: 10px;
+}
+thead {
+    background-color: rgb(4, 19, 133);
+    color: white;
+}
+/* Make table and cells have solid 1px black borders */
+#staffTable,
+#staffTable th,
+#staffTable td {
+  border: 1px solid rgb(100, 100, 100) !important;
+}
+
+/* Optional: add border-collapse to avoid double borders */
+#staffTable {
+  border-collapse: collapse !important;
+}
+/* Color for ascending sort arrow */
+table.dataTable thead .sorting_asc::before {
+  color: green !important;  /* change to your desired color */
+}
+
+/* Color for descending sort arrow */
+table.dataTable thead .sorting_desc::before {
+  color: red !important;  /* change to your desired color */
+}
+
+/* Color for unsorted columns (hover state) */
+table.dataTable thead .sorting::before,
+table.dataTable thead .sorting::after {
+  color: #999 !important; /* lighter gray for default unsorted */
+}
+
+/* Optional: change arrow color on hover */
+table.dataTable thead th:hover::before,
+table.dataTable thead th:hover::after {
+  color: blue !important;  /* highlight color on hover */
+}
+/* Target DataTables search input */
+.dataTables_filter input {
+  border: 1px solid #ccc;          /* normal border */
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+/* On hover */
+.dataTables_filter input:hover {
+  border-color: #007bff;           /* bootstrap primary blue or any color */
+  outline: none;
+}
+
+/* On focus (when typing) */
+.dataTables_filter input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0,123,255,0.5);
+  outline: none;
+}
+
+.container{
+    padding: 50px;
+}
+
+.staff-add{
+    margin-left: 20px;
+}
+
+.view-toggle button {
+    background: none;
+    border: none;
+    padding: 6px 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+    border-bottom: 3px solid transparent;
+    color: #333;
+    transition: border-color 0.3s, color 0.3s;
+}
+
+.view-toggle button.active {
+    border-bottom-color: #0d6efd;
+    color: #0d6efd;
+}
+
+.view-toggle button:hover:not(.active) {
+    color: #0a58ca;
+}
+
+.staff-card{
+    width: 200px;
+}
+
+.staff-card{
+    margin: 10px;
+}

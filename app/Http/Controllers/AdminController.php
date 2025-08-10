@@ -1,0 +1,184 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Http\Requests\StaffUpdateRequest;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Position;
+use App\Http\Requests\UpdateUserProfileRequest;
+use App\Http\Requests\StaffRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
+use Box\Spout\Common\Type;
+
+class AdminController extends Controller
+{
+    private function getUser()
+    {
+        return auth()->user();
+    }
+    public function showProfile()
+    {
+        $user = $this->getUser();
+        return view('admin.profile.profile', compact('user'));
+    }
+
+    public function editProfile()
+    {
+        $user = $this->getUser();
+        return view('admin.profile.profile_edit', compact('user'));
+    }
+
+    public function updateProfile(UpdateUserProfileRequest $request)
+    {
+        $user = auth()->user();
+
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->storeAs('public/images', $imageName);
+            $validated['image'] = $imageName;
+        }
+        $user->update($validated);
+
+        return redirect()->route('admin.profile.show')->with('success', 'Profile updated successfully.');
+    }
+
+    public function showsStaffList()
+    {
+        $staffs = User::where('super_user', false)->get();
+        return view('admin.staff.list', compact('staffs'));
+    }
+
+    public function destroyStaff($id)
+    {
+        $staff = User::findOrFail($id); // Find staff by id or throw 404 if not found
+        $staff->delete();                // Delete the staff record
+
+        return redirect()->route('staff.list')->with('success', 'Staff deleted successfully.');
+    }
+
+    public function editStaff($id)
+    {
+        $staff = User::findOrFail($id);
+        $positions = Position::all();
+        return response()->json(['staff' => $staff, 'positions' => $positions]);
+    }
+
+
+    public function updateStaff(StaffUpdateRequest $request, $id)
+    {
+        $staff = User::findOrFail($id);
+
+        $data = $request->validated();
+
+        // Handle image upload if exists
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($staff->image && Storage::disk('public')->exists($staff->image)) {
+                Storage::disk('public')->delete($staff->image);
+            }
+            $path = $request->file('image')->store('staff', 'public');
+            $data['image'] = $path;
+        }
+
+        // Convert married_status and super_user to boolean 0 or 1
+        $data['married_status'] = $request->has('married_status') ? 1 : 0;
+        $data['super_user'] = $request->has('super_user') ? 1 : 0;
+
+        // Update the staff record
+        $staff->update($data);
+
+        return response()->json(['message' => 'Staff updated successfully']);
+    }
+
+    public function storeStaff(StaffRequest $request)
+    {
+        $data = $request->validated();
+
+        // Handle image upload if exists
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('staff', 'public');
+            $data['image'] = $path;
+        }
+
+        // Save married_status and super_user as boolean 0 or 1
+        $data['married_status'] = $request->has('married_status') ? 1 : 0;
+        $data['super_user'] = false;
+
+        // Hash password before storing
+        $data['password'] = Hash::make($request->input('password'));
+
+        Log::info('Store method called in StaffController.', ['data' => $data]);
+
+        User::create($data);
+
+        return response()->json(['message' => 'Staff created successfully']);
+    }
+
+    public function calculate(Request $request)
+    {
+        $request->validate([
+            'months' => 'required|array',
+            'types' => 'required|array',
+            'quantities' => 'required|array',
+            'unit_prices' => 'required|array',
+            'unit_prices.*' => 'numeric|min:0',
+        ]);
+        $months = $request->months;
+        $types = $request->types;
+        $quantities = $request->quantities;
+        $unitPrices = $request->unit_prices;
+
+        // Create XLSX writer
+        $writer = WriterEntityFactory::createXLSXWriter();
+
+        // Temp file to save
+        $fileName = 'calculated_' . time() . '.xlsx';
+        $tempFile = tempnam(sys_get_temp_dir(), $fileName);
+
+        $writer->openToFile($tempFile);
+
+        // Create header row
+        $headerRow = WriterEntityFactory::createRowFromArray(['လ','အမျိုးအစား', 'အရေအတွက်', 'Unit Price', 'Total']);
+        $writer->addRow($headerRow);
+
+        $grandTotal = 0;
+
+        // Add data rows
+        for ($i = 0; $i < count($types); $i++) {
+            $total = $quantities[$i] * $unitPrices[$i];
+            $grandTotal += $total;
+
+            $row = WriterEntityFactory::createRowFromArray([
+                $months[$i] ?? '',
+                $types[$i],
+                $quantities[$i],
+                $unitPrices[$i] . ' ကျပ်',
+                $total . ' ကျပ်',
+            ]);
+            $writer->addRow($row);
+        }
+
+        // Add total sum row
+        $totalRow = WriterEntityFactory::createRowFromArray([
+            'စုစုပေါင်း', // Label in Myanmar for Total
+            '', // empty cell for quantity column
+            '',
+            '', // empty cell for unit price column
+        $grandTotal . ' ကျပ်',
+        ]);
+        $writer->addRow($totalRow);
+
+        $writer->close();
+
+        return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
+
+
+}
