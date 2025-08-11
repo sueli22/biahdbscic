@@ -47,6 +47,12 @@
                                                 <button class="dropdown-item text-danger" type="submit">Delete</button>
                                             </form>
                                         </li>
+                                        <li>
+    <a href="javascript:void(0);" class="dropdown-item view-btn" data-id="{{ $staff->id }}">
+        <i class="bi bi-eye"></i> View
+    </a>
+</li>
+
                                     </ul>
                                 </div>
                             </td>
@@ -81,6 +87,12 @@
                                         <button class="dropdown-item text-danger" type="submit">Delete</button>
                                     </form>
                                 </li>
+                                <li>
+    <a href="javascript:void(0);" class="dropdown-item view-btn" data-id="{{ $staff->id }}">
+        <i class="bi bi-eye"></i> View
+    </a>
+</li>
+
                             </ul>
                         </div>
 
@@ -317,6 +329,45 @@
             </form>
         </div>
     </div>
+
+    <!-- Show Staff Detail Modal -->
+<!-- Show Staff Detail Modal -->
+<div class="modal fade" id="showStaffModal" tabindex="-1" aria-labelledby="showStaffModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">ဝန်ထမ်းအချက်အလက် ကြည့်ရန်</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ပိတ်ရန်"></button>
+            </div>
+            <div class="modal-body p-0">
+
+                <!-- Full width image -->
+                <img id="staff_image_show" src="https://via.placeholder.com/600x300" alt="Staff Image"
+                    style="width: 100%; height: 300px; object-fit: cover;">
+
+                <!-- List of details with lines -->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>အမည်:</strong> <span id="staff_name_show"></span></li>
+                    <li class="list-group-item"><strong>အီးမေးလ်:</strong> <span id="staff_email_show"></span></li>
+                    <li class="list-group-item"><strong>ဝန်ထမ်းနံပါတ် (EID):</strong> <span id="staff_eid_show"></span></li>
+                    <li class="list-group-item"><strong>မွေးသက္ကရာဇ်:</strong> <span id="staff_dob_show"></span></li>
+                    <li class="list-group-item"><strong>လက်ရှိလိပ်စာ:</strong> <span id="staff_currentaddress_show"></span></li>
+                    <li class="list-group-item"><strong>ဖုန်းနံပါတ်:</strong> <span id="staff_phno_show"></span></li>
+                    <li class="list-group-item"><strong>ဌာန:</strong> <span id="staff_department_show"></span></li>
+                    <li class="list-group-item"><strong>ရာထူး:</strong> <span id="staff_position_show"></span></li>
+                    <li class="list-group-item"><strong>လက်ထပ်ပြီး:</strong> <span id="staff_married_status_show"></span></li>
+                    <li class="list-group-item"><strong>လိင် :</strong> <span id="staff_gender_show"></span></li>
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ပိတ်မည်</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @endsection
 @section('scripts')
     <script>

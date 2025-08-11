@@ -44,14 +44,14 @@
         </a>
         <nav id="navmenu" class="navmenu">
             <ul>
-                <li><a href="{{ route('dashboard') }}" class="active"><i
+                <li><a href="" class="active"><i
                             class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ</a></li>
-                <li><a href="{{ route('staff.list') }}"><i class="bi bi-person navicon"></i>ခွင့်တိုင်ကြားရန်</a>
+                <li><a href=""><i class="bi bi-person navicon"></i>ခွင့်တိုင်ကြားရန်</a>
                 </li>
-                <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i>လစာထုတ်ယူမှု ဇယား </a></li>
-                <li><a href="{{ route('positions.index') }}"><i
+                <li><a href=""><i class="bi bi-file-earmark-text navicon"></i>လစာထုတ်ယူမှု ဇယား </a></li>
+                <li><a href="{{route('employee_housing_request.index')}}"><i
                             class="bi bi-file-earmark-text navicon"></i>၀န်ထမ်းအိမ်ယာ လျှောက်ရန်</a></li>
-                <li><a href="{{ route('admin.profile.show') }}"><i class="bi bi-hdd-stack navicon"></i> မိမိအကောင့်</a>
+                <li><a href="{{route('employee.profile.show')}}"><i class="bi bi-hdd-stack navicon"></i> မိမိအကောင့်</a>
                 </li>
                 <li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -96,6 +96,8 @@
 
     <!-- Then DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Your custom scripts last -->
     @yield('scripts')
 

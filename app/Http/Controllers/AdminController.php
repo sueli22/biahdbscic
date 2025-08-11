@@ -79,7 +79,6 @@ class AdminController extends Controller
 
         // Handle image upload if exists
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($staff->image && Storage::disk('public')->exists($staff->image)) {
                 Storage::disk('public')->delete($staff->image);
             }
@@ -145,7 +144,7 @@ class AdminController extends Controller
         $writer->openToFile($tempFile);
 
         // Create header row
-        $headerRow = WriterEntityFactory::createRowFromArray(['လ','အမျိုးအစား', 'အရေအတွက်', 'Unit Price', 'Total']);
+        $headerRow = WriterEntityFactory::createRowFromArray(['လ', 'အမျိုးအစား', 'အရေအတွက်', 'Unit Price', 'Total']);
         $writer->addRow($headerRow);
 
         $grandTotal = 0;
@@ -171,13 +170,23 @@ class AdminController extends Controller
             '', // empty cell for quantity column
             '',
             '', // empty cell for unit price column
-        $grandTotal . ' ကျပ်',
+            $grandTotal . ' ကျပ်',
         ]);
         $writer->addRow($totalRow);
 
         $writer->close();
 
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
+
+    public function showStaff($id)
+    {
+        $staff = User::findOrFail($id);
+
+        // Add position name or other computed properties if needed
+        $staff->position_name = $staff->getPositionName();
+
+        return response()->json($staff);
     }
 
 

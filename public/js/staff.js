@@ -193,4 +193,43 @@ $(document).ready(function() {
         });
     });
 
+    $(document).on('click', '.view-btn', function() {
+    var staffId = $(this).data('id');
+
+    $.ajax({
+        url: '/staff/' + staffId,  // Adjust to your route for fetching staff JSON data
+        type: 'GET',
+        success: function(data) {
+            // Image URL or placeholder
+            let imageUrl = data.image ? '/storage/' + data.image : 'https://via.placeholder.com/120';
+            $('#staff_image_show').attr('src', imageUrl);
+
+            // Fill in all the fields
+            $('#staff_name_show').text(data.name);
+            $('#staff_email_show').text(data.email);
+            $('#staff_eid_show').text(data.eid || 'N/A');
+            $('#staff_dob_show').text(data.dob || 'N/A');
+            $('#staff_currentaddress_show').text(data.currentaddress || 'N/A');
+            $('#staff_phno_show').text(data.phno || 'N/A');
+            $('#staff_department_show').text(data.department || 'N/A');
+            $('#staff_position_show').text(data.position_name || 'N/A');  // Adjust if your data has position name
+
+            // Married status display
+            $('#staff_married_status_show').text(data.married_status == 1 ? 'လက်ထပ်ထားပါသည်' : 'လူလွတ်');
+
+            // Gender display
+            let genderText = 'Other';
+            if(data.gender == 0) genderText = 'အမျိုးသမီး';
+            else if(data.gender == 1) genderText = 'အမျိုးသား';
+            $('#staff_gender_show').text(genderText);
+
+            // Show the modal
+            $('#showStaffModal').modal('show');
+        },
+        error: function() {
+            alert('Failed to load staff details.');
+        }
+    });
+});
+
 });

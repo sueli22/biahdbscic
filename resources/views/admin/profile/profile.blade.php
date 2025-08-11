@@ -5,7 +5,7 @@
 
     <div class="card" style="max-width: 800px; margin: 100px auto;">
         <div class="card-body text-center">
-            <img src="{{ asset('storage/images/' . ($user->image ?? 'default.jpg')) }}" alt="User Image"
+            <img src="{{ asset('storage/public/images/' . ($user->image ?? 'default.jpg')) }}" alt="User Image"
                 class="mb-3" style="width: 100%; height: 140px; object-fit: cover;">
             <ul class="list-group list-group-flush text-start">
                 <li class="list-group-item"><strong>နာမည်:</strong> {{ $user->name }}</li>
