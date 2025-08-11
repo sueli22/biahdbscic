@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeHousingController;
+use App\Http\Controllers\TranslateController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LeaveTypeController;
@@ -24,6 +25,7 @@ use App\Mail\HelloMail;
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
+Route::post('/translate', [TranslateController::class, 'translate'])->name('translate');
 // Route::get('/', function () {
 //     Mail::to('recipient@example.com')->send(new HelloMail());
 // });
@@ -71,6 +73,9 @@ Route::get('/employee/dashboard', function () {
     return view('employee.home');
 })->name('employee.dashboard')->middleware('auth');
 
+Route::get('/employee/leave/request', [EmployeeController::class, 'showLeaveRequestForm'])->name('employee.leave.index');
+// routes/web.php
+Route::post('/leave-requests', [EmployeeController::class, 'storeLeaveRequest'])->name('employee.leave.store');
 
 Route::get('/sendmail/create', [SendMailController::class, 'create'])->name('sendmail.create'); // show form
 Route::post('/sendmail', [SendMailController::class, 'store'])->name('sendmail.store'); // store + send email

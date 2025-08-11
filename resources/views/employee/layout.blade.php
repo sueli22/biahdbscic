@@ -46,7 +46,7 @@
             <ul>
                 <li><a href="" class="active"><i
                             class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ</a></li>
-                <li><a href=""><i class="bi bi-person navicon"></i>ခွင့်တိုင်ကြားရန်</a>
+                <li><a href="{{route('employee.leave.index')}}"><i class="bi bi-person navicon"></i>ခွင့်တိုင်ကြားရန်</a>
                 </li>
                 <li><a href=""><i class="bi bi-file-earmark-text navicon"></i>လစာထုတ်ယူမှု ဇယား </a></li>
                 <li><a href="{{route('employee_housing_request.index')}}"><i

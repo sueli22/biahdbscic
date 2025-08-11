@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LeaveType;
+use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,4 +40,47 @@ class EmployeeController extends Controller
 
         return redirect()->back()->with('success', 'ပုံကို အောင်မြင်စွာ ပြောင်းလဲပြီးပါပြီ။');
     }
+
+    public function showLeaveRequestForm()
+    {
+        $user = $this->getUser();
+        $leaveTypes = LeaveType::all();
+        return view('employee.leave.index', compact('user', 'leaveTypes'));
+    }
+
+    public function storeLeaveRequest(Request $request)
+    {
+        $rules = [
+            'leave_type' => 'required|in:casual,special',
+            'description' => 'nullable|string',
+            'img' => 'nullable|image|max:2048',
+        ];
+
+        if ($request->leave_type === 'casual') {
+            $rules['from_date'] = 'required|date';
+            $rules['to_date'] = 'required|date|after_or_equal:from_date';
+        } else {
+            $rules['leave_type_id'] = 'required|exists:leave_types,id';
+        }
+
+        $validated = $request->validate($rules);
+
+        $leaveRequest = new LeaveRequest();
+        $leaveRequest->user_id = auth()->id();
+        $leaveRequest->leave_type_id = $request->leave_type === 'special' ? $request->leave_type_id : null;
+        $leaveRequest->from_date = $request->leave_type === 'casual' ? $request->from_date : null;
+        $leaveRequest->to_date = $request->leave_type === 'casual' ? $request->to_date : null;
+        $leaveRequest->description = $request->description;
+
+        if ($request->hasFile('img')) {
+            $path = $request->file('img')->store('leave_docs', 'public');
+            $leaveRequest->img = $path;
+        }
+
+        $leaveRequest->status = 'pending';
+        $leaveRequest->save();
+
+        return response()->json(['message' => 'ခွင့်လျှောက်လွှာ အောင်မြင်စွာ တင်သွင်းပြီးပါပြီ။']);
+    }
+
 }

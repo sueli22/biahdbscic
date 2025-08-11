@@ -98,7 +98,6 @@ $(document).ready(function() {
         $('#editLeaveTypeModal').modal('show');
     });
 
-
     // Submit edit form with validation error handling
     $('#editLeaveTypeForm').submit(function(e) {
         e.preventDefault();
