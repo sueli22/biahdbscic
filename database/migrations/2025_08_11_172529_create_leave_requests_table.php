@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('leave_type_id')->nullable();
             $table->date('from_date')->nullable();
             $table->date('to_date')->nullable();
+            $table->integer('duration')->nullable();
             $table->text('description')->nullable();
             $table->string('img')->nullable();
             $table->string('status')->default('pending');

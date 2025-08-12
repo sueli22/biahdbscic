@@ -6,6 +6,8 @@ use App\Models\LeaveType;
 use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class EmployeeController extends Controller
 {
@@ -43,10 +45,15 @@ class EmployeeController extends Controller
 
     public function showLeaveRequestForm()
     {
-        $user = $this->getUser();
+        $user = auth()->user();
         $leaveTypes = LeaveType::all();
-        return view('employee.leave.index', compact('user', 'leaveTypes'));
+        $leaveRequests = LeaveRequest::where('user_id', $user->id)
+            ->with('leaveType') // eager load leave type
+            ->get();
+
+        return view('employee.leave.index', compact('user', 'leaveTypes', 'leaveRequests'));
     }
+
 
     public function storeLeaveRequest(Request $request)
     {
@@ -57,19 +64,53 @@ class EmployeeController extends Controller
         ];
 
         if ($request->leave_type === 'casual') {
-            $rules['from_date'] = 'required|date';
+            $rules['from_date'] = 'required|date|after:today';
             $rules['to_date'] = 'required|date|after_or_equal:from_date';
         } else {
             $rules['leave_type_id'] = 'required|exists:leave_types,id';
+            $rules['from_date'] = 'required|date|after:today';
         }
 
-        $validated = $request->validate($rules);
+        $messages = [
+            'leave_type.required' => 'ခွင့်အမျိုးအစား ကိုရွေးချယ်ရန် လိုအပ်သည်။',
+            'leave_type.in' => 'ခွင့်အမျိုးအစား သည် တရားဝင်မဟုတ်ပါ။',
+
+            'description.string' => 'ဖော်ပြချက်သည် စာသားဖြစ်ရမည်။',
+
+            'img.image' => 'ဓာတ်ပုံဖိုင်သာ တင်သွင်းနိုင်သည်။',
+            'img.max' => 'ဓာတ်ပုံ၏ အရွယ်အစားသည် 2MB ထက် မကျော်ရပါ။',
+
+            'from_date.required' => 'စတင်နေ့ကို ဖြည့်ရန် လိုအပ်သည်။',
+            'from_date.date' => 'စတင်နေ့သည် တရားဝင်ရက်စွဲဖြစ်ရမည်။',
+            'from_date.after' => 'စတင်နေ့သည် ယနေ့နောက်မှသာ ရွေးချယ်နိုင်ပါသည်။',
+
+            'to_date.required' => 'ဆုံးနိမ့်နေ့ကို ဖြည့်ရန် လိုအပ်သည်။',
+            'to_date.date' => 'ဆုံးနိမ့်နေ့သည် တရားဝင်ရက်စွဲဖြစ်ရမည်။',
+            'to_date.after_or_equal' => 'ဆုံးနိမ့်နေ့သည် စတင်နေ့နှင့် ညီညွတ်ရမည် သို့မဟုတ် နောက်ရက်ဖြစ်ရမည်။',
+
+            'leave_type_id.required' => 'ခွင့်အမျိုးအစား ကိုရွေးချယ်ရန် လိုအပ်သည်။',
+            'leave_type_id.exists' => 'ရွေးချယ်ထားသော ခွင့်အမျိုးအစား မရှိပါ။',
+        ];
+
+        $validated = $request->validate($rules, $messages);
 
         $leaveRequest = new LeaveRequest();
         $leaveRequest->user_id = auth()->id();
-        $leaveRequest->leave_type_id = $request->leave_type === 'special' ? $request->leave_type_id : null;
-        $leaveRequest->from_date = $request->leave_type === 'casual' ? $request->from_date : null;
-        $leaveRequest->to_date = $request->leave_type === 'casual' ? $request->to_date : null;
+
+        if ($request->leave_type === 'casual') {
+            $leaveRequest->leave_type_id = null;
+            $leaveRequest->from_date = $request->from_date;
+            $leaveRequest->to_date = $request->to_date;
+            $leaveRequest->duration = \Carbon\Carbon::parse($request->from_date)
+                ->diffInDays(\Carbon\Carbon::parse($request->to_date)) + 1;
+        } else {
+            $leaveType = LeaveType::findOrFail($request->leave_type_id);
+            $leaveRequest->leave_type_id = $leaveType->id;
+            $leaveRequest->from_date = $request->from_date;
+            $leaveRequest->duration = $leaveType->max_days; // use max_days as duration
+            $leaveRequest->to_date = Carbon::parse($request->from_date)->addDays($leaveType->max_days - 1)->format('Y-m-d');
+        }
+
         $leaveRequest->description = $request->description;
 
         if ($request->hasFile('img')) {
@@ -82,5 +123,4 @@ class EmployeeController extends Controller
 
         return response()->json(['message' => 'ခွင့်လျှောက်လွှာ အောင်မြင်စွာ တင်သွင်းပြီးပါပြီ။']);
     }
-
 }

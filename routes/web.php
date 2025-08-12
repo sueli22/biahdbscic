@@ -7,6 +7,7 @@ use App\Http\Controllers\TranslateController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\PaySalaryController;
 use App\Http\Controllers\SendMailController;
 use Illuminate\Support\Facades\Route;
 use App\Mail\HelloMail;
@@ -91,7 +92,18 @@ Route::get('/admin/housing/{id}/show', [EmployeeHousingController::class, 'showH
 Route::put('/admin/housing/{id}/approve', [EmployeeHousingController::class, 'approveHouseRequest'])->name('employee_housing.approve');
 Route::put('/admin/housing/{id}/reject', [EmployeeHousingController::class, 'rejectHouseRequest'])->name('employee_housing.reject');
 
+Route::get('/admin/leave_request', [AdminController::class, 'leaveRequestList'])->name('admin.leave_request.list');
+Route::prefix('admin')->group(function () {
+    Route::put('/leave/{id}/approve', [AdminController::class, 'approveLeaveRequest'])->name('admin.leave.approve');
+    Route::put('/leave/{id}/reject', [AdminController::class, 'rejectLeaveRequest'])->name('admin.leave.reject');
+    Route::get('/leave/{id}/show', [AdminController::class, 'showLeaveRequest'])->name('admin.leave.show');
+});
 
+Route::prefix('admin')->group(function () {
+    Route::get('/payroll', [PaySalaryController::class, 'index'])->name('payroll.index');
+    Route::get('/payroll/list', [PaySalaryController::class, 'list'])->name('payroll.list');
+    Route::post('/payroll', [PaySalaryController::class, 'store'])->name('payroll.store');
+});
 
 Route::get('/employee_housing_request', [EmployeeHousingController::class, 'createForm'])->name('employee_housing_request.index');
 Route::post('/employee_housing_request', [EmployeeHousingController::class, 'storeForm'])->name('employee_housing_request.store');
@@ -100,3 +112,4 @@ Route::get('/employee/profile', [EmployeeController::class, 'showProfile'])->nam
 Route::put('/employee/profile/image-update', [EmployeeController::class, 'updateImage'])->name('employee.profile.image.update');
 
 
+Route::get('/get-user-salary/{user}', [UserController::class, 'getUserSalary']);

@@ -1,0 +1,142 @@
+@extends('admin.layout')
+@section('content')
+    <div class="container">
+        <button type="button" id="openPayModal" class="btn btn-primary">
+            လစာထည့်ရန်
+        </button>
+
+
+        <table class="table table-bordered" id="paySalariesTable">
+            <thead>
+                <tr>
+                    <th>အမှတ်</th>
+                    <th>၀န်ထမ်းအမည်</th>
+                    <th>လစာပမာဏ</th>
+                    <th>ပေးချေသည့်ရက်စွဲ</th>
+                    <th>မှတ်ချက်</th>
+            </thead>
+            <tbody>
+                @foreach ($paySalaries as $paySalary)
+                    <tr>
+                        <td>{{ $paySalary->id }}</td>
+                        <td>{{ $paySalary->user->name ?? 'N/A' }}</td>
+                        <td>{{ $paySalary->amount }}</td>
+                        <td>{{ $paySalary->created_at->format('Y-m-d') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal fade" id="addPayModal" tabindex="-1" aria-labelledby="addPayModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="" method="POST">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addPayModalLabel">လစာအသစ်ထည့်ရန်</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <!-- User Dropdown -->
+                        <div class="mb-3">
+                            <label for="user_id" class="form-label">၀န်ထမ်းအမည်</label>
+                            <select name="user_id" id="user_id" class="form-select" required>
+                                <option value="">အလုပ်သမားရွေးပါ</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="pay_date" class="form-label">လစာ ပေးချေသည့်ရက်စွဲ</label>
+                            <input type="date" name="pay_date" id="pay_date" class="form-control" required>
+                        </div>
+
+                        <!-- Salary Month -->
+                        <div class="mb-3">
+                            <label for="salary_month" class="form-label">လစာ ပေးချေသည့်လ</label>
+                            <select name="salary_month" id="salary_month" class="form-select" required>
+                                <option value="">လကိုရွေးပါ</option>
+                                <option value="1">January (ဇန်နဝါရီ)</option>
+                                <option value="2">February (ဖေဖော်ဝါရီ)</option>
+                                <option value="3">March (မတ်)</option>
+                                <option value="4">April (ဧပြီ)</option>
+                                <option value="5">May (မေ)</option>
+                                <option value="6">June (ဇွန်)</option>
+                                <option value="7">July (ဇူလိုင်)</option>
+                                <option value="8">August (ဩဂုတ်)</option>
+                                <option value="9">September (စက်တင်ဘာ)</option>
+                                <option value="10">October (အောက်တိုဘာ)</option>
+                                <option value="11">November (နိုဝင်ဘာ)</option>
+                                <option value="12">December (ဒီဇင်ဘာ)</option>
+                            </select>
+                        </div>
+
+
+                        <!-- Basic Salary -->
+                        <div class="mb-3">
+                            <label for="basic_salary" class="form-label">အခြေခံလစာ</label>
+                            <input type="number" name="basic_salary" id="basic_salary" class="form-control" step="0.01"
+                                min="0" required readonly>
+                        </div>
+
+                        <!-- Allowances -->
+                        <div class="mb-3">
+                            <label for="allowances" class="form-label">အပိုထောက်ပံ့ငွေ</label>
+                            <input type="number" name="allowances" id="allowances" class="form-control" step="0.01"
+                                min="0" value="0">
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="mb-3">
+                            <label for="payment_method" class="form-label">ငွေပေးချေမှုနည်းလမ်း</label>
+                            <input type="text" name="payment_method" id="payment_method" class="form-control"
+                                placeholder="ဥပမာ - ငွေသား, ဘဏ်လွှဲ">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ပိတ်ရန်</button>
+                        <button type="submit" class="btn btn-primary">သိမ်းရန်</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection
+@section('scripts')
+    <script>
+        $(document).ready(function() {
+            $('#paySalariesTable').DataTable();
+            $('#openPayModal').click(function() {
+                $('#addPayModal').modal('show');
+            });
+
+            $('#user_id').change(function() {
+                var userId = $(this).val();
+                if (userId) {
+                    $.ajax({
+                        url: '/get-user-salary/' + userId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.salary !== 'N/A') {
+                                $('#basic_salary').val(data.salary);
+                            } else {
+                                $('#basic_salary').val('');
+                            }
+                        },
+                        error: function() {
+                            $('#basic_salary').val('');
+                        }
+                    });
+                } else {
+                    $('#basic_salary').val('');
+                }
+            });
+        });
+    </script>
+@endsection

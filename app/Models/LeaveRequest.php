@@ -17,6 +17,7 @@ class LeaveRequest extends Model
         'user_id',
         'leave_type_id',
         'from_date',
+        'duration',
         'to_date',
         'description',
         'img',
@@ -33,4 +34,6 @@ class LeaveRequest extends Model
     {
         return $this->belongsTo(LeaveType::class);
     }
+
+
 }

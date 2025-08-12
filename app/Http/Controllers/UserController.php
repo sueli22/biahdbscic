@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Http\Requests\UserLoginRequest;
 
 class UserController extends Controller
@@ -34,4 +35,12 @@ class UserController extends Controller
         Auth::logout();
         return redirect('/');
     }
+
+    public function getUserSalary(User $user)
+    {
+        $salary = $user->position ? $user->position->salary : 0;
+
+        return response()->json(['salary' => $salary]);
+    }
+
 }

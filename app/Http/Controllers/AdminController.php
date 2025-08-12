@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\LeaveRequest;
 use App\Http\Requests\StaffUpdateRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Position;
@@ -189,5 +190,63 @@ class AdminController extends Controller
         return response()->json($staff);
     }
 
+    public function leaveRequestList(Request $request)
+    {
+        $status = $request->get('status');
+
+        $query = LeaveRequest::with(['user', 'leaveType']);
+
+        if ($status && $status !== 'all') {
+            $query->where('status', $status);
+        }
+
+        $leaveRequests = $query->latest()->get();
+
+        return view('admin.leave.request', compact('leaveRequests', 'status'));
+    }
+
+    // In Admin\LeaveRequestController.php
+
+    public function approveLeaveRequest(Request $request, $id)
+    {
+        $leave = LeaveRequest::findOrFail($id);
+        $leave->status = LeaveRequest::STATUS_APPROVED;
+        $leave->save();
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'ခွင့်တင်မှု လက်ခံပြီးပါပြီ!']);
+        }
+
+        return redirect()->back()->with('success', 'ခွင့်တင်မှု လက်ခံပြီးပါပြီ!');
+    }
+
+
+    public function rejectLeaveRequest($id)
+    {
+        $leave = LeaveRequest::findOrFail($id);
+        $leave->status = LeaveRequest::STATUS_REJECT;
+        $leave->save();
+
+        return redirect()->back()->with('success', 'ခွင့်တင်မှု ငြင်းပယ်ပြီးပါပြီ!');
+    }
+
+    public function showLeaveRequest($id)
+    {
+        $leave = LeaveRequest::with('user', 'leaveType')->findOrFail($id);
+
+        return response()->json([
+            'user' => [
+                'name' => $leave->user->name ?? '-'
+            ],
+            'leave_type_name' => $leave->leaveType->title ?? ucfirst($leave->leave_type),
+            'from_date' => $leave->from_date,
+            'to_date' => $leave->to_date,
+            'duration' => $leave->duration,
+            'description' => $leave->description,
+            'img' => $leave->img,
+            'approved_date' => $leave->approved_date,
+            'status' => $leave->status
+        ]);
+    }
 
 }

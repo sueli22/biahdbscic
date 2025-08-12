@@ -50,13 +50,17 @@
                             class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ</a></li>
                 <li><a href="{{route('admin.sendmail.list')}}" class="active"><i class="bi bi-house navicon"></i>စီမံကိန်းဘဏ္ဍာအကြောင်းပြန်ရန်
                     </a></li>
+                <li><a href="{{ route('admin.leave_request.list') }}"><i
+                            class="bi bi-file-earmark-text navicon"></i>ခွင့်တိုင်စာများ</a></li>
                 <li><a href="{{ route('leave_types.index') }}"><i
-                            class="bi bi-file-earmark-text navicon"></i>ခွင့်စာများ</a></li>
+                            class="bi bi-file-earmark-text navicon"></i>ခွင့်အမျိူးအစား</a></li>
                 <li><a href="{{ route('staff.list') }}"><i class="bi bi-person navicon"></i>၀န်ထမ်းအကောင့် စီမံမည်</a>
                 </li>
                 <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i>သတင်းများ</a></li>
                 <li><a href="{{ route('positions.index') }}"><i
                             class="bi bi-file-earmark-text navicon"></i>ရာထူးနှင့်လစာ</a></li>
+                                            <li><a href="{{ route('payroll.index') }}"><i
+                            class="bi bi-file-earmark-text navicon"></i>လစာပေးမည်</a></li>
                 <li><a href="{{ route('employee_housing_request.list') }}"><i class="bi bi-file-earmark-text navicon"></i>အိမ်ယာ
                         လျှောက်လွှာ စီမံမှု</a></li>
                 <li><a href="{{ route('admin.profile.show') }}"><i class="bi bi-hdd-stack navicon"></i> မိမိအကောင့်</a>

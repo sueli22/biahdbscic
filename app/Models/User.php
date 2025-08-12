@@ -45,6 +45,11 @@ class User extends Authenticatable
         return $this->belongsTo(Position::class, 'position_id', 'position_id');
     }
 
+    public function getUserSalary(): float
+    {
+        return $this->salary ?? 0;
+    }
+
     public function isSuperUser(): bool
     {
         return $this->super_user === 1;
@@ -70,4 +75,10 @@ class User extends Authenticatable
     {
         return $this->position ? $this->position->title : 'N/A';
     }
+
+    public function getSalary(): string
+    {
+        return $this->position ? $this->position->title : 'N/A';
+    }
+
 }
