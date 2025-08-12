@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\LeaveType;
+use App\Models\PaySalary;
 use App\Models\LeaveRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
 class EmployeeController extends Controller
@@ -66,6 +67,13 @@ class EmployeeController extends Controller
         if ($request->leave_type === 'casual') {
             $rules['from_date'] = 'required|date|after:today';
             $rules['to_date'] = 'required|date|after_or_equal:from_date';
+            $rules['to_date'][] = function ($attribute, $value, $fail) use ($request) {
+                $fromDate = \Carbon\Carbon::parse($request->from_date);
+                $toDate = \Carbon\Carbon::parse($value);
+                if ($fromDate->format('Y-m') !== $toDate->format('Y-m')) {
+                    $fail('From date နှင့် To date တို့သည် တစ်လအတွင်း ဖြစ်ရပါမည်။');
+                }
+            };
         } else {
             $rules['leave_type_id'] = 'required|exists:leave_types,id';
             $rules['from_date'] = 'required|date|after:today';
@@ -122,5 +130,15 @@ class EmployeeController extends Controller
         $leaveRequest->save();
 
         return response()->json(['message' => 'ခွင့်လျှောက်လွှာ အောင်မြင်စွာ တင်သွင်းပြီးပါပြီ။']);
+    }
+
+    public function showSalaryList()
+    {
+        $paySalaries = PaySalary::with('user')
+        ->where('user_id', Auth::id())
+        ->latest()
+        ->get();
+
+        return view('employee.salary.list', compact('paySalaries'));
     }
 }

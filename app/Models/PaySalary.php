@@ -13,16 +13,12 @@ class PaySalary extends Model
 
     protected $fillable = [
         'user_id',
-        'pay_date',
         'salary_month',
         'basic_salary',
         'allowances',
-        'bonus',
         'deductions',
-        // 'net_salary' is virtual/computed by DB, so no need to fill
+        'net_salary',
         'payment_method',
-        'payment_status',
-        'remarks',
     ];
 
     /**

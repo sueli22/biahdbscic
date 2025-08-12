@@ -14,13 +14,12 @@ return new class extends Migration
         Schema::create('pay_salaries', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->date('pay_date');
             $table->tinyInteger('salary_month');
             $table->decimal('basic_salary', 12, 2)->default(0);
             $table->decimal('allowances', 12, 2)->default(0);
             $table->decimal('deductions', 12, 2)->default(0);
-            $table->decimal('net_salary', 12, 2)->virtualAs('basic_salary + allowances + bonus - deductions');
             $table->string('payment_method', 50)->nullable();
+            $table->decimal('net_salary', 12, 2);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });

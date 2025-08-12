@@ -42,18 +42,34 @@
         <a href="index.html" class="logo d-flex align-items-center justify-content-center">
             <span class="sitename">စီမံကိန်းနှင့်ဘဏ္ဍာရေးဝန်ကြီးဌာန</span>
         </a>
-        <nav id="navmenu" class="navmenu">
-            <ul>
-                <li><a href="" class="active"><i
-                            class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ</a></li>
-                <li><a href="{{route('employee.leave.index')}}"><i class="bi bi-person navicon"></i>ခွင့်တိုင်ကြားရန်</a>
-                </li>
-                <li><a href=""><i class="bi bi-file-earmark-text navicon"></i>လစာထုတ်ယူမှု ဇယား </a></li>
-                <li><a href="{{route('employee_housing_request.index')}}"><i
-                            class="bi bi-file-earmark-text navicon"></i>၀န်ထမ်းအိမ်ယာ လျှောက်ရန်</a></li>
-                <li><a href="{{route('employee.profile.show')}}"><i class="bi bi-hdd-stack navicon"></i> မိမိအကောင့်</a>
-                </li>
-                <li>
+       <nav id="navmenu" class="navmenu">
+    <ul>
+        <li>
+            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                <i class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('employee.leave.index') }}" class="{{ request()->routeIs('employee.leave.*') ? 'active' : '' }}">
+                <i class="bi bi-person navicon"></i>ခွင့်တိုင်ကြားရန်
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('employee.salary.list') }}" class="{{ request()->routeIs('employee.salary.list') ? 'active' : '' }}">
+                <i class="bi bi-file-earmark-text navicon"></i>လစာထုတ်ယူမှု ဇယား
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('employee_housing_request.index') }}" class="{{ request()->routeIs('employee_housing_request.*') ? 'active' : '' }}">
+                <i class="bi bi-file-earmark-text navicon"></i>၀န်ထမ်းအိမ်ယာ လျှောက်ရန်
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('employee.profile.show') }}" class="{{ request()->routeIs('employee.profile.show') ? 'active' : '' }}">
+                <i class="bi bi-hdd-stack navicon"></i> မိမိအကောင့်
+            </a>
+        </li>
+         <li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
@@ -62,8 +78,9 @@
                         <i class="bi bi-envelope navicon"></i>ထွက်မည်
                     </a>
                 </li>
-            </ul>
-        </nav>
+    </ul>
+</nav>
+
     </header>
 
     <main class="main">

@@ -46,24 +46,63 @@
         </a>
         <nav id="navmenu" class="navmenu">
             <ul>
-                <li><a href="{{ route('dashboard') }}" class="active"><i
-                            class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ</a></li>
-                <li><a href="{{route('admin.sendmail.list')}}" class="active"><i class="bi bi-house navicon"></i>စီမံကိန်းဘဏ္ဍာအကြောင်းပြန်ရန်
-                    </a></li>
-                <li><a href="{{ route('admin.leave_request.list') }}"><i
-                            class="bi bi-file-earmark-text navicon"></i>ခွင့်တိုင်စာများ</a></li>
-                <li><a href="{{ route('leave_types.index') }}"><i
-                            class="bi bi-file-earmark-text navicon"></i>ခွင့်အမျိူးအစား</a></li>
-                <li><a href="{{ route('staff.list') }}"><i class="bi bi-person navicon"></i>၀န်ထမ်းအကောင့် စီမံမည်</a>
+                <li>
+                    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <i class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ
+                    </a>
                 </li>
-                <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i>သတင်းများ</a></li>
-                <li><a href="{{ route('positions.index') }}"><i
-                            class="bi bi-file-earmark-text navicon"></i>ရာထူးနှင့်လစာ</a></li>
-                                            <li><a href="{{ route('payroll.index') }}"><i
-                            class="bi bi-file-earmark-text navicon"></i>လစာပေးမည်</a></li>
-                <li><a href="{{ route('employee_housing_request.list') }}"><i class="bi bi-file-earmark-text navicon"></i>အိမ်ယာ
-                        လျှောက်လွှာ စီမံမှု</a></li>
-                <li><a href="{{ route('admin.profile.show') }}"><i class="bi bi-hdd-stack navicon"></i> မိမိအကောင့်</a>
+                <li>
+                    <a href="{{ route('admin.sendmail.list') }}"
+                        class="{{ request()->routeIs('admin.sendmail.list') ? 'active' : '' }}">
+                        <i class="bi bi-house navicon"></i>စီမံကိန်းဘဏ္ဍာအကြောင်းပြန်ရန်
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.leave_request.list') }}"
+                        class="{{ request()->routeIs('admin.leave_request.list') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-text navicon"></i>ခွင့်တိုင်စာများ
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('leave_types.index') }}"
+                        class="{{ request()->routeIs('leave_types.index') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-text navicon"></i>ခွင့်အမျိူးအစား
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('staff.list') }}"
+                        class="{{ request()->routeIs('staff.list') ? 'active' : '' }}">
+                        <i class="bi bi-person navicon"></i>၀န်ထမ်းအကောင့် စီမံမည်
+                    </a>
+                </li>
+                <li>
+                    <a href="#resume" class="{{ request()->is('resume') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-text navicon"></i>သတင်းများ
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('positions.index') }}"
+                        class="{{ request()->routeIs('positions.index') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-text navicon"></i>ရာထူးနှင့်လစာ
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('payroll.index') }}"
+                        class="{{ request()->routeIs('payroll.index') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-text navicon"></i>လစာပေးမည်
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('employee_housing_request.list') }}"
+                        class="{{ request()->routeIs('employee_housing_request.list') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-text navicon"></i>အိမ်ယာ လျှောက်လွှာ စီမံမှု
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.profile.show') }}"
+                        class="{{ request()->routeIs('admin.profile.show') ? 'active' : '' }}">
+                        <i class="bi bi-hdd-stack navicon"></i>မိမိအကောင့်
+                    </a>
                 </li>
                 <li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -76,6 +115,7 @@
                 </li>
             </ul>
         </nav>
+
     </header>
 
     <main class="main">
@@ -111,17 +151,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: 'အောင်မြင်ပါသည်!',
-        text: "{{ session('success') }}",
-        timer: 3000,
-        timerProgressBar: true,
-        showConfirmButton: false
-    });
-</script>
-@endif
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'အောင်မြင်ပါသည်!',
+                text: "{{ session('success') }}",
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'အမှားဖြစ်ပါသည်!',
+                text: "{{ session('error') }}",
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+
 
 
 

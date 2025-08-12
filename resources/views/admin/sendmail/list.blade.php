@@ -35,7 +35,8 @@
                             </table>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary calculateBtn" id="calculateBtn">Calculate & Download Excel</button>
+                            <button type="submit" class="btn btn-primary calculateBtn" id="calculateBtn">Calculate &
+                                Download Excel</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                         </div>
                     </div>
@@ -56,33 +57,57 @@
                         <div class="modal-body">
 
                             <div class="mb-3">
-                                <label class="form-label">ပေးပို့သူ Email (From Email)</label>
-                                <input type="email" name="from" class="form-control" required>
+                                <label class="form-label">ပြန်ပို့ရန်</label>
+                                <input type="email" name="to" class="form-control @error('to') is-invalid @enderror"
+                                    value="{{ old('to') }}">
+                                @error('to')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">ဌာန</label>
-                                <input type="text" name="department" class="form-control" required>
+                                <input type="text" name="department"
+                                    class="form-control @error('department') is-invalid @enderror"
+                                    value="{{ old('department') }}">
+                                @error('department')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">ဖုန်းနံပါတ် (Optional)</label>
-                                <input type="text" name="phone" class="form-control">
+                                <input type="text" name="phone"
+                                    class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}">
+                                @error('phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">ခေါင်းစဉ်</label>
-                                <input type="text" name="title" class="form-control" required>
+                                <input type="text" name="title"
+                                    class="form-control @error('title') is-invalid @enderror" value="{{ old('title') }}">
+                                @error('title')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">စာအကြောင်းအရာ</label>
-                                <textarea name="body" class="form-control" rows="4" required></textarea>
+                                <textarea name="body" class="form-control @error('body') is-invalid @enderror" rows="4">{{ old('body') }}</textarea>
+                                @error('body')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">ဖိုင်တွဲ (Optional)</label>
-                                <input type="file" name="file" class="form-control">
+                                <input type="file" name="file"
+                                    class="form-control @error('file') is-invalid @enderror">
+                                @error('file')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                         </div>
@@ -189,4 +214,18 @@
 
     @section('scripts')
         <script src="{{ asset('js/sendmail.js') }}"></script>
+        <script>
+$(document).ready(function() {
+    var sendBackModalEl = document.getElementById('sendBackModal');
+    var sendBackModal = new bootstrap.Modal(sendBackModalEl, {
+        backdrop: 'static',
+        keyboard: false
+    });
+
+    @if ($errors->any())
+        sendBackModal.show();
+    @endif
+});
+</script>
+
     @endsection

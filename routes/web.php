@@ -73,13 +73,14 @@ Route::get('/admin/sendmails', [SendMailController::class, 'sendMailList'])->nam
 Route::get('/employee/dashboard', function () {
     return view('employee.home');
 })->name('employee.dashboard')->middleware('auth');
-
+Route::get('/employee/salary', [EmployeeController::class, 'showSalaryList'])->name('employee.salary.list');
 Route::get('/employee/leave/request', [EmployeeController::class, 'showLeaveRequestForm'])->name('employee.leave.index');
-// routes/web.php
 Route::post('/leave-requests', [EmployeeController::class, 'storeLeaveRequest'])->name('employee.leave.store');
-
 Route::get('/sendmail/create', [SendMailController::class, 'create'])->name('sendmail.create'); // show form
 Route::post('/sendmail', [SendMailController::class, 'store'])->name('sendmail.store'); // store + send email
+
+// routes/web.php
+
 Route::post('/admin/sendbackmail', [SendMailController::class, 'sendBack'])->name('sendmail.sendback');
 
 Route::get('/excel-upload', function () {
@@ -102,7 +103,7 @@ Route::prefix('admin')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::get('/payroll', [PaySalaryController::class, 'index'])->name('payroll.index');
     Route::get('/payroll/list', [PaySalaryController::class, 'list'])->name('payroll.list');
-    Route::post('/payroll', [PaySalaryController::class, 'store'])->name('payroll.store');
+    Route::post('/pay-salaries', [PaySalaryController::class, 'store'])->name('pay_salaries.store');
 });
 
 Route::get('/employee_housing_request', [EmployeeHousingController::class, 'createForm'])->name('employee_housing_request.index');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SendMail;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
@@ -20,7 +21,11 @@ class SendMailController extends Controller
             'body' => 'required|string',
              'file' => 'nullable|file|mimes:pdf,jpg,png,doc,docx,xlsx,xls,csv'
         ], [
-            // custom messages ...
+            'department.required' => 'ဌာနကို ဖြည့်ရန်လိုအပ်သည်။',
+            'phone.required' => 'ဖုန်းနံပါတ်ကို ဖြည့်ရန်လိုအပ်သည်။',
+            'title.required' => 'ခေါင်းစဉ်ကို ဖြည့်ရန်လိုအပ်သည်။',
+            'body.required' => 'စာအကြောင်းကို ဖြည့်ရန်လိုအပ်သည်။',
+            'file.mimes' => 'ဖိုင်အမျိုးအစားသည် PDF, JPG, PNG, DOC, DOCX, XLSX, XLS, CSV ဖြစ်ရမည်။',
         ]);
 
         $filePath = null;
@@ -63,12 +68,17 @@ class SendMailController extends Controller
         $superUserEmails = User::where('super_user', 1)->pluck('email')->toArray();
 
         $request->validate([
-            'from' => 'required|email',
             'department' => 'required|string',
             'phone' => 'nullable|string',
             'title' => 'required|string',
             'body' => 'required|string',
             'file' => 'nullable|file|mimes:pdf,jpg,png,doc,docx,xlsx,xls,csv'
+        ], [
+            'department.required' => 'ဌာနကို ဖြည့်ရန်လိုအပ်သည်။',
+            'phone.required' => 'ဖုန်းနံပါတ်ကို ဖြည့်ရန်လိုအပ်သည်။',
+            'title.required' => 'ခေါင်းစဉ်ကို ဖြည့်ရန်လိုအပ်သည်။',
+            'body.required' => 'စာအကြောင်းကို ဖြည့်ရန်လိုအပ်သည်။',
+            'file.mimes' => 'ဖိုင်အမျိုးအစားသည် PDF, JPG, PNG, DOC, DOCX, XLSX, XLS, CSV ဖြစ်ရမည်။',
         ]);
 
         $filePath = null;
@@ -78,8 +88,8 @@ class SendMailController extends Controller
 
         // Save to DB, fix from and to
         $sendMail = SendMail::create([
-            'from' => $request->from,               // Sender email
-            'to' => implode(',', $superUserEmails), // Store super user emails as CSV string or handle differently
+            'from' =>implode(',', $superUserEmails),               // Sender email
+            'to' => $request->to, // Store super user emails as CSV string or handle differently
             'department' => $request->department,
             'phone' => $request->phone ?? '',        // handle missing phone
             'title' => $request->title,
@@ -94,7 +104,7 @@ class SendMailController extends Controller
         <p>{$sendMail->body}</p>
     ", function ($message) use ($sendMail, $superUserEmails) {
             $message->from($sendMail->from, $sendMail->department)
-                ->to($superUserEmails)  // array of emails
+                ->to($sendMail->to)  // array of emails
                 ->subject($sendMail->title);
 
             if ($sendMail->file) {
@@ -113,7 +123,12 @@ class SendMailController extends Controller
 
     public function sendMailList()
     {
-        $mails = SendMail::all();
+        $user = auth()->user();
+        if ($user && $user->super_user) {
+            $mails = SendMail::where('to', $user->email)->get();
+        } else {
+            $mails = collect();
+        }
         return view('admin.sendmail.list', compact('mails'));
     }
 }
