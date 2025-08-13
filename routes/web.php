@@ -53,6 +53,10 @@ Route::get('/staff/{id}', [AdminController::class, 'showStaff'])->name('staff.sh
 Route::get('/admin/yearly_reports/list', [YearlyReportController::class, 'list'])->name('yearly_reports.list');
 Route::post('/admin/yearly_reports/store', [YearlyReportController::class, 'store'])->name('yearly_reports.store');
 Route::get('/admin/yearly_reports', [YearlyReportController::class, 'index'])->name('yearly_reports.index');
+Route::get('/yearly_reports/{id}', [YearlyReportController::class, 'show']);
+Route::delete('/yearly_reports/{id}', [YearlyReportController::class, 'destroy'])->name('yearly_reports.destroy');
+Route::get('/yearly_reports/{id}', [YearlyReportController::class, 'edit']);   // data load for edit
+Route::put('/yearly_reports/{id}', [YearlyReportController::class, 'update']);
 
 Route::prefix('admin/leave-types')->group(function () {
     Route::get('/', [LeaveTypeController::class, 'index'])->name('leave_types.index'); // List all leave types

@@ -29,12 +29,12 @@
                     <th>လုပ်ငန်းအမည်</th>
                     <th>တည်နေရာ</th>
                     <th>စတင်မည့်ကာလ</th>
-                    <th>ပြီးစီးမည့်ကာလ</th>
                     <th>ဆောင်ရွက်မည့်ဌာန/အဖွဲ့အစည်း</th>
                     <th>စုစုပေါင်းရင်းနှီးမြှုပ်နှံမည့်ငွေ</th>
                     <th>ဆောင်ရွက်သည့်နှစ်</th>
                     <th>တိုင်းဒေသကြီးဘတ်ဂျက်</th>
                     <th>တင်ဒါအောင်မြင်သည့်စျေးနှုန်း</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -126,6 +126,109 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="editForm">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel">ပြင်ဆင်ရန်</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="edit_id" name="id">
+                         <div class="col-md-6 mb-2">
+                                <label>စတင်မည့်နှစ်</label>
+                                <input type="text" name="from" id="edit_from" class="form-control">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label>ပြီးဆုံးမည့်နှစ်</label>
+                                <input type="text" name="to" id="edit_to" class="form-control">
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        <div class="mb-3">
+                            <label>စီမံကိန်းအမည်</label>
+                            <input type="text" class="form-control" id="edit_name" name="name">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>တည်နေရာ</label>
+                            <input type="text" class="form-control" id="edit_location" name="location">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>စတင်မည့်လ</label>
+                            <input type="text" class="form-control" id="edit_start_month" name="start_month">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>ပြီးဆုံးမည့်လ</label>
+                            <input type="text" class="form-control" id="edit_end_month" name="end_month">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>ဌာန/အဖွဲ့အစည်း</label>
+                            <input type="text" class="form-control" id="edit_department" name="department">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>စုစုပေါင်းရင်းနှီးမြှုပ်နှံမည့်ငွေ</label>
+                            <input type="number" class="form-control" id="edit_total_investment"
+                                name="total_investment">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>ဆောင်ရွက်မည့်နှစ်</label>
+                            <input type="number" class="form-control" id="edit_operation_year" name="operation_year">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>တိုင်းဒေသကြီးဘတ်ဂျက်</label>
+                            <input type="number" class="form-control" id="edit_regional_budget" name="regional_budget">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>တင်ဒါအောင်မြင်သည့်စျေးနှုန်း</label>
+                            <input type="number" class="form-control" id="edit_tender_price" name="tender_price">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">မလုပ်ဆောင်ပါ</button>
+                        <button type="submit" class="btn btn-primary">အပ်ဒိတ်လုပ်မည်</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- View Modal -->
+    <div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">စီမံကိန်းအသေးစိတ်</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="viewContent">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -147,20 +250,46 @@
                         $('#reportsTable tbody').empty();
                         $.each(data, function(index, report) {
                             $('#reportsTable tbody').append(`
-                        <tr>
-                            <td>${index+1}</td>
-                            <td>${report.name || ''}</td>
-                            <td>${report.location || ''}</td>
-                            <td>${report.start_month || ''}</td>
-                            <td>${report.end_month || ''}</td>
-                            <td>${report.department || ''}</td>
-                            <td>${report.total_investment || ''}</td>
-                            <td>${report.operation_year || ''}</td>
-                            <td>${report.regional_budget || ''}</td>
-                            <td>${report.tender_price || ''}</td>
-                        </tr>
-                    `);
+        <tr>
+            <td>${index + 1}</td>
+            <td>${report.name || ''}</td>
+            <td>${report.location || ''}</td>
+            <td>${report.start_month || ''}</td>
+            <td>${report.department || ''}</td>
+            <td>${report.total_investment || ''}</td>
+            <td>${report.operation_year || ''}</td>
+            <td>${report.regional_budget || ''}</td>
+            <td>${report.tender_price || ''}</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item view-btn" data-id="${report.id}">
+                                <i class="bi bi-eye"></i> View
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);" class="dropdown-item edit-btn" data-id="${report.id}">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                        </li>
+                        <li>
+                            <form action="/yearly_reports/${report.id}" method="POST" onsubmit="return confirm('ဖျက်မှာ သေချာလား?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="dropdown-item text-danger" type="submit">Delete</button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    `);
                         });
+
                         $('#reportsTable').DataTable();
                     },
                     error: function(xhr) {
@@ -256,6 +385,108 @@
                     }
                 });
             });
+
+            $(document).on('click', '.view-btn', function() {
+                var id = $(this).data('id');
+
+                $('#viewContent').html('<p>Loading...</p>');
+
+                $.ajax({
+                    url: '/yearly_reports/' + id,
+                    type: 'GET',
+                    success: function(data) {
+                        var content = `
+                         <p><strong>From:</strong> ${data.from}</p>
+                          <p><strong>To:</strong> ${data.to}</p>
+                <p><strong>စီမံကိန်းအမည်:</strong> ${data.name}</p>
+                <p><strong>တည်နေရာ:</strong> ${data.location}</p>
+                <p><strong>စတင်မည့်ကာလ:</strong> ${data.start_month}</p>
+                <p><strong>ပြီးဆုံးမည့်ကာလ:</strong> ${data.end_month}</p>
+                <p><strong>ဌာန/အဖွဲ့အစည်း:</strong> ${data.department}</p>
+                <p><strong>စုစုပေါင်းရင်းနှီးမြှုပ်နှံမည့်ငွေ:</strong> ${data.total_investment}</p>
+                <p><strong>ဆောင်ရွက်သည့်နှစ်:</strong> ${data.operation_year}</p>
+                <p><strong>တိုင်းဒေသကြီးဘတ်ဂျက်:</strong> ${data.regional_budget}</p>
+                <p><strong>တင်ဒါအောင်မြင်သည့်စျေးနှုန်း:</strong> ${data.tender_price}</p>
+            `;
+                        $('#viewContent').html(content);
+                        var viewModal = new bootstrap.Modal(document.getElementById(
+                            'viewModal'));
+                        viewModal.show();
+                    },
+                    error: function() {
+                        $('#viewContent').html('<p>Data could not be loaded.</p>');
+                    }
+                });
+            });
+
+            var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+
+
+            // Edit button click → modal ဖွင့်ပြီး data load
+
+           $(document).on('click', '.edit-btn', function() {
+    var id = $(this).data('id');
+
+    $.ajax({
+        url: '/yearly_reports/' + id,
+        type: 'GET',
+        success: function(data) {
+             $('#edit_from').val(data.from);
+            $('#edit_to').val(data.to);
+            $('#edit_id').val(data.id);
+            $('#edit_name').val(data.name);
+            $('#edit_location').val(data.location);
+            $('#edit_start_month').val(data.start_month);
+            $('#edit_end_month').val(data.end_month);
+            $('#edit_department').val(data.department);
+            $('#edit_total_investment').val(data.total_investment);
+            $('#edit_operation_year').val(data.operation_year);
+            $('#edit_regional_budget').val(data.regional_budget);
+            $('#edit_tender_price').val(data.tender_price);
+
+            // Show the modal
+            editModal.show();
+        },
+        error: function() {
+            alert('Data မရနိုင်ပါ။');
+        }
+    });
+});
+
+
+            // Submit edit form with AJAX
+
+          $('#editForm').on('submit', function(e) {
+    e.preventDefault();
+
+    let id = $('#edit_id').val();
+    let formData = $(this).serialize();
+
+    $.ajax({
+        url: '/yearly_reports/' + id,
+        type: 'POST', // Use POST with _method=PUT
+        data: formData,
+        success: function(res) {
+
+            // Hide modal properly in Bootstrap 5
+            editModal.hide();
+
+            loadTable(); // refresh table
+        },
+        error: function(xhr) {
+            if (xhr.status === 422) {
+                let errors = xhr.responseJSON.errors;
+                $.each(errors, function(key, val) {
+                    let input = $('#edit_' + key);
+                    input.addClass('is-invalid');
+                    input.next('.invalid-feedback').text(val[0]);
+                });
+            }
+        }
+    });
+});
+
+
 
         });
     </script>
