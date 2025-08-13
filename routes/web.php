@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\LeaveTypeController;
 use App\Http\Controllers\PaySalaryController;
 use App\Http\Controllers\SendMailController;
+use App\Http\Controllers\YearlyReportController;
 use Illuminate\Support\Facades\Route;
 use App\Mail\HelloMail;
 
@@ -49,6 +50,9 @@ Route::post('/staff', [AdminController::class, 'storeStaff'])->name('staff.store
 Route::get('/staff/{id}', [AdminController::class, 'showStaff'])->name('staff.show');
 
 
+Route::get('/admin/yearly_reports/list', [YearlyReportController::class, 'list'])->name('yearly_reports.list');
+Route::post('/admin/yearly_reports/store', [YearlyReportController::class, 'store'])->name('yearly_reports.store');
+Route::get('/admin/yearly_reports', [YearlyReportController::class, 'index'])->name('yearly_reports.index');
 
 Route::prefix('admin/leave-types')->group(function () {
     Route::get('/', [LeaveTypeController::class, 'index'])->name('leave_types.index'); // List all leave types

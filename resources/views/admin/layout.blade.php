@@ -58,6 +58,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('yearly_reports.index') }}"
+                        class="{{ request()->routeIs('yearly_reports.index') ? 'active' : '' }}">
+                        <i class="bi bi-bar-chart navicon"></i>နှစ်ပတ်လည်အစီရင်ခံစာများ
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('admin.leave_request.list') }}"
                         class="{{ request()->routeIs('admin.leave_request.list') ? 'active' : '' }}">
                         <i class="bi bi-file-earmark-text navicon"></i>ခွင့်တိုင်စာများ

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('department');
             $table->string('phone');
             $table->string('title');
-            $table->text('body')->change();
+            $table->text('body');
             $table->string('file')->nullable();
             $table->timestamps();
         });
