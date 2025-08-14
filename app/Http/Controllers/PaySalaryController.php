@@ -14,8 +14,8 @@ class PaySalaryController extends Controller
     {
         // Load users for dropdown
         $users = User::select('id', 'name')
-        ->where('super_user', '!=', 1)
-        ->get();
+            ->where('super_user', '!=', 1)
+            ->get();
         $paySalaries = PaySalary::with('user')->latest()->get();
         return view('admin.payroll.index', compact('users', 'paySalaries'));
     }
@@ -56,15 +56,18 @@ class PaySalaryController extends Controller
             ->sum('duration');
 
         $basicSalary = $request->basic_salary;
+        $allowances = $request->allowances ?? 0;
         $deductionPerDay = ($basicSalary * 0.02);
         $totalDeduction = $deductionPerDay * $totalDuration;
-        $netSalary = $basicSalary - $totalDeduction;
+
+        // Include allowances in net salary
+        $netSalary = $basicSalary + $allowances - $totalDeduction;
 
         PaySalary::create([
             'user_id' => $request->user_id,
             'salary_month' => $request->salary_month,
-            'basic_salary' => $request->basic_salary,
-            'allowances' => $request->allowances ?? 0,
+            'basic_salary' => $basicSalary,
+            'allowances' => $allowances,
             'deductions' => $totalDeduction,
             'payment_method' => $request->payment_method,
             'net_salary' => $netSalary,
@@ -72,4 +75,5 @@ class PaySalaryController extends Controller
 
         return redirect()->back()->with('success', 'လစာကို အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။');
     }
+
 }
