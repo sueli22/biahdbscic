@@ -31,7 +31,7 @@ Route::post('/translate', [TranslateController::class, 'translate'])->name('tran
 // Route::get('/', function () {
 //     Mail::to('recipient@example.com')->send(new HelloMail());
 // });
-
+Route::get('/home/yearly', [YearlyReportController::class, 'homeYearlyReport'])->name('home.yearly');
 Route::get('/login', [UserController::class, 'loginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login'])->name('login.post');
 Route::get('/admin/dashboard', function () {

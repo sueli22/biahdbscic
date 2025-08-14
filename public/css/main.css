@@ -1507,3 +1507,34 @@ html, body {
     margin-left: 150px;
 }
 
+/* Custom Download Button */
+.custom-download-btn {
+    background-color: #28a745 !important;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 6px 12px !important;
+    transition: 0.3s;
+}
+
+.custom-download-btn:hover {
+    background-color: #218838 !important;
+    color: white !important;
+    cursor: pointer;
+}
+
+/* DataTable Header Styling */
+#reportsTable thead th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Optional: center table body text */
+#reportsTable tbody td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 8px;
+}

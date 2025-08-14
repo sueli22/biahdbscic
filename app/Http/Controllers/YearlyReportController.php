@@ -14,6 +14,10 @@ class YearlyReportController extends Controller
         return response()->json($report);
     }
 
+    public function homeYearlyReport()
+    {
+        return view('home.report');
+    }
 
     public function index()
     {

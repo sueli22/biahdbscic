@@ -38,13 +38,15 @@
             <img src="{{ asset('img/logo/logo.jpg') }}" alt="logo" class="img-fluid">
         </div>
 
-        <a href="index.html" class="logo d-flex align-items-center justify-content-center">
+        <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
             <span class="sitename">စီမံကိန်းနှင့်ဘဏ္ဍာရေးဝန်ကြီးဌာန</span>
         </a>
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ</a></li>
                 <li><a href="#about"><i class="bi bi-person navicon"></i>သမိုင်းကြောင်း</a></li>
+                <li><a href="{{ route('home.yearly') }}"><i
+                            class="bi bi-file-earmark-text navicon"></i>စီမံကိန်းနှစ်ပတ်လည်အစီရင်ခံစာများ</a></li>
                 <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i>သတင်းများ</a></li>
                 <li><a href="#mail"><i class="bi bi-envelope navicon"></i>ဌာနဆိုင်ရာမေးလ်ပို့ရန် </a></li>
                 <li><a href="#contact"><i class="bi bi-envelope navicon"></i>ဆက်သွယ်ရန်</a></li>
@@ -141,8 +143,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">ဌာန</label>
-                            <input type="text" name="department" class="form-control"
-                                placeholder="ဥပမာ - အစိုးရဌာန" value="{{ old('department') }}">
+                            <input type="text" name="department" class="form-control" placeholder="ဥပမာ - အစိုးရဌာန"
+                                value="{{ old('department') }}">
                             @error('department')
                                 <div class="text-danger small">{{ $message }}</div>
                             @enderror
@@ -221,13 +223,13 @@
                         <div class="col-md-9">
                             <p class="card-text mb-0">၀၄၄-၂၁၁၄၅</p>
                             <p class="card-text mb-0">၀၄၄-၂၁၆၇၉</p>
-                            <p class="card-text mb-0">၀၉-၄၀۴၉၅၃၈၂၃</p>
+                            <p class="card-text mb-0">၀၉-၄၀၄၉၅၃၈၂၃</p>
                         </div>
                     </div>
                     <hr>
 
                     <!-- Email Row -->
-                    <div class="row align-items-center">
+                    <div class="row align-items-center mb-3">
                         <div class="col-md-3 d-flex align-items-center">
                             <i class="bi bi-envelope-fill text-muted me-2"></i>
                             <h6 class="card-subtitle mb-0 text-muted">Email</h6>
@@ -236,9 +238,17 @@
                             <a href="mailto:kyawkhaingoo@gmail.com" class="card-link">kyawkhaingoo@gmail.com</a>
                         </div>
                     </div>
+
+                    <!-- Google Map Embed -->
+                    <div class="row">
+                        <div class="col-12">
+                           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3126.7450313624986!2d95.43368607624012!3d17.599801581725895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30c0c10045367eed%3A0x9c88b19ec5970fa5!2z4YCF4YCu4YCZ4YC24YCA4YCt4YCU4YC64YC44YCb4YCx4YC44YCG4YC94YCy4YCb4YCx4YC44YCm4YC44YCF4YCu4YC44YCM4YCs4YCUKOGAgeGAm-GAreGAr-GAhOGAuivhgJnhgLzhgK3hgK_hgLfhgJThgJrhgLop!5e0!3m2!1sen!2smm!4v1755180163759!5m2!1sen!2smm" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section><!-- /Contact Section -->
+        </section>
+
 
     </main>
 
@@ -290,16 +300,16 @@
             }, 100);
         });
     </script>
-    @if(session('success'))
-<script>
-    Swal.fire({
-        icon: 'success',
-        title: 'မေးလ် ပေးပို့ခြင်း အောင်မြင်ပါသည်',
-        text: "{{ session('success') }}",
-        confirmButtonText: 'OK'
-    });
-</script>
-@endif
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'မေးလ် ပေးပို့ခြင်း အောင်မြင်ပါသည်',
+                text: "{{ session('success') }}",
+                confirmButtonText: 'OK'
+            });
+        </script>
+    @endif
 
 
 </body>
