@@ -13,6 +13,7 @@ use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\YearlyReportController;
 use Illuminate\Support\Facades\Route;
 use App\Mail\HelloMail;
+use App\Models\Attendence;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,7 +68,9 @@ Route::prefix('admin/leave-types')->group(function () {
     Route::delete('/{leaveType}', [LeaveTypeController::class, 'destroy'])->name('leave_types.destroy'); // Delete
 });
 
-
+Route::get('/attendence/list', [AttendenceController::class, 'showAttendanceList'])->name('admin.show.attendence.list');
+// web.php
+Route::post('/attendance/update-status', [AttendenceController::class, 'updateStatus'])->name('attendance.updateStatus');
 Route::get('/positions/{position}/edit', [PositionController::class, 'edit']);
 Route::put('/positions/{position}', [PositionController::class, 'update'])->name('positions.update');
 Route::delete('/positions/{position}', [PositionController::class, 'destroy']);

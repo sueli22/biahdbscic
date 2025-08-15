@@ -51,6 +51,11 @@
                         <i class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ
                     </a>
                 </li>
+                 <li>
+                    <a href="{{ route('admin.show.attendence.list') }}" class="{{ request()->routeIs('admin.show.attendence.list') ? 'active' : '' }}">
+                        <i class="bi bi-house navicon"></i>နေ့စဥ်အတန်းတတ်လက်မှတ်
+                    </a>
+                </li>
                 <li>
                     <a href="{{ route('admin.sendmail.list') }}"
                         class="{{ request()->routeIs('admin.sendmail.list') ? 'active' : '' }}">
@@ -181,10 +186,6 @@
             });
         </script>
     @endif
-
-
-
-
     <!-- Your custom scripts last -->
     @yield('scripts')
 

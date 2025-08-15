@@ -17,6 +17,12 @@ class AttendenceController extends Controller
         return view('employee.attendance.show', compact('attendances'));
     }
 
+    public function showAttendanceList()
+    {
+        $attendances = Attendence::all();
+        return view('admin.attendance.list', compact('attendances'));
+    }
+
     public function storeToday(Request $request)
     {
         $user = auth()->user();
@@ -47,5 +53,14 @@ class AttendenceController extends Controller
         ]);
 
         return back()->with('success', 'ယနေ့အတွက် လက်မှတ်တင်ခြင်း ပြီးစီးပါပြီ။');
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $attendance = Attendence::findOrFail($request->id);
+        $attendance->status = $request->status;
+        $attendance->save();
+
+        return response()->json(['success' => true]);
     }
 }
