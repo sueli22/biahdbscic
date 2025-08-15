@@ -8,6 +8,7 @@ use App\Http\Controllers\TranslateController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LeaveTypeController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PaySalaryController;
 use App\Http\Controllers\SendMailController;
 use App\Http\Controllers\YearlyReportController;
@@ -80,6 +81,13 @@ Route::get('/positions', [PositionController::class, 'index'])->name(name: 'posi
 
 Route::get('/admin/sendmails', [SendMailController::class, 'sendMailList'])->name('admin.sendmail.list');
 
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');       // list all news
+Route::get('/news/create', [NewsController::class, 'create'])->name('news.create'); // show create form
+Route::post('/news', [NewsController::class, 'store'])->name('news.store');      // store new news
+Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show'); // show single news
+Route::get('/news/{news}/edit', [NewsController::class, 'edit'])->name('news.edit'); // show edit form
+Route::put('/news/{news}', [NewsController::class, 'update'])->name('news.update'); // update news
+Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.destroy'); // delete news
 
 
 Route::get('/employee/dashboard', function () {

@@ -39,7 +39,7 @@
             <img src="{{ asset('img/logo/logo.jpg') }}" alt="logo" class="img-fluid">
         </div>
 
-        <a href="index.html" class="logo d-flex align-items-center justify-content-center">
+        <a href="{{route('welcome')}}" class="logo d-flex align-items-center justify-content-center">
             <span class="sitename">စီမံကိန်းနှင့်ဘဏ္ဍာရေးဝန်ကြီးဌာန</span>
         </a>
         <nav id="navmenu" class="navmenu">
