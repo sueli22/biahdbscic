@@ -42,34 +42,44 @@
         <a href="index.html" class="logo d-flex align-items-center justify-content-center">
             <span class="sitename">စီမံကိန်းနှင့်ဘဏ္ဍာရေးဝန်ကြီးဌာန</span>
         </a>
-       <nav id="navmenu" class="navmenu">
-    <ul>
-        <li>
-            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                <i class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('employee.leave.index') }}" class="{{ request()->routeIs('employee.leave.*') ? 'active' : '' }}">
-                <i class="bi bi-person navicon"></i>ခွင့်တိုင်ကြားရန်
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('employee.salary.list') }}" class="{{ request()->routeIs('employee.salary.list') ? 'active' : '' }}">
-                <i class="bi bi-file-earmark-text navicon"></i>လစာထုတ်ယူမှု ဇယား
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('employee_housing_request.index') }}" class="{{ request()->routeIs('employee_housing_request.*') ? 'active' : '' }}">
-                <i class="bi bi-file-earmark-text navicon"></i>၀န်ထမ်းအိမ်ယာ လျှောက်ရန်
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('employee.profile.show') }}" class="{{ request()->routeIs('employee.profile.show') ? 'active' : '' }}">
-                <i class="bi bi-hdd-stack navicon"></i> မိမိအကောင့်
-            </a>
-        </li>
-         <li>
+        <nav id="navmenu" class="navmenu">
+            <ul>
+                <li>
+                    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <i class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('attendance.show') }}"
+                        class="{{ request()->routeIs('attendance.show.*') ? 'active' : '' }}">
+                        <i class="bi bi-person navicon"></i>နေ့စဥ်တတ်ရောက်မှု
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('employee.leave.index') }}"
+                        class="{{ request()->routeIs('employee.leave.*') ? 'active' : '' }}">
+                        <i class="bi bi-person navicon"></i>ခွင့်တိုင်ကြားရန်
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('employee.salary.list') }}"
+                        class="{{ request()->routeIs('employee.salary.list') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-text navicon"></i>လစာထုတ်ယူမှု ဇယား
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('employee_housing_request.index') }}"
+                        class="{{ request()->routeIs('employee_housing_request.*') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-text navicon"></i>၀န်ထမ်းအိမ်ယာ လျှောက်ရန်
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('employee.profile.show') }}"
+                        class="{{ request()->routeIs('employee.profile.show') ? 'active' : '' }}">
+                        <i class="bi bi-hdd-stack navicon"></i> မိမိအကောင့်
+                    </a>
+                </li>
+                <li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
@@ -78,8 +88,8 @@
                         <i class="bi bi-envelope navicon"></i>ထွက်မည်
                     </a>
                 </li>
-    </ul>
-</nav>
+            </ul>
+        </nav>
 
     </header>
 
@@ -114,7 +124,31 @@
     <!-- Then DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'အောင်မြင်ပါသည်!',
+                text: "{{ session('success') }}",
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
 
+    @if (session('error'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'အမှားဖြစ်ပါသည်!',
+                text: "{{ session('error') }}",
+                timer: 3000,
+                timerProgressBar: true,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
     <!-- Your custom scripts last -->
     @yield('scripts')
 

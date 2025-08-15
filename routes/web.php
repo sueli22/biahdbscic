@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AttendenceController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeHousingController;
 use App\Http\Controllers\TranslateController;
@@ -122,3 +123,7 @@ Route::put('/employee/profile/image-update', [EmployeeController::class, 'update
 
 
 Route::get('/get-user-salary/{user}', [UserController::class, 'getUserSalary']);
+Route::get('/attendece', [AttendenceController::class, 'showAttendance'])->name('attendance.show');
+Route::post('/attendance/today', [AttendenceController::class, 'storeToday'])
+    ->name('attendance.today')
+    ->middleware('auth');
