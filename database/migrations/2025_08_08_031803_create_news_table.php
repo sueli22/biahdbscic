@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('image');
             $table->string('title');
             $table->text('content');
+            $table->boolean('is_public')->default(1);
             $table->timestamps();
         });
     }

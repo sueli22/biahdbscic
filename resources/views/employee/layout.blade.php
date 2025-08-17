@@ -55,6 +55,12 @@
                         <i class="bi bi-person navicon"></i>နေ့စဥ်တတ်ရောက်မှု
                     </a>
                 </li>
+                  <li>
+                    <a href="{{ route('employee.news.index') }}"
+                        class="{{ request()->routeIs('employee.news.index') ? 'active' : '' }}">
+                        <i class="bi bi-person navicon"></i>ရုံးတွင်းသတင်းများ
+                    </a>
+                </li>
                 <li>
                     <a href="{{ route('employee.leave.index') }}"
                         class="{{ request()->routeIs('employee.leave.*') ? 'active' : '' }}">

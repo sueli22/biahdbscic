@@ -9,6 +9,7 @@
                 <th>ပုံ</th>
                 <th>ခေါင်းစဉ်</th>
                 <th>အကြောင်းအရာ</th>
+                <th>ဖော်ပြမှု</th>
                 <th>လုပ်ဆောင်ချက်များ</th>
             </tr>
         </thead>
@@ -20,15 +21,22 @@
                     <td>{{ Str::limit($item->title, 30) }}</td>
                     <td>{{ Str::limit($item->content, 50) }}</td>
                     <td>
+                        @if ($item->is_public)
+                            <span class="badge bg-success">ပြင်ပသတင်း</span>
+                        @else
+                            <span class="badge bg-danger">ရုံးသတင်း</span>
+                        @endif
+                    </td>
+                    <td>
                         <!-- View button with eye icon -->
                         <button class="btn btn-info btn-sm viewBtn" data-title="{{ $item->title }}"
-                            data-content="{{ $item->content }}" data-image="{{ $item->image }}">
+                            data-content="{{ $item->content }}" data-image="{{ $item->image }}" data-is_public="{{ $item->is_public }}">
                             <i class="bi bi-eye"></i>
                         </button>
 
                         <!-- Edit button with pencil icon -->
                         <button class="btn btn-warning btn-sm editBtn" data-id="{{ $item->id }}"
-                            data-title="{{ $item->title }}" data-content="{{ $item->content }}"
+                            data-title="{{ $item->title }}" data-content="{{ $item->content }}" data-is_public="{{ $item->is_public }}"
                             data-image="{{ $item->image }}">
                             <i class="bi bi-pencil-square"></i>
                         </button>
@@ -71,10 +79,20 @@
                             <input type="file" name="image" class="form-control">
                             <span class="text-danger error-text image_error"></span>
                         </div>
+
+                        <div class="mb-3">
+                            <label>ဖော်ပြမှု အဆင့်</label>
+                            <select name="is_public" class="form-control">
+                                <option value="1">Public (အများမြင်နိုင်)</option>
+                                <option value="0">Private (မူရင်းသိသာ)</option>
+                            </select>
+                            <span class="text-danger error-text is_public_error"></span>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">သိမ်းမည်</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ပိတ်မည်</button>
+                        <button type="button" class="btn btn-secondary" ‌ေdata-bs-dismiss="modal">ပိတ်မည်</button>
                     </div>
                 </div>
             </form>
@@ -90,6 +108,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
+                     <div class="mb-3">
+                        <strong>ဖော်ပြမှု:</strong>
+                        <p id="viewStatus"></p>
+                    </div>
                     <div class="mb-3">
                         <strong>ခေါင်းစဉ်:</strong>
                         <p id="viewTitle"></p>
@@ -101,6 +123,8 @@
                     <div class="mb-3">
                         <img id="viewImage" src="" class="img-fluid" alt="News Image" width="100%">
                     </div>
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ပိတ်မည်</button>
@@ -139,6 +163,15 @@
                             <img id="currentImage" src="" width="100" class="mt-2">
                             <span class="text-danger error-text image_error"></span>
                         </div>
+                        <div class="mb-3">
+                            <label>ဖော်ပြမှု အဆင့်</label>
+                            <select name="is_public" id="editIsPublic" class="form-control">
+                                <option value="1">Public (အများမြင်နိုင်)</option>
+                                <option value="0">Private (မူရင်းသိသာ)</option>
+                            </select>
+                            <span class="text-danger error-text is_public_error"></span>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-success">ပြင်ဆင်မည်</button>
@@ -210,10 +243,12 @@
                 let title = $(this).data('title');
                 let content = $(this).data('content');
                 let image = $(this).data('image');
+                let is_public = $(this).data('is_public');
 
                 $('#editNewsId').val(id);
                 $('#editTitle').val(title);
                 $('#editContent').val(content);
+                $('#editIsPublic').val(is_public);
 
                 if (image) {
                     $('#currentImage').attr('src', '/storage/' + image);
@@ -256,14 +291,22 @@
                 });
             });
 
-            // View
             $('.viewBtn').click(function() {
                 let title = $(this).data('title');
                 let content = $(this).data('content');
                 let image = $(this).data('image');
+                let is_public = $(this).data('is_public');
+
+                console.log(is_public);
 
                 $('#viewTitle').text(title);
                 $('#viewContent').text(content);
+
+                if (is_public === 1) {
+                    $('#viewStatus').html('<span class="badge bg-success">ပြင်ပသတင်း</span>');
+                } else {
+                    $('#viewStatus').html('<span class="badge bg-danger">ရုံးသတင်း</span>');
+                }
 
                 if (image) {
                     $('#viewImage').attr('src', '/storage/' + image).show();
@@ -274,6 +317,7 @@
                 var viewModal = new bootstrap.Modal(document.getElementById('viewModal'));
                 viewModal.show();
             });
+
 
 
 

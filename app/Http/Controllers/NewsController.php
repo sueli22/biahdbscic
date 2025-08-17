@@ -8,6 +8,20 @@ use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
+
+    public function welcomeNews()
+    {
+        $news = News::where('is_public', 1)->latest()->get();
+
+        return view('home.news', compact('news'));
+    }
+
+    public function staffNews()
+    {
+        $news = News::where('is_public', 0)->latest()->get();
+        return view('employee.news.index', compact('news'));
+    }
+
     public function index()
     {
         $news = News::all();
@@ -20,6 +34,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'image' => 'required|image|max:2048',
+            'is_public' => 'required|boolean',
         ], [
             'title.required' => 'ခေါင်းစဉ်ကို ဖြည့်ရန် လိုအပ်ပါသည်။',
             'title.string' => 'ခေါင်းစဉ်သည် စာသားဖြစ်ရမည်။',
@@ -31,6 +46,9 @@ class NewsController extends Controller
             'image.required' => 'ပုံကို တင်ရန် လိုအပ်ပါသည်။',
             'image.image' => 'ဖိုင်သည် ပုံပုံစံဖြစ်ရမည်။',
             'image.max' => 'ပုံဖိုင်အရွယ်အစားသည် ၂ မီဂါဘိုင်ထက် မပိုရပါ။',
+
+            'is_public.required' => 'ဖော်ပြမှု အဆင့်ကို ရွေးရန် လိုအပ်ပါသည်။',
+            'is_public.boolean' => 'ဖော်ပြမှု အဆင့်သည် မှန်ကန်သော အချက်အလက်ဖြစ်ရမည်။',
         ]);
 
 
@@ -39,6 +57,7 @@ class NewsController extends Controller
         $news = News::create([
             'title' => $request->title,
             'content' => $request->content,
+            'is_public' => $request->is_public,
             'image' => $imagePath,
         ]);
 

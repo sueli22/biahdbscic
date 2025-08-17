@@ -30,10 +30,13 @@ use App\Models\Attendence;
 Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
+
 Route::post('/translate', [TranslateController::class, 'translate'])->name('translate');
 // Route::get('/', function () {
 //     Mail::to('recipient@example.com')->send(new HelloMail());
 // });
+Route::get('/employee/news', [NewsController::class, 'staffNews'])->name('employee.news.index');
+Route::get('/home/news', [NewsController::class, 'welcomeNews'])->name('welcome.news.index');       // list all news
 Route::get('/home/yearly', [YearlyReportController::class, 'homeYearlyReport'])->name('home.yearly');
 Route::get('/login', [UserController::class, 'loginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login'])->name('login.post');
@@ -81,13 +84,14 @@ Route::get('/positions', [PositionController::class, 'index'])->name(name: 'posi
 
 Route::get('/admin/sendmails', [SendMailController::class, 'sendMailList'])->name('admin.sendmail.list');
 
-Route::get('/news', [NewsController::class, 'index'])->name('news.index');       // list all news
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/create', [NewsController::class, 'create'])->name('news.create'); // show create form
 Route::post('/news', [NewsController::class, 'store'])->name('news.store');      // store new news
 Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show'); // show single news
 Route::get('/news/{news}/edit', [NewsController::class, 'edit'])->name('news.edit'); // show edit form
 Route::put('/news/{news}', [NewsController::class, 'update'])->name('news.update'); // update news
 Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.destroy'); // delete news
+
 
 
 Route::get('/employee/dashboard', function () {

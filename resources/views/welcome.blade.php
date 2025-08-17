@@ -47,7 +47,7 @@
                 <li><a href="#about"><i class="bi bi-person navicon"></i>သမိုင်းကြောင်း</a></li>
                 <li><a href="{{ route('home.yearly') }}"><i
                             class="bi bi-file-earmark-text navicon"></i>စီမံကိန်းနှစ်ပတ်လည်အစီရင်ခံစာများ</a></li>
-                <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i>သတင်းများ</a></li>
+                <li><a href="{{route('welcome.news.index')}}"><i class="bi bi-file-earmark-text navicon"></i>သတင်းများ</a></li>
                 <li><a href="#mail"><i class="bi bi-envelope navicon"></i>ဌာနဆိုင်ရာမေးလ်ပို့ရန် </a></li>
                 <li><a href="#contact"><i class="bi bi-envelope navicon"></i>ဆက်သွယ်ရန်</a></li>
             </ul>
