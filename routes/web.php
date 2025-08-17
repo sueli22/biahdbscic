@@ -40,9 +40,7 @@ Route::get('/home/news', [NewsController::class, 'welcomeNews'])->name('welcome.
 Route::get('/home/yearly', [YearlyReportController::class, 'homeYearlyReport'])->name('home.yearly');
 Route::get('/login', [UserController::class, 'loginForm'])->name('login');
 Route::post('/login', [UserController::class, 'login'])->name('login.post');
-Route::get('/admin/dashboard', function () {
-    return view('admin.home');
-})->name('dashboard')->middleware('auth');
+Route::get('/admin/dashboard', [AdminController::class, 'indexDashboard'])->name('dashboard')->middleware('auth');
 Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 Route::get('/admin/profile', [AdminController::class, 'showProfile'])->name('admin.profile.show');
 Route::post('/admin/profile/update', [AdminController::class, 'update'])->name('admin.profile.update');

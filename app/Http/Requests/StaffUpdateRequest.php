@@ -20,7 +20,7 @@ class StaffUpdateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $staffId,
             'position_id' => 'required|exists:positions,position_id',
-            'dob' => 'required|date',
+            'dob' => 'required|date|before:1995-01-01',
             'currentaddress' => 'nullable|string|max:255',
             'phno' => 'nullable|string|max:20',
             'department' => 'nullable|string|max:100',
@@ -52,6 +52,7 @@ class StaffUpdateRequest extends FormRequest
 
             'dob.required' => 'မွေးသက္ကရာဇ်ထည့်ရန် လိုအပ်သည်။',
             'dob.date' => 'မွေးသက္ကရာဇ်သည် မှန်ကန်သော ရက်စွဲဖြစ်ရမည်။',
+            'dob.before' => 'မွေးသက္ကရာဇ်သည် ၁၉၉၅-၀၁-၀၁ မတိုင်မီ ဖြစ်ရမည်။',
 
             'currentaddress.string' => 'လိပ်စာသည် စာသားဖြစ်ရမည်။',
             'currentaddress.max' => 'လိပ်စာသည် ၂၅၅ စာလုံးအတွင်း ဖြစ်ရမည်။',

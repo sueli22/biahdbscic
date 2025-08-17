@@ -15,9 +15,25 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Common\Type;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
+    public function indexDashboard()
+    {
+        $usersByPosition = User::select('position_id', DB::raw('count(*) as total'))
+            ->groupBy('position_id')
+            ->with('position')
+            ->get();
+
+        $salaryByPosition = User::join('positions', 'users.position_id', '=', 'positions.position_id')
+            ->select('positions.title', DB::raw('SUM(positions.salary) as total_salary'))
+            ->groupBy('positions.title')
+            ->get();
+
+        return view('admin.home', compact('usersByPosition', 'salaryByPosition'));
+    }
+
     private function getUser()
     {
         return auth()->user();
