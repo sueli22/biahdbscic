@@ -61,6 +61,9 @@ class EmployeeController extends Controller
 
     public function storeLeaveRequest(Request $request)
     {
+        $user = auth()->user();
+        $today = Carbon::today();
+
         // Base validation rules
         $rules = [
             'leave_type' => 'required|in:casual,special',
@@ -75,11 +78,47 @@ class EmployeeController extends Controller
                 'required',
                 'date',
                 'after_or_equal:from_date',
-                function ($attribute, $value, $fail) use ($request) {
+                function ($attribute, $value, $fail) use ($request, $user) {
                     $fromDate = Carbon::parse($request->from_date);
                     $toDate = Carbon::parse($value);
+
+                    // Check same month
                     if ($fromDate->format('Y-m') !== $toDate->format('Y-m')) {
                         $fail('From date နှင့် To date တို့သည် တစ်လအတွင်း ဖြစ်ရပါမည်။');
+                    }
+
+                    // Requested days
+                    $requestedDays = $fromDate->diffInDays($toDate) + 1;
+
+                    // Check monthly limit (3 days)
+                    $monthLeaves = LeaveRequest::where('user_id', $user->id)
+                        ->whereNull('leave_type_id') // casual leave
+                        ->whereYear('from_date', $fromDate->year)
+                        ->whereMonth('from_date', $fromDate->month)
+                        ->sum('duration');
+
+                    if (($monthLeaves + $requestedDays) > 3) {
+                        $fail('သင်သည် ယခုလအတွက် casual leave ၃ရက်ရယူပီးပီ ဖစ်ပါသည်။ တစ်လတွင် casual leave သည် 3 ရက်ထက် ပိုမရနိုင်ပါ။');
+                    }
+
+                    $monthApprovedLeaves = LeaveRequest::where('user_id', $user->id)
+                        ->whereNull('leave_type_id')
+                        ->where('status', 'approved')
+                        ->whereYear('from_date', $fromDate->year)
+                        ->whereMonth('from_date', $fromDate->month)
+                        ->sum('duration');
+                    if ($monthApprovedLeaves > 3) {
+                        $fail('သည်လအတွက် leave သည် 3 ရက်ပြည့်သွားပါပီ');
+                    }
+
+                    // Check yearly limit (10 days)
+                    $yearLeaves = LeaveRequest::where('user_id', $user->id)
+                        ->whereNull('leave_type_id') // casual leave
+                        ->whereYear('from_date', $fromDate->year)
+                        ->sum('duration');
+
+                    if (($yearLeaves + $requestedDays) > 10) {
+                        $fail('ယခုနှစ်အတွင်း casual leave သည် 10 ရက်ထက်  ပိုမရနိုင်ပါ။');
                     }
                 }
             ];
@@ -110,7 +149,7 @@ class EmployeeController extends Controller
 
         // Create new leave request
         $leaveRequest = new LeaveRequest();
-        $leaveRequest->user_id = auth()->id();
+        $leaveRequest->user_id = $user->id;
 
         if ($request->leave_type === 'casual') {
             $leaveRequest->leave_type_id = null;
@@ -149,6 +188,7 @@ class EmployeeController extends Controller
             'leave_request' => $leaveRequest
         ]);
     }
+
     public function showSalaryList()
     {
         $web = Web::first();
