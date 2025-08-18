@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Position;
 use Illuminate\Http\Request;
+use App\Models\Web;
 
 class PositionController extends Controller
 {
     // List all positions
     public function index()
     {
+        $web = Web::first();
         $positions = Position::all();
-        return view('admin.positions.index', compact('positions'));
+        return view('admin.positions.index', compact('positions', 'web'));
     }
 
     public function edit(Position $position)
@@ -32,23 +34,23 @@ class PositionController extends Controller
     }
 
     public function store(Request $request)
-{
-    try {
-        $request->validate([
-            'title' => 'required|string',
-            'salary' => 'required|numeric',
-        ]);
+    {
+        try {
+            $request->validate([
+                'title' => 'required|string',
+                'salary' => 'required|numeric',
+            ]);
 
-        Position::create($request->only('title', 'salary'));
+            Position::create($request->only('title', 'salary'));
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true]);
 
-    } catch (ValidationException $e) {
-        return response()->json([
-            'errors' => $e->errors()
-        ], 422);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'errors' => $e->errors()
+            ], 422);
+        }
     }
-}
 
     public function destroy(Position $position)
     {

@@ -4,13 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\LeaveType;
 use Illuminate\Http\Request;
+use App\Models\Web;
 
 class LeaveTypeController extends Controller
 {
     public function index(Request $request)
     {
+        $web = Web::first();
         $leaveTypes = LeaveType::all();
-        return view('admin.leave.list', compact('leaveTypes'));
+        return view('admin.leave.list', compact('leaveTypes', 'web'));
     }
 
     public function store(Request $request)

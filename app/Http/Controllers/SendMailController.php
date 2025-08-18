@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\SendMail;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Web;
 use Illuminate\Support\Facades\Mail;
 
 class SendMailController extends Controller
@@ -118,17 +119,19 @@ class SendMailController extends Controller
 
     public function create()
     {
-        return view('sendmail.create');
+        $web = Web::first();
+        return view('sendmail.create', compact('web'));
     }
 
     public function sendMailList()
     {
+        $web = Web::first();
         $user = auth()->user();
         if ($user && $user->super_user) {
             $mails = SendMail::where('to', $user->email)->get();
         } else {
             $mails = collect();
         }
-        return view('admin.sendmail.list', compact('mails'));
+        return view('admin.sendmail.list', compact('mails', 'web'));
     }
 }

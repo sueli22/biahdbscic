@@ -9,8 +9,9 @@
                 @csrf
                 @method('PATCH')
                 <div class="text-center mb-3">
-                    <img src="{{ $user->image ? asset('storage/public/images/' . $user->image) : asset('img/default-profile.png') }}"
-                        alt="Profile Image" style="width: 100%; height: 180px; object-fit: cover;">
+                    <img src="{{ asset('storage/images/' . ($user->image ?? 'default.jpg')) }}" alt="User Image"
+                        class="mb-3" style="width: 100%; height: 140px; object-fit: cover;">
+
                 </div>
 
                 <div class="mb-3">

@@ -31,11 +31,11 @@
 
 <body class="index-page">
 
-    <header id="header" class="header dark-background d-flex flex-column">
+     <header id="header" class="header dark-background d-flex flex-column" style="background-color: {{ $web->color ?? '#ffffff' }};">
         <i class="header-toggle d-xl-none bi bi-list"></i>
 
         <div class="profile-img">
-            <img src="{{ asset('img/logo/logo.jpg') }}" alt="logo" class="img-fluid">
+            <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}" alt="logo" class="img-fluid">
         </div>
 
         <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
@@ -54,7 +54,6 @@
         </nav>
 
     </header>
-
     <main class="main">
         <a href="{{ route('login') }}" class="fixed-login-btn">အကောင့်၀င်ရောက်ရန်</a>
         <!-- Resume Section -->
@@ -68,7 +67,7 @@
       z-index: 1;
       overflow: hidden;
   ">
-                <img src="{{ asset('img/logo/htd.jpg') }}" alt="Background"
+                <img src="{{ !empty($web->bgimg) ? asset('bg/' . $web->bgimg) : asset('img/logo/htd.jpg') }}" alt="Background"
                     style="
         width: 100%;
         height: 100%;
@@ -253,22 +252,7 @@
     </main>
 
     <footer id="footer" class="footer position-relative light-background">
-
-        <div class="container">
-            <div class="copyright text-center ">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights
-                        Reserved</span></p>
-            </div>
-            <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you've purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a
-                    href="https://themewagon.com">ThemeWagon</a>
-            </div>
-        </div>
-
+               {!! $web->footer !!}
     </footer>
 
     <!-- Scroll Top -->
@@ -310,7 +294,16 @@
             });
         </script>
     @endif
-
+  <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Use the Blade variable to get the color
+            var headerColor = "{{ $web->color ?? '#ffffff' }}"; // fallback to white
+            var header = document.getElementById('header');
+            if (header) {
+                header.style.backgroundColor = headerColor;
+            }
+        });
+    </script>
 
 </body>
 

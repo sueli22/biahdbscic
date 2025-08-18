@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\YearlyReport;
+use App\Models\Web;
 
 class YearlyReportController extends Controller
 {
@@ -16,12 +17,14 @@ class YearlyReportController extends Controller
 
     public function homeYearlyReport()
     {
-        return view('home.report');
+        $web = Web::first();
+        return view('home.report', compact('web'));
     }
 
     public function index()
     {
-        return view('admin.reports.index');
+        $web = Web::first();
+        return view('admin.reports.index', compact('web'));
     }
 
     public function list(Request $request)

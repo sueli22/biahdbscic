@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Web;
 
 class EmployeeController extends Controller
 {
@@ -19,8 +20,9 @@ class EmployeeController extends Controller
     }
     public function showProfile()
     {
+        $web = Web::first();
         $user = $this->getUser();
-        return view('employee.profile.show', compact('user'));
+        return view('employee.profile.show', compact('user', 'web'));
     }
 
     public function updateImage(Request $request)
@@ -46,13 +48,14 @@ class EmployeeController extends Controller
 
     public function showLeaveRequestForm()
     {
+        $web = Web::first();
         $user = auth()->user();
         $leaveTypes = LeaveType::all();
         $leaveRequests = LeaveRequest::where('user_id', $user->id)
             ->with('leaveType') // eager load leave type
             ->get();
 
-        return view('employee.leave.index', compact('user', 'leaveTypes', 'leaveRequests'));
+        return view('employee.leave.index', compact('user', 'leaveTypes', 'leaveRequests', 'web'));
     }
 
 
@@ -148,11 +151,12 @@ class EmployeeController extends Controller
     }
     public function showSalaryList()
     {
+        $web = Web::first();
         $paySalaries = PaySalary::with('user')
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
-        return view('employee.salary.list', compact('paySalaries'));
+        return view('employee.salary.list', compact('paySalaries', 'web'));
     }
 }

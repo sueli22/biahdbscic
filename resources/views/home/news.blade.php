@@ -84,11 +84,8 @@
         </ul>
     </main>
 
-    <footer class="footer text-center">
-        <div class="container">
-            <p>© <strong>MPOF</strong> | All Rights Reserved</p>
-            <p>Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a></p>
-        </div>
+    <footer id="footer" class="footer position-relative light-background">
+               {!! $web->footer !!}
     </footer>
 
     <!-- Scripts -->

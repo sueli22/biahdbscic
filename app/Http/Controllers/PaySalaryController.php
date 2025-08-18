@@ -6,18 +6,20 @@ use App\Models\PaySalary;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Models\LeaveRequest;
+use App\Models\Web;
 use Illuminate\Http\Request;
 
 class PaySalaryController extends Controller
 {
     public function index()
     {
+        $web = Web::first();
         // Load users for dropdown
         $users = User::select('id', 'name')
             ->where('super_user', '!=', 1)
             ->get();
         $paySalaries = PaySalary::with('user')->latest()->get();
-        return view('admin.payroll.index', compact('users', 'paySalaries'));
+        return view('admin.payroll.index', compact('users', 'paySalaries', 'web'));
     }
 
     public function store(Request $request)
@@ -75,5 +77,4 @@ class PaySalaryController extends Controller
 
         return redirect()->back()->with('success', 'လစာကို အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။');
     }
-
 }

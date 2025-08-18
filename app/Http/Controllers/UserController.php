@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Web;
 use App\Http\Requests\UserLoginRequest;
 
 class UserController extends Controller
 {
     public function login(UserLoginRequest $request)
     {
+        $web = Web::first();
         $credentials = $request->only('email', 'password');
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
@@ -27,7 +29,8 @@ class UserController extends Controller
 
     public function loginForm()
     {
-        return view('auth.login');
+        $web = Web::first();
+        return view('auth.login', compact('web'));
     }
 
     public function logout()

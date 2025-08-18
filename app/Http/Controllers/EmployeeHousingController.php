@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EmployeeHousing;
 use Illuminate\Http\Request;
+use App\Models\Web;
 
 class EmployeeHousingController extends Controller
 {
@@ -12,6 +13,7 @@ class EmployeeHousingController extends Controller
      */
     public function employeeHouseList(Request $request)
     {
+        $web = Web::first();
         $status = $request->get('status');
 
         $query = EmployeeHousing::with('user');
@@ -22,7 +24,7 @@ class EmployeeHousingController extends Controller
 
         $housings = $query->latest()->get();
 
-        return view('admin.staff.house', compact('housings', 'status'));
+        return view('admin.staff.house', compact('housings', 'status', 'web'));
     }
 
     /**
@@ -30,10 +32,11 @@ class EmployeeHousingController extends Controller
      */
     public function createForm()
     {
+        $web = Web::first();
         $userId = auth()->id();
         $requests = EmployeeHousing::where('user_id', $userId)->get();
         $hasRequest = $requests->isNotEmpty();
-        return view('employee.housing.create', compact('requests', 'hasRequest'));
+        return view('employee.housing.create', compact('requests', 'hasRequest', 'web'));
     }
 
     /**

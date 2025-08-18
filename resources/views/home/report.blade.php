@@ -73,17 +73,8 @@
         </div>
     </main>
 
-    <footer id="footer" class="footer position-relative light-background mt-4">
-        <div class="container">
-            <div class="copyright text-center">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights
-                        Reserved</span></p>
-            </div>
-            <div class="credits">
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a
-                    href="https://themewagon.com">ThemeWagon</a>
-            </div>
-        </div>
+    <footer id="footer" class="footer position-relative light-background">
+               {!! $web->footer !!}
     </footer>
 
     <!-- Scripts -->

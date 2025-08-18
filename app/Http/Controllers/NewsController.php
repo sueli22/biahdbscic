@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
+use App\Models\Web;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -11,9 +12,10 @@ class NewsController extends Controller
 
     public function welcomeNews()
     {
+        $web = Web::first();
         $news = News::where('is_public', 1)->latest()->get();
 
-        return view('home.news', compact('news'));
+        return view('home.news', compact('news', 'web'));
     }
 
     public function staffNews()
@@ -25,7 +27,8 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::all();
-        return view('admin.news.index', compact('news'));
+        $web = Web::first();
+        return view('admin.news.index', compact('news', 'web'));
     }
 
     public function store(Request $request)

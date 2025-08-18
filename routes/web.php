@@ -15,6 +15,8 @@ use App\Http\Controllers\YearlyReportController;
 use Illuminate\Support\Facades\Route;
 use App\Mail\HelloMail;
 use App\Models\Attendence;
+use App\Models\web;
+use App\Http\Controllers\WebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +30,8 @@ use App\Models\Attendence;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+     $web = Web::first();
+        return view('welcome', compact('web'));
 })->name('welcome');
 
 Route::post('/translate', [TranslateController::class, 'translate'])->name('translate');
@@ -93,7 +96,8 @@ Route::delete('/news/{news}', [NewsController::class, 'destroy'])->name('news.de
 
 
 Route::get('/employee/dashboard', function () {
-    return view('employee.home');
+    $web = Web::first();
+    return view('employee.home', compact('web'));
 })->name('employee.dashboard')->middleware('auth');
 Route::get('/employee/salary', [EmployeeController::class, 'showSalaryList'])->name('employee.salary.list');
 Route::get('/employee/leave/request', [EmployeeController::class, 'showLeaveRequestForm'])->name('employee.leave.index');
@@ -101,6 +105,8 @@ Route::post('/leave-requests', [EmployeeController::class, 'storeLeaveRequest'])
 Route::get('/sendmail/create', [SendMailController::class, 'create'])->name('sendmail.create'); // show form
 Route::post('/sendmail', [SendMailController::class, 'store'])->name('sendmail.store'); // store + send email
 
+Route::get('/webs', [WebController::class, 'index'])->name('web.index');
+Route::put('/webs/{id}', [WebController::class, 'update'])->name('web.update');
 // routes/web.php
 
 Route::post('/admin/sendbackmail', [SendMailController::class, 'sendBack'])->name('sendmail.sendback');

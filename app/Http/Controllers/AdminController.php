@@ -15,12 +15,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Common\Type;
+use App\Models\Web;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function indexDashboard()
     {
+        $web = Web::first();
         $usersByPosition = User::select('position_id', DB::raw('count(*) as total'))
             ->groupBy('position_id')
             ->with('position')
@@ -31,7 +33,7 @@ class AdminController extends Controller
             ->groupBy('positions.title')
             ->get();
 
-        return view('admin.home', compact('usersByPosition', 'salaryByPosition'));
+        return view('admin.home', compact('usersByPosition', 'salaryByPosition', 'web'));
     }
 
     private function getUser()
@@ -40,18 +42,21 @@ class AdminController extends Controller
     }
     public function showProfile()
     {
+        $web = Web::first();
         $user = $this->getUser();
-        return view('admin.profile.profile', compact('user'));
+        return view('admin.profile.profile', compact('user', 'web'));
     }
 
     public function editProfile()
     {
+        $web = Web::first();
         $user = $this->getUser();
-        return view('admin.profile.profile_edit', compact('user'));
+        return view('admin.profile.profile_edit', compact('user', 'web'));
     }
 
     public function updateProfile(UpdateUserProfileRequest $request)
     {
+        $web = Web::first();
         $user = auth()->user();
 
         $validated = $request->validated();
@@ -68,8 +73,9 @@ class AdminController extends Controller
 
     public function showsStaffList()
     {
+        $web = Web::first();
         $staffs = User::where('super_user', false)->get();
-        return view('admin.staff.list', compact('staffs'));
+        return view('admin.staff.list', compact('staffs', 'web'));
     }
 
     public function destroyStaff($id)
@@ -208,6 +214,7 @@ class AdminController extends Controller
 
     public function leaveRequestList(Request $request)
     {
+        $web = Web::first();
         $status = $request->get('status');
 
         $query = LeaveRequest::with(['user', 'leaveType']);
@@ -218,7 +225,7 @@ class AdminController extends Controller
 
         $leaveRequests = $query->latest()->get();
 
-        return view('admin.leave.request', compact('leaveRequests', 'status'));
+        return view('admin.leave.request', compact('leaveRequests', 'status', 'web'));
     }
 
     // In Admin\LeaveRequestController.php

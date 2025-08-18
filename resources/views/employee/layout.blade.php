@@ -32,11 +32,11 @@
 
 <body class="index-page">
 
-    <header id="header" class="header dark-background d-flex flex-column">
+     <header id="header" class="header dark-background d-flex flex-column" style="background-color: {{ $web->color ?? '#ffffff' }};">
         <i class="header-toggle d-xl-none bi bi-list"></i>
 
         <div class="profile-img">
-            <img src="{{ asset('img/logo/logo.jpg') }}" alt="logo" class="img-fluid">
+            <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}" alt="logo" class="img-fluid">
         </div>
 
         <a href="{{route('welcome')}}" class="logo d-flex align-items-center justify-content-center">
@@ -103,23 +103,8 @@
 
         @yield('content')
     </main>
-    <footer id="footer" class="footer position-relative light-background">
-
-        <div class="container">
-            <div class="copyright text-center ">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights
-                        Reserved</span></p>
-            </div>
-            <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you've purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a
-                    href="https://themewagon.com">ThemeWagon</a>
-            </div>
-        </div>
-
+       <footer id="footer" class="footer position-relative light-background">
+               {!! $web->footer !!}
     </footer>
     <!-- Load jQuery FIRST -->
     <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -155,6 +140,17 @@
             });
         </script>
     @endif
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Use the Blade variable to get the color
+            var headerColor = "{{ $web->color ?? '#ffffff' }}"; // fallback to white
+            var header = document.getElementById('header');
+            if (header) {
+                header.style.backgroundColor = headerColor;
+            }
+        });
+    </script>
     <!-- Your custom scripts last -->
     @yield('scripts')
 

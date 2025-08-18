@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Web extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['color','logoimg','bgimg','footer'];
 }

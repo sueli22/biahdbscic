@@ -6,21 +6,24 @@ use Illuminate\Http\Request;
 use App\Models\Attendance;
 use App\Models\Attendence;
 use Carbon\Carbon;
+use App\Models\Web;
 
 class AttendenceController extends Controller
 {
     public function showAttendance()
     {
+        $web = Web::first();
         $attendances = Attendence::where('user_id', auth()->id())
             ->orderBy('date', 'desc')
             ->get();
-        return view('employee.attendance.show', compact('attendances'));
+        return view('employee.attendance.show', compact('attendances', 'web'));
     }
 
     public function showAttendanceList()
     {
+        $web = Web::first();
         $attendances = Attendence::all();
-        return view('admin.attendance.list', compact('attendances'));
+        return view('admin.attendance.list', compact('attendances', 'web'));
     }
 
     public function storeToday(Request $request)
