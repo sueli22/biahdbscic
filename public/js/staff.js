@@ -7,19 +7,19 @@ $(document).ready(function() {
 
     $('.staff-list').show();
     $('.staff-grid-container').hide();
-     $('#btnShowTable').on('click', function() {
-            $('.staff-list').show();
-            $('.staff-grid-container').hide();
-            $(this).addClass('active');
-            $('#btnShowGrid').removeClass('active');
-        });
+    $('#btnShowTable').on('click', function() {
+        $('.staff-list').show();
+        $('.staff-grid-container').hide();
+        $(this).addClass('active');
+        $('#btnShowGrid').removeClass('active');
+    });
 
-        $('#btnShowGrid').on('click', function() {
-            $('.staff-list').hide();
-            $('.staff-grid-container').show();
-            $(this).addClass('active');
-            $('#btnShowTable').removeClass('active');
-        });
+    $('#btnShowGrid').on('click', function() {
+        $('.staff-list').hide();
+        $('.staff-grid-container').show();
+        $(this).addClass('active');
+        $('#btnShowTable').removeClass('active');
+    });
 
     // Initialize DataTable
     $('#staffTable').DataTable({
@@ -47,15 +47,15 @@ $(document).ready(function() {
             url: '/api/positions',
             method: 'GET',
             success: function(positions) {
-            var $select = $('#' + selectId);
-            $select.empty().append('<option value="" disabled selected>ရာထူးရွေးပါ</option>');
-            $.each(positions, function(i, pos) {
-                $select.append('<option value="' + pos.position_id + '">' + pos.title + '</option>');
-            });
-            if (currentPositionId !== null) {
-                $select.val(currentPositionId); // Set the value AFTER options are loaded
-            }
-        },
+                var $select = $('#' + selectId);
+                $select.empty().append('<option value="" disabled selected>ရာထူးရွေးပါ</option>');
+                $.each(positions, function(i, pos) {
+                    $select.append('<option value="' + pos.position_id + '">' + pos.title + '</option>');
+                });
+                if (currentPositionId !== null) {
+                    $select.val(currentPositionId); // Set the value AFTER options are loaded
+                }
+            },
             error: function() {
                 alert('Positions load failed!');
             }
@@ -66,6 +66,8 @@ $(document).ready(function() {
     $('#btnCreateStaff').click(function() {
         $('#createStaffForm')[0].reset();
         $('#preview_image').hide();
+        $('.invalid-feedback').html('');
+        $('.form-control, .form-select, .form-check-input').removeClass('is-invalid');
         loadPositions('create_staff_position_id');
         $('#createStaffModal').modal('show');
     });
@@ -107,7 +109,8 @@ $(document).ready(function() {
     // Open Edit Modal and populate form
     $('#staffTable, .staff-grid-container').on('click', '.edit-btn', function() {
         let staffId = $(this).data('id');
-
+        $('.invalid-feedback').html('');
+        $('.form-control, .form-select, .form-check-input').removeClass('is-invalid');
         $.ajax({
             url: '/staff/' + staffId + '/edit',
             method: 'GET',
@@ -135,9 +138,9 @@ $(document).ready(function() {
                 $('#staff_phno').val(staff.phno);
                 $('#staff_department').val(staff.department);
                 $('#staff_gender').val(staff.gender);
-
-                $('#staff_married_status').prop('checked', staff.married_status == 1);
+                $('#staff_married_status').val(staff.married_status);
                 $('#staff_super_user').prop('checked', staff.super_user == 1);
+
 
                 // Load positions with current position selected
                 var $posSelect = $('#edit_staff_position_id');
@@ -168,7 +171,7 @@ $(document).ready(function() {
 
         $.ajax({
             url: '/staff/' + staffId, // Assumes RESTful update route
-            method: 'POST',          // Laravel expects POST + _method=PUT for PUT
+            method: 'POST', // Laravel expects POST + _method=PUT for PUT
             data: formData,
             contentType: false,
             processData: false,
@@ -182,8 +185,9 @@ $(document).ready(function() {
             error: function(xhr) {
                 if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
+                    console.log(errors);
                     $.each(errors, function(field, messages) {
-                        $('#error-' + field).html(messages[0]);
+                        $('#edit-error-' + field).html(messages[0]);
                         $('[name="' + field + '"]').addClass('is-invalid');
                     });
                 } else {
@@ -194,42 +198,43 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.view-btn', function() {
-    var staffId = $(this).data('id');
+        var staffId = $(this).data('id');
 
-    $.ajax({
-        url: '/staff/' + staffId,  // Adjust to your route for fetching staff JSON data
-        type: 'GET',
-        success: function(data) {
-            // Image URL or placeholder
-            let imageUrl = data.image ? '/storage/' + data.image : 'https://via.placeholder.com/120';
-            $('#staff_image_show').attr('src', imageUrl);
+        $.ajax({
+            url: '/staff/' + staffId, // Adjust to your route for fetching staff JSON data
+            type: 'GET',
+            success: function(data) {
+                console.log(data.married_status);
+                // Image URL or placeholder
+                let imageUrl = data.image ? '/storage/' + data.image : 'https://via.placeholder.com/120';
+                $('#staff_image_show').attr('src', imageUrl);
 
-            // Fill in all the fields
-            $('#staff_name_show').text(data.name);
-            $('#staff_email_show').text(data.email);
-            $('#staff_eid_show').text(data.eid || 'N/A');
-            $('#staff_dob_show').text(data.dob || 'N/A');
-            $('#staff_currentaddress_show').text(data.currentaddress || 'N/A');
-            $('#staff_phno_show').text(data.phno || 'N/A');
-            $('#staff_department_show').text(data.department || 'N/A');
-            $('#staff_position_show').text(data.position_name || 'N/A');  // Adjust if your data has position name
+                // Fill in all the fields
+                $('#staff_name_show').text(data.name);
+                $('#staff_email_show').text(data.email);
+                $('#staff_eid_show').text(data.eid || 'N/A');
+                $('#staff_dob_show').text(data.dob || 'N/A');
+                $('#staff_currentaddress_show').text(data.currentaddress || 'N/A');
+                $('#staff_phno_show').text(data.phno || 'N/A');
+                $('#staff_department_show').text(data.department || 'N/A');
+                $('#staff_position_show').text(data.position_name || 'N/A'); // Adjust if your data has position name
 
-            // Married status display
-            $('#staff_married_status_show').text(data.married_status == 1 ? 'လက်ထပ်ထားပါသည်' : 'လူလွတ်');
+                // Married status display
+                $('#staff_married_status_show').text(data.married_status == 1 ? 'လက်ထပ်ထားပါသည်' : 'လက်မထပ်ရသေးပါ');
 
-            // Gender display
-            let genderText = 'Other';
-            if(data.gender == 0) genderText = 'အမျိုးသမီး';
-            else if(data.gender == 1) genderText = 'အမျိုးသား';
-            $('#staff_gender_show').text(genderText);
+                // Gender display
+                let genderText = 'Other';
+                if (data.gender == 0) genderText = 'အမျိုးသမီး';
+                else if (data.gender == 1) genderText = 'အမျိုးသား';
+                $('#staff_gender_show').text(genderText);
 
-            // Show the modal
-            $('#showStaffModal').modal('show');
-        },
-        error: function() {
-            alert('Failed to load staff details.');
-        }
+                // Show the modal
+                $('#showStaffModal').modal('show');
+            },
+            error: function() {
+                alert('Failed to load staff details.');
+            }
+        });
     });
-});
 
 });

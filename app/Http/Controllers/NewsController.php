@@ -20,8 +20,9 @@ class NewsController extends Controller
 
     public function staffNews()
     {
+        $web = Web::first();
         $news = News::where('is_public', 0)->latest()->get();
-        return view('employee.news.index', compact('news'));
+        return view('employee.news.index', compact('news', 'web'));
     }
 
     public function index()
@@ -78,6 +79,7 @@ class NewsController extends Controller
             'title' => 'sometimes|required|string|max:255',
             'content' => 'sometimes|required|string',
             'image' => 'nullable|image|max:2048',
+            'is_public' => 'required|boolean', // validate is_public
         ], [
             'title.required' => 'ခေါင်းစဉ်ကို ဖြည့်ရန် လိုအပ်ပါသည်။',
             'title.string' => 'ခေါင်းစဉ်သည် စာသားဖြစ်ရမည်။',
@@ -88,21 +90,29 @@ class NewsController extends Controller
 
             'image.image' => 'ဖိုင်သည် ပုံပုံစံဖြစ်ရမည်။',
             'image.max' => 'ပုံဖိုင်အရွယ်အစားသည် ၂ မီဂါဘိုင်ထက် မပိုရပါ။',
+
+            'is_public.required' => 'ဖော်ပြမှု အဆင့်ကို ရွေးရန် လိုအပ်ပါသည်။',
+            'is_public.boolean' => 'ဖော်ပြမှု အဆင့်သည် မှန်ကန်သော အချက်အလက်ဖြစ်ရမည်။',
         ]);
 
-
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($news->image && Storage::disk('public')->exists($news->image)) {
                 Storage::disk('public')->delete($news->image);
             }
             $news->image = $request->file('image')->store('news_images', 'public');
         }
 
-        $news->update($request->only(['title', 'content', 'image']));
+        // Force is_public to 0 or 1
+        $news->is_public = $request->is_public == "1" ? 1 : 0;
+
+        $news->title = $request->title ?? $news->title;
+        $news->content = $request->content ?? $news->content;
+
+        $news->save();
 
         return response()->json($news);
     }
+
 
     public function destroy(News $news)
     {

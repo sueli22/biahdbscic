@@ -24,7 +24,6 @@
             @endforeach
 
         </ul>
-g
         @else
             <h2 class="text-center">သတင်းမရှိပါ</h2>
         @endif

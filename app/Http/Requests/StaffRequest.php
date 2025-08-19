@@ -70,6 +70,7 @@ class StaffRequest extends FormRequest
             'married_status.required' => 'လက်ထပ်မှု အချက်အလက်ထည့်ရန် လိုအပ်သည်။',
             'married_status.boolean' => 'လက်ထပ်မှု အချက်အလက် မမှန်ကန်ပါ။',
 
+            'image.required' => 'ဓာတ်ပုံထည့်ရန် လိုအပ်သည်။',
             'image.image' => 'ဓာတ်ပုံ ဖိုင်သာဖြစ်ရမည်။',
             'image.mimes' => 'ဓာတ်ပုံအမျိုးအစား မမှန်ပါ (jpeg, png, jpg, gif).',
             'image.max' => 'ဓာတ်ပုံ အရွယ်အစား 2MB အတွင်း ဖြစ်ရမည်။',

@@ -103,7 +103,6 @@ class EmployeeController extends Controller
 
                     $monthApprovedLeaves = LeaveRequest::where('user_id', $user->id)
                         ->whereNull('leave_type_id')
-                        ->where('status', 'approved')
                         ->whereYear('from_date', $fromDate->year)
                         ->whereMonth('from_date', $fromDate->month)
                         ->sum('duration');
@@ -137,9 +136,9 @@ class EmployeeController extends Controller
             'from_date.required' => 'စတင်နေ့ကို ဖြည့်ရန် လိုအပ်သည်။',
             'from_date.date' => 'စတင်နေ့သည် တရားဝင်ရက်စွဲဖြစ်ရမည်။',
             'from_date.after' => 'စတင်နေ့သည် ယနေ့နောက်မှသာ ရွေးချယ်နိုင်ပါသည်။',
-            'to_date.required' => 'ဆုံးနိမ့်နေ့ကို ဖြည့်ရန် လိုအပ်သည်။',
-            'to_date.date' => 'ဆုံးနိမ့်နေ့သည် တရားဝင်ရက်စွဲဖြစ်ရမည်။',
-            'to_date.after_or_equal' => 'ဆုံးနိမ့်နေ့သည် စတင်နေ့နှင့် ညီညွတ်ရမည် သို့မဟုတ် နောက်ရက်ဖြစ်ရမည်။',
+            'to_date.required' => 'နောက်ဆုံးခွင်ံရက်ကို ဖြည့်ရန် လိုအပ်သည်။',
+            'to_date.date' => 'နောက်ဆုံးခွင်ံရက်သည် တရားဝင်ရက်စွဲဖြစ်ရမည်။',
+            'to_date.after_or_equal' => 'နောက်ဆုံးခွင်ံရက်သည် စတင်နေ့နှင့် ညီညွတ်ရမည် သို့မဟုတ် နောက်ရက်ဖြစ်ရမည်။',
             'leave_type_id.required' => 'ခွင့်အမျိုးအစား ကိုရွေးချယ်ရန် လိုအပ်သည်။',
             'leave_type_id.exists' => 'ရွေးချယ်ထားသော ခွင့်အမျိုးအစား မရှိပါ။',
         ];

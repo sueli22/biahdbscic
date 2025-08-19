@@ -110,8 +110,9 @@ class AdminController extends Controller
         }
 
         // Convert married_status and super_user to boolean 0 or 1
-        $data['married_status'] = $request->has('married_status') ? 1 : 0;
-        $data['super_user'] = $request->has('super_user') ? 1 : 0;
+        $data['married_status'] = (int) $request->input('married_status', 0);
+        logger()->info('Update method called in AdminController.', ['data' =>$data['married_status']]);
+        $data['super_user'] = (int) $request->input('super_user', 0);
 
         // Update the staff record
         $staff->update($data);
@@ -130,7 +131,7 @@ class AdminController extends Controller
         }
 
         // Save married_status and super_user as boolean 0 or 1
-        $data['married_status'] = $request->has('married_status') ? 1 : 0;
+        $data['married_status'] = (int) $request->input('married_status', 0);
         $data['super_user'] = false;
 
         // Hash password before storing

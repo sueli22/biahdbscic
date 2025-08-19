@@ -39,13 +39,13 @@
             <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}" alt="logo" class="img-fluid">
         </div>
 
-        <a href="{{route('welcome')}}" class="logo d-flex align-items-center justify-content-center">
+        <a href="#" class="logo d-flex align-items-center justify-content-center">
             <span class="sitename">စီမံကိန်းနှင့်ဘဏ္ဍာရေးဝန်ကြီးဌာန</span>
         </a>
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li>
-                    <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <a href="#" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ
                     </a>
                 </li>

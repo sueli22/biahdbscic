@@ -42,7 +42,7 @@
             <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}" alt="logo" class="img-fluid">
         </div>
 
-        <a href="{{ route('welcome') }}" class="logo d-flex align-items-center justify-content-center">
+        <a href="#" class="logo d-flex align-items-center justify-content-center">
             <span class="sitename">စီမံကိန်းနှင့်ဘဏ္ဍာရေးဝန်ကြီးဌာန</span>
         </a>
         <nav id="navmenu" class="navmenu">

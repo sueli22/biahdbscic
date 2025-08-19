@@ -27,7 +27,6 @@ class StaffUpdateRequest extends FormRequest
             'gender' => 'required|in:0,1,2',
             'married_status' => 'required|boolean',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'password' => 'required|string|min:8',
         ];
     }
 
@@ -73,11 +72,7 @@ class StaffUpdateRequest extends FormRequest
 
             'image.image' => 'ဓာတ်ပုံ ဖိုင်သာဖြစ်ရမည်။',
             'image.mimes' => 'ဓာတ်ပုံအမျိုးအစား မမှန်ပါ (jpeg, png, jpg, gif).',
-            'image.max' => 'ဓာတ်ပုံ အရွယ်အစား 2MB အတွင်း ဖြစ်ရမည်။',
-
-            'password.required' => 'စကားဝှက်ထည့်ရန် လိုအပ်သည်။',
-            'password.string' => 'စကားဝှက်သည် စာသားဖြစ်ရမည်။',
-            'password.min' => 'စကားဝှက်သည် အနည်းဆုံး ၈ လုံးရှိရမည်။',
+            'image.max' => 'ဓာတ်ပုံ အရွယ်အစား 2MB အတွင်း ဖြစ်ရမည်။'
         ];
     }
 }

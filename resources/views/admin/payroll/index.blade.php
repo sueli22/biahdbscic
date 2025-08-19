@@ -2,7 +2,7 @@
 @section('content')
     <div class="container">
         <button type="button" id="openPayModal" class="btn btn-primary">
-            လစာပေးရန် နိုပ်ပါ
+            လစာပေးရန် နှိပ်ပါ
         </button>
 
 

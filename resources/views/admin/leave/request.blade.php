@@ -98,7 +98,7 @@
                     <p><strong>ဝန်ထမ်း:</strong> <span id="detail-name"></span></p>
                     <p><strong>ခွင့်အမျိုးအစား:</strong> <span id="detail-leave-type"></span></p>
                     <p><strong>စတင်နေ့:</strong> <span id="detail-from-date"></span></p>
-                    <p><strong>ဆုံးနိမ့်နေ့:</strong> <span id="detail-to-date"></span></p>
+                    <p><strong>နောက်ဆုံးခွင်ံရက်:</strong> <span id="detail-to-date"></span></p>
                     <p><strong>ကြာချိန်:</strong> <span id="detail-duration"></span></p>
                     <p><strong>ဖော်ပြချက်:</strong> <span id="detail-description"></span></p>
                     <img id="detail-image" src="" class=" mb-2" alt="" width="100%" height="400px">
