@@ -27,27 +27,88 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- Main CSS File -->
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    <style>
+        /* Hide ugly default Google banner */
+        .goog-te-banner-frame.skiptranslate,
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        body {
+            top: 0px !important;
+        }
+
+        /* Style the translate dropdown */
+        #google_translate_element {
+            text-align: center;
+            margin: 10px auto;
+        }
+
+        #google_translate_element select {
+            background: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #google_translate_element select:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+
+        .goog-te-gadget-icon {
+            display: none !important;
+        }
+
+        /* Reset body always */
+        body {
+            top: 0px !important;
+            margin-top: 0 !important;
+            position: static !important;
+        }
+
+        .VIpgJd-ZVi9od-ORHb *,
+        .VIpgJd-ZVi9od-ORHb,
+        .VIpgJd-ZVi9od-ORHb img {
+            display: none !important;
+        }
+    </style>
+
 </head>
 
 <body class="index-page">
 
-     <header id="header" class="header dark-background d-flex flex-column" style="background-color: {{ $web->color ?? '#ffffff' }};">
+    <header id="header" class="header dark-background d-flex flex-column"
+        style="background-color: {{ $web->color ?? '#ffffff' }};">
         <i class="header-toggle d-xl-none bi bi-list"></i>
 
-        <div class="profile-img">
-            <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}" alt="logo" class="img-fluid">
+        <div class="profile-img" style="margin-top:30px">
+            <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}"
+                alt="logo" class="img-fluid">
         </div>
 
         <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
             <span class="sitename">စီမံကိန်းနှင့်ဘဏ္ဍာရေးဝန်ကြီးဌာန</span>
         </a>
+
+        <div id="google_translate_element" class="fixed-lan-btn" style="margin: 10px; text-align:center;"></div>
+
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ</a></li>
                 <li><a href="#about"><i class="bi bi-person navicon"></i>သမိုင်းကြောင်း</a></li>
                 <li><a href="{{ route('home.yearly') }}"><i
                             class="bi bi-file-earmark-text navicon"></i>စီမံကိန်းနှစ်ပတ်လည်အစီရင်ခံစာများ</a></li>
-                <li><a href="{{route('welcome.news.index')}}"><i class="bi bi-file-earmark-text navicon"></i>သတင်းများ</a></li>
+                <li><a href="{{ route('welcome.news.index') }}"><i
+                            class="bi bi-file-earmark-text navicon"></i>သတင်းများ</a></li>
                 <li><a href="#mail"><i class="bi bi-envelope navicon"></i>ဌာနဆိုင်ရာမေးလ်ပို့ရန် </a></li>
                 <li><a href="#contact"><i class="bi bi-envelope navicon"></i>ဆက်သွယ်ရန်</a></li>
             </ul>
@@ -67,7 +128,8 @@
       z-index: 1;
       overflow: hidden;
   ">
-                <img src="{{ !empty($web->bgimg) ? asset('bg/' . $web->bgimg) : asset('img/logo/htd.jpg') }}" alt="Background"
+                <img src="{{ !empty($web->bgimg) ? asset('bg/' . $web->bgimg) : asset('img/logo/htd.jpg') }}"
+                    alt="Background"
                     style="
         width: 100%;
         height: 100%;
@@ -142,8 +204,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">ဌာန</label>
-                            <input type="text" name="department" class="form-control" placeholder="ဥပမာ - အစိုးရဌာန"
-                                value="{{ old('department') }}">
+                            <input type="text" name="department" class="form-control"
+                                placeholder="ဥပမာ - အစိုးရဌာန" value="{{ old('department') }}">
                             @error('department')
                                 <div class="text-danger small">{{ $message }}</div>
                             @enderror
@@ -241,7 +303,10 @@
                     <!-- Google Map Embed -->
                     <div class="row">
                         <div class="col-12">
-                           <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3126.7450313624986!2d95.43368607624012!3d17.599801581725895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30c0c10045367eed%3A0x9c88b19ec5970fa5!2z4YCF4YCu4YCZ4YC24YCA4YCt4YCU4YC64YC44YCb4YCx4YC44YCG4YC94YCy4YCb4YCx4YC44YCm4YC44YCF4YCu4YC44YCM4YCs4YCUKOGAgeGAm-GAreGAr-GAhOGAuivhgJnhgLzhgK3hgK_hgLfhgJThgJrhgLop!5e0!3m2!1sen!2smm!4v1755180163759!5m2!1sen!2smm" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3126.7450313624986!2d95.43368607624012!3d17.599801581725895!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30c0c10045367eed%3A0x9c88b19ec5970fa5!2z4YCF4YCu4YCZ4YC24YCA4YCt4YCU4YC64YC44YCb4YCx4YC44YCG4YC94YCy4YCb4YCx4YC44YCm4YC44YCF4YCu4YC44YCM4YCs4YCUKOGAgeGAm-GAreGAr-GAhOGAuivhgJnhgLzhgK3hgK_hgLfhgJThgJrhgLop!5e0!3m2!1sen!2smm!4v1755180163759!5m2!1sen!2smm"
+                                width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                     </div>
                 </div>
@@ -252,7 +317,7 @@
     </main>
 
     <footer id="footer" class="footer position-relative light-background">
-               {!! $web->footer !!}
+        {!! $web->footer !!}
     </footer>
 
     <!-- Scroll Top -->
@@ -294,7 +359,7 @@
             });
         </script>
     @endif
-  <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Use the Blade variable to get the color
             var headerColor = "{{ $web->color ?? '#ffffff' }}"; // fallback to white
@@ -304,6 +369,42 @@
             }
         });
     </script>
+    <!-- 🌍 Google Translate -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'my',
+                includedLanguages: 'my,en,zh-CN,th', // Added Thai (th)
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+
+            // Apply CSS via JS
+            const container = document.getElementById('google_translate_element');
+            container.style.fontFamily = 'Arial, sans-serif';
+            container.style.fontSize = '14px';
+            container.style.backgroundColor = '#f0f0f0';
+            container.style.padding = '5px 0px';
+            container.style.borderRadius = '8px';
+            container.style.display = 'inline-block';
+
+            // Style the dropdown after it's rendered
+            setTimeout(() => {
+                const select = container.querySelector('select');
+                if (select) {
+                    select.style.backgroundColor = '#000000';
+                    select.style.border = '1px solid #ccc';
+                    select.style.borderRadius = '4px';
+                    select.style.padding = '2px 5px';
+                    select.style.fontSize = '14px';
+                }
+            }, 500); // Wait for the widget to load
+        }
+    </script>
+
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+    </script>
+
+
 
 </body>
 

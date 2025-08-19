@@ -1458,7 +1458,7 @@ html, body {
 }
 .fixed-login-btn {
     position: fixed;
-    top: 20px;       /* screen အပေါ်ကနေ 20px အောက် */
+    top: 50px;       /* screen အပေါ်ကနေ 20px အောက် */
     right: 20px;     /* screen ညာဘက်ကနေ 20px အတွင်း */
     background: #2855a7;
     color: white;

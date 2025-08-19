@@ -20,11 +20,11 @@ class StaffRequest extends FormRequest
             'position_id' => 'required|exists:positions,position_id',
             'dob' => 'required|date|before:2000-01-01',
             'currentaddress' => 'nullable|string|max:255',
-            'phno' => 'nullable|string|max:20',
-            'department' => 'nullable|string|max:100',
-            'gender' => 'nullable|in:0,1,2',
-            'married_status' => 'nullable|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'phno' => 'required|regex:/^09\d{7,9}$/|max:11',
+            'department' => 'required|string|max:100',
+            'gender' => 'required|in:0,1,2',
+            'married_status' => 'required|boolean',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'password' => 'required|string|min:8',
         ];
     }
@@ -55,14 +55,19 @@ class StaffRequest extends FormRequest
             'currentaddress.string' => 'လိပ်စာသည် စာသားဖြစ်ရမည်။',
             'currentaddress.max' => 'လိပ်စာသည် ၂၅၅ စာလုံးအတွင်း ဖြစ်ရမည်။',
 
+            'phno.required' => 'ဖုန်းနံပါတ်ထည့်ရန် လိုအပ်သည်။',
+            'phno.regex' => 'ဖုန်းနံပါတ်သည် 09XXXXXXXXX (09 နံပါတ်ဖြင့် စတင်ပြီး ၁၁ လုံးရှိရမည်) ။',
             'phno.string' => 'ဖုန်းနံပါတ်သည် စာသားဖြစ်ရမည်။',
-            'phno.max' => 'ဖုန်းနံပါတ်သည် ၂၀ စာလုံးအတွင်း ဖြစ်ရမည်။',
+            'phno.max' => 'ဖုန်းနံပါတ်သည် 11 စာလုံးအတွင်း ဖြစ်ရမည်။',
 
+            'department.required' => 'ဌာနထည့်ရန် လိုအပ်သည်။',
             'department.string' => 'ဌာနသည် စာသားဖြစ်ရမည်။',
             'department.max' => 'ဌာနသည် ၁၀၀ စာလုံးအတွင်း ဖြစ်ရမည်။',
 
+            'gender.required' => 'ကျား/မ/အခြား သတ်မှတ်ချက်ထည့်ရန် လိုအပ်သည်။',
             'gender.in' => 'ကျား/မ/အခြား သတ်မှတ်ချက် မမှန်ကန်ပါ။',
 
+            'married_status.required' => 'လက်ထပ်မှု အချက်အလက်ထည့်ရန် လိုအပ်သည်။',
             'married_status.boolean' => 'လက်ထပ်မှု အချက်အလက် မမှန်ကန်ပါ။',
 
             'image.image' => 'ဓာတ်ပုံ ဖိုင်သာဖြစ်ရမည်။',
