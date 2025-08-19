@@ -30,7 +30,7 @@
         <div class="mt-4">
             <div class="d-flex align-items-center mb-3">
                 <a href="{{ url('/') }}">
-                    <img src="/img/logo/logo.jpg" alt="logo"
+                    <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}" alt="logo"
                         style="max-width: 40px; height: 40px; margin-right: 20px; border-radius: 20%;">
                 </a>
                 <h2 class="mb-0">စီမံကိန်းနှစ်ပတ်လည်အစီရင်ခံစာများ</h2>
@@ -105,24 +105,27 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-    $(document).ready(function() {
-        function loadTable(from = '', to = '') {
-            $.ajax({
-                url: '{{ route('yearly_reports.list') }}',
-                type: 'GET',
-                dataType: 'json',
-                data: { from: from, to: to },
-                success: function(data) {
-                    if ($.fn.DataTable.isDataTable('#reportsTable')) {
-                        $('#reportsTable').DataTable().destroy();
-                    }
-                    $('#reportsTable tbody').empty();
+        $(document).ready(function() {
+            function loadTable(from = '', to = '') {
+                $.ajax({
+                    url: '{{ route('yearly_reports.list') }}',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        from: from,
+                        to: to
+                    },
+                    success: function(data) {
+                        if ($.fn.DataTable.isDataTable('#reportsTable')) {
+                            $('#reportsTable').DataTable().destroy();
+                        }
+                        $('#reportsTable tbody').empty();
 
-                    let departmentData = {}; // Pie chart
-                    let yearlyTender = {};   // Bar chart
+                        let departmentData = {}; // Pie chart
+                        let yearlyTender = {}; // Bar chart
 
-                    $.each(data, function(index, report) {
-                        $('#reportsTable tbody').append(`
+                        $.each(data, function(index, report) {
+                            $('#reportsTable tbody').append(`
                             <tr>
                                 <td>${index + 1}</td>
                                 <td>${report.from || ''}</td>
@@ -134,91 +137,119 @@
                                 <td>${report.department || ''}</td>
                                 <td>${report.total_investment ? report.total_investment + ' ကျပ်' : ''}</td>
                                 <td>${report.operation_year || ''}</td>
-                                <td>${report.regional_budget ? report.regional_budget + ' ကျပ်' : ''}</td>
-                                <td>${report.tender_price ? report.tender_price + ' ကျပ်' : ''}</td>
+                                <td>${report.regional_budget ? report.regional_budget  : ''}</td>
+                                <td>${report.tender_price ? report.tender_price : ''}</td>
                             </tr>
                         `);
 
-                        // Department count
-                        if (report.department) {
-                            departmentData[report.department] = (departmentData[report.department] || 0) + 1;
-                        }
-
-                        // Tender price sum per year
-                        if (report.operation_year && report.tender_price) {
-                            let price = parseFloat(report.tender_price);
-                            if (!isNaN(price)) {
-                                yearlyTender[report.operation_year] = (yearlyTender[report.operation_year] || 0) + price;
+                            // Department count
+                            if (report.department) {
+                                departmentData[report.department] = (departmentData[report
+                                    .department] || 0) + 1;
                             }
-                        }
-                    });
 
-                    // ---------- Pie Chart ----------
-                    const deptCtx = document.getElementById('departmentPieChart').getContext('2d');
-                    if (window.departmentChart) window.departmentChart.destroy();
-                    window.departmentChart = new Chart(deptCtx, {
-                        type: 'pie',
-                        data: {
-                            labels: Object.keys(departmentData),
-                            datasets: [{
-                                data: Object.values(departmentData),
-                                backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF','#FF9F40']
-                            }]
-                        },
-                        options: { responsive:true, plugins:{legend:{position:'bottom'}, title:{display:true,text:'Reports by Department'}} }
-                    });
+                            // Tender price sum per year
+                            if (report.operation_year && report.tender_price) {
+                                let price = parseFloat(report.tender_price);
+                                if (!isNaN(price)) {
+                                    yearlyTender[report.operation_year] = (yearlyTender[report
+                                        .operation_year] || 0) + price;
+                                }
+                            }
+                        });
 
-                    // ---------- Bar Chart ----------
-                    let sortedYears = Object.keys(yearlyTender).sort((a,b)=>yearlyTender[b]-yearlyTender[a]);
-                    const tenderCtx = document.getElementById('tenderYearChart').getContext('2d');
-                    if (window.tenderChart) window.tenderChart.destroy();
-                    window.tenderChart = new Chart(tenderCtx, {
-                        type:'bar',
-                        data:{
-                            labels: sortedYears,
-                            datasets:[{
-                                label:'Tender Price (ကျပ်)',
-                                data: sortedYears.map(y => yearlyTender[y]),
-                                backgroundColor:'#36A2EB'
-                            }]
-                        },
-                        options:{ responsive:true, plugins:{legend:{display:false}, title:{display:true,text:'Tender Price per Year (Max → Min)'}}, scales:{y:{beginAtZero:true}}}
-                    });
+                        // ---------- Pie Chart ----------
+                        const deptCtx = document.getElementById('departmentPieChart').getContext('2d');
+                        if (window.departmentChart) window.departmentChart.destroy();
+                        window.departmentChart = new Chart(deptCtx, {
+                            type: 'pie',
+                            data: {
+                                labels: Object.keys(departmentData),
+                                datasets: [{
+                                    data: Object.values(departmentData),
+                                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56',
+                                        '#4BC0C0', '#9966FF', '#FF9F40'
+                                    ]
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom'
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Reports by Department'
+                                    }
+                                }
+                            }
+                        });
 
-                    // ---------- DataTable ----------
-                    $('#reportsTable').DataTable({
-                        dom: 'Bfrtip',
-                        buttons:[{
-                            extend:'csvHtml5',
-                            text:'<i class="bi bi-download"></i> Download CSV',
-                            className:'btn btn-success btn-sm custom-download-btn',
-                            title:'Yearly Reports',
-                            bom:true,
-                            exportOptions:{columns:':visible'}
-                        }]
-                    });
-                },
-                error: function(xhr) {
-                    alert('တောင်းဆိုမှုတွင် အမှားဖြစ်နေပါသည်။');
-                    console.log(xhr.responseText);
-                }
+                        // ---------- Bar Chart ----------
+                        let sortedYears = Object.keys(yearlyTender).sort((a, b) => yearlyTender[b] -
+                            yearlyTender[a]);
+                        const tenderCtx = document.getElementById('tenderYearChart').getContext('2d');
+                        if (window.tenderChart) window.tenderChart.destroy();
+                        window.tenderChart = new Chart(tenderCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: sortedYears,
+                                datasets: [{
+                                    label: 'Tender Price (ကျပ်)',
+                                    data: sortedYears.map(y => yearlyTender[y]),
+                                    backgroundColor: '#36A2EB'
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Tender Price per Year (Max → Min)'
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+
+                        // ---------- DataTable ----------
+                        $('#reportsTable').DataTable({
+                            dom: 'Bflrtip',
+                            buttons: [
+                                'copy', 'excel', 'print'
+                            ]
+                        });
+                    },
+                    error: function(xhr) {
+                        alert('တောင်းဆိုမှုတွင် အမှားဖြစ်နေပါသည်။');
+                        console.log(xhr.responseText);
+                    }
+                });
+            }
+
+            // Initial load
+            loadTable();
+
+            // Filter button
+            $('#filter').click(function() {
+                loadTable($('#from').val(), $('#to').val());
             });
-        }
 
-        // Initial load
-        loadTable();
-
-        // Filter button
-        $('#filter').click(function() {
-            loadTable($('#from').val(), $('#to').val());
+            // Toggle Table/Charts
+            $('#toggleCharts').click(function() {
+                $('#tableContainer, #chartContainer').toggle();
+                $(this).text($('#chartContainer').is(':visible') ? 'Show Table' : 'Show Charts');
+            });
         });
-
-        // Toggle Table/Charts
-        $('#toggleCharts').click(function() {
-            $('#tableContainer, #chartContainer').toggle();
-            $(this).text($('#chartContainer').is(':visible') ? 'Show Table' : 'Show Charts');
-        });
-    });
     </script>
 </body>
+
 </html>
