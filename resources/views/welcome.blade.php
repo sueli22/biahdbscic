@@ -397,7 +397,11 @@
                     select.style.padding = '2px 5px';
                     select.style.fontSize = '14px';
                 }
-            }, 500); // Wait for the widget to load
+            }, 500);
+            setTimeout(() => {
+    const banner = document.querySelector('.VIpgJd-yAWNEb-L7lbkb > div');
+    if (banner) banner.style.display = 'none';
+}, 1000); // Wait for the widget to load
         }
     </script>
 

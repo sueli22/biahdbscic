@@ -28,6 +28,7 @@
 <body class="index-page">
     <main class="container main">
         <div class="mt-4">
+            <div id="google_translate_element"></div>
             <div class="d-flex align-items-center mb-3">
                 <a href="{{ url('/') }}">
                     <img src="/img/logo/logo.jpg" alt="logo"
@@ -220,5 +221,43 @@
         });
     });
     </script>
+    <script type="text/javascript">
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'my',
+        includedLanguages: 'my,en,zh-CN,th',  // Added Thai (th)
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+
+    // Apply CSS via JS
+    const container = document.getElementById('google_translate_element');
+    container.style.fontFamily = 'Arial, sans-serif';
+    container.style.fontSize = '14px';
+    container.style.backgroundColor = '#f0f0f0';
+    container.style.padding = '5px 10px';
+    container.style.borderRadius = '8px';
+    container.style.display = 'inline-block';
+
+    // Style the dropdown after it's rendered
+    setTimeout(() => {
+        const select = container.querySelector('select');
+        if (select) {
+            select.style.backgroundColor = '#fff';
+            select.style.border = '1px solid #ccc';
+            select.style.borderRadius = '4px';
+            select.style.padding = '2px 5px';
+            select.style.fontSize = '14px';
+        }
+    }, 500); // Wait for the widget to load
+}
+setTimeout(() => {
+    const banner = document.querySelector('.VIpgJd-yAWNEb-L7lbkb > div');
+    if (banner) banner.style.display = 'none';
+}, 1000);
+</script>
+
+<script type="text/javascript"
+    src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+</script>
 </body>
 </html>
