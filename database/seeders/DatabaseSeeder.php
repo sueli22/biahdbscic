@@ -28,8 +28,8 @@ class DatabaseSeeder extends Seeder
             'image' => 'default.jpg',
             'position_id' => null,  // optional
             'eid' => 'E0001',     // employee ID, must be unique
-            'name' => 'Wyine',
-            'email' => 'w@gmail.com',
+            'name' => 'OOKyawKhaing',
+            'email' => 'admin@gmail.com',
             'dob' => '1990-01-01',
             'currentaddress' => 'Yangon, Myanmar',
             'phno' => '0912345678',

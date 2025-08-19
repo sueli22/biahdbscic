@@ -31,7 +31,7 @@
             <div id="google_translate_element"></div>
             <div class="d-flex align-items-center mb-3">
                 <a href="{{ url('/') }}">
-                    <img src="/img/logo/logo.jpg" alt="logo"
+                    <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}" alt="logo"
                         style="max-width: 40px; height: 40px; margin-right: 20px; border-radius: 20%;">
                 </a>
                 <h2 class="mb-0">စီမံကိန်းနှစ်ပတ်လည်အစီရင်ခံစာများ</h2>
