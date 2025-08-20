@@ -91,19 +91,24 @@ class EmployeeController extends Controller
                     $requestedDays = $fromDate->diffInDays($toDate) + 1;
 
                     // Check monthly limit (3 days)
+                    // Check existing leaves in this month
                     $monthLeaves = LeaveRequest::where('user_id', $user->id)
                         ->whereNull('leave_type_id') // casual leave
                         ->whereYear('from_date', $fromDate->year)
                         ->whereMonth('from_date', $fromDate->month)
                         ->sum('duration');
 
+                    if ($monthLeaves >= 3) {
+                        $fail('ယခုလအတွက် casual leave ၃ ရက်လုံး အသုံးပြုပြီးပါပြီး ထပ်မလျှောက်နိုင်ပါ။');
+                    }
+
+                    // 🚨 Prevent exceeding 3 days in the same month
                     if (($monthLeaves + $requestedDays) > 3) {
-                        $fail('သင်သည် ယခုလအတွက် casual leave ၃ရက်ရယူပီးပီ ဖစ်ပါသည်။ တစ်လတွင် casual leave သည် 3 ရက်ထက် ပိုမရနိုင်ပါ။');
+                        $fail('တစ်လအတွင်း casual leave သည် အများဆုံး 3 ရက်သာ ခွင့်ပြုသည်။');
                     }
 
                     $monthApprovedLeaves = LeaveRequest::where('user_id', $user->id)
                         ->whereNull('leave_type_id')
-                        ->whereYear('from_date', $fromDate->year)
                         ->whereMonth('from_date', $fromDate->month)
                         ->sum('duration');
                     if ($monthApprovedLeaves > 3) {
