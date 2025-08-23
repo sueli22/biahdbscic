@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Models\Web;
 
 class EmployeeController extends Controller
@@ -48,6 +49,16 @@ class EmployeeController extends Controller
 
     public function showLeaveRequestForm()
     {
+        $leaveRules = [
+            'shaung'              => 10,   // တစ်နှစ် ၁၀ ရက်
+            'contagious'          => 30,   // ၃၀ ရက်
+            'long-service'        => 60,   // ၂ လ
+            'medical-certificate' => 365,  // ၁၂ လ
+            'maternity'           => 180,  // ၆ လ
+            'disability'          => 730,  // ၂ နှစ်
+            'no-pay'              => null,   // တစ်နှစ် ၁၀ ရက်
+        ];
+
         $web = Web::first();
         $user = auth()->user();
         $leaveTypes = LeaveType::all();
@@ -55,73 +66,37 @@ class EmployeeController extends Controller
             ->with('leaveType') // eager load leave type
             ->get();
 
-        return view('employee.leave.index', compact('user', 'leaveTypes', 'leaveRequests', 'web'));
+        // Usage
+        $leaveUsages = LeaveRequest::selectRaw('req_type, SUM(duration) as used_days')
+            ->where('user_id', $user->id)
+            ->whereIn('status', ['approved', 'pending'])
+            ->whereYear('from_date', now()->year) // သာမန် leave များ yearly reset
+            ->groupBy('req_type')
+            ->pluck('used_days', 'req_type')
+            ->toArray();
+
+        // Balance
+        $leaveBalances = [];
+        foreach ($leaveRules as $type => $maxDays) {
+            $used = $leaveUsages[$type] ?? 0;
+            $left = max($maxDays - $used, 0);
+
+            $leaveBalances[$type] = [
+                'max'  => $maxDays,
+                'used' => $used,
+                'left' => $left,
+            ];
+        }
+
+
+        return view('employee.leave.index', compact('user', 'leaveTypes', 'leaveRequests', 'web', 'leaveBalances'));
     }
 
 
     public function storeLeaveRequest(Request $request)
     {
         $user = auth()->user();
-        $today = Carbon::today();
 
-        // Base validation rules
-        $rules = [
-            'leave_type' => 'required|in:casual,special',
-            'description' => 'nullable|string',
-            'img' => 'nullable|image|max:2048', // 2MB max
-        ];
-
-        // Conditional rules
-        if ($request->leave_type === 'casual') {
-
-            $rules['from_date'] = 'required|date|after:today';
-            $rules['to_date'] = [
-                'required',
-                'date',
-                'after_or_equal:from_date',
-                function ($attribute, $value, $fail) use ($request, $user) {
-                    $fromDate = Carbon::parse($request->from_date);
-                    $toDate   = Carbon::parse($value);
-
-                    // Check same month
-                    if ($fromDate->format('Y-m') !== $toDate->format('Y-m')) {
-                        $fail('From date နှင့် To date တို့သည် တစ်လအတွင်း ဖြစ်ရပါမည်။');
-                    }
-
-                    $requestedDays = $fromDate->diffInDays($toDate) + 1;
-
-                    // ✅ Dynamic condition for both shaung / no-shaung
-                    $monthLeaves = LeaveRequest::where('user_id', $user->id)
-                        ->where('req_type', $request->req_type)
-                        ->whereYear('from_date', $fromDate->year)
-                        ->whereMonth('from_date', $fromDate->month)
-                        ->sum('duration');
-
-                    if ($monthLeaves >= 3) {
-                        $fail('ယခုလအတွက် leave ၃ ရက် ယူပြီးပါပြီ။');
-                    }
-
-                    if (($monthLeaves + $requestedDays) > 3) {
-                        $fail('တစ်လအတွင်း leave သည် အများဆုံး 3 ရက်သာ ခွင့်ပြုသည်။');
-                    }
-
-                    $yearLeaves = LeaveRequest::where('user_id', $user->id)
-                        ->where('req_type', $request->req_type)
-                        ->whereYear('from_date', $fromDate->year)
-                        ->sum('duration');
-
-                    if (($yearLeaves + $requestedDays) > 10) {
-                        $fail('ယခုနှစ်အတွင်း "' . $request->req_type . '" leave သည် 10 ရက်ထက် မကျော်ရပါ။');
-                    }
-                }
-            ];
-        } else {
-            $rules['leave_type_id'] = 'required|exists:leave_types,id';
-            $rules['from_date']     = 'required|date|after:today';
-        }
-
-
-        // Custom error messages
         $messages = [
             'leave_type.required' => 'ခွင့်အမျိုးအစား ကိုရွေးချယ်ရန် လိုအပ်သည်။',
             'leave_type.in' => 'ခွင့်အမျိုးအစား သည် တရားဝင်မဟုတ်ပါ။',
@@ -134,57 +109,178 @@ class EmployeeController extends Controller
             'to_date.required' => 'နောက်ဆုံးခွင်ံရက်ကို ဖြည့်ရန် လိုအပ်သည်။',
             'to_date.date' => 'နောက်ဆုံးခွင်ံရက်သည် တရားဝင်ရက်စွဲဖြစ်ရမည်။',
             'to_date.after_or_equal' => 'နောက်ဆုံးခွင်ံရက်သည် စတင်နေ့နှင့် ညီညွတ်ရမည် သို့မဟုတ် နောက်ရက်ဖြစ်ရမည်။',
-            'leave_type_id.required' => 'ခွင့်အမျိုးအစား ကိုရွေးချယ်ရန် လိုအပ်သည်။',
-            'leave_type_id.exists' => 'ရွေးချယ်ထားသော ခွင့်အမျိုးအစား မရှိပါ။',
         ];
 
-        // Validate request
-        $validated = $request->validate($rules, $messages);
+        // Validation
+        $request->validate([
+            'req_type'   => 'required|string',
+            'from_date'  => 'required|date|after:today',
+            'to_date'    => $request->req_type === 'maternity' ? 'nullable|date' : 'required|date|after_or_equal:from_date',
+            'description' => 'nullable|string|max:255',
+            'img'        => 'nullable|image|max:2048',
+        ], $messages);
 
-        // Create new leave request
-        $leaveRequest = new LeaveRequest();
-        $leaveRequest->user_id = $user->id;
+        $from = Carbon::parse($request->from_date);
+        $to   = $request->to_date ? Carbon::parse($request->to_date) : $from;
+        $days = $from->diffInDays($to) + 1;
 
-        if ($request->leave_type === 'casual') {
-            $leaveRequest->leave_type_id = null;
-            $leaveRequest->from_date = $request->from_date;
-            $leaveRequest->to_date = $request->to_date;
-            $leaveRequest->req_type = $request->req_type;
-            $leaveRequest->duration = Carbon::parse($request->from_date)
-                ->diffInDays(Carbon::parse($request->to_date)) + 1;
-        } else { // special leave
-            $leaveType = LeaveType::findOrFail($request->leave_type_id);
-            $leaveRequest->leave_type_id = $leaveType->id;
-            $leaveRequest->from_date = $request->from_date;
-            $leaveRequest->duration = $leaveType->max_days;
-            $leaveRequest->req_type = $request->req_type;
-            
-            $leaveRequest->to_date = Carbon::parse($request->from_date)
-                ->addDays($leaveType->max_days - 1)
-                ->format('Y-m-d');
+        // Check overlapping leaves
+        $overlap = LeaveRequest::where('user_id', $user->id)
+            ->whereIn('status', ['approved', 'pending'])
+            ->where(function ($q) use ($from, $to) {
+                $q->whereBetween('from_date', [$from, $to])
+                    ->orWhereBetween('to_date', [$from, $to])
+                    ->orWhere(function ($q2) use ($from, $to) {
+                        $q2->where('from_date', '<=', $from)
+                            ->where('to_date', '>=', $to);
+                    });
+            })
+            ->exists();
+
+        if ($overlap) {
+            return response()->json([
+                'errors' => ['general' => ['သတ်မှတ်ထားသောရက်များတွင် ခွင့်တောင်းထားပြီးသားရှိပါသည်။']]
+            ], 422);
         }
 
-        // Description
-        $leaveRequest->description = $request->description;
+        // Merge SHAUNG leave if new leave is other type
+        if ($request->req_type !== 'shaung') {
+            $overlappingShaung = LeaveRequest::where('user_id', $user->id)
+                ->where('req_type', 'shaung')
+                ->whereIn('status', ['approved', 'pending'])
+                ->where(function ($q) use ($from, $to) {
+                    $q->where(function ($q1) use ($from, $to) {
+                        $q1->whereDate('from_date', '<=', $to->copy()->addDay())
+                            ->whereDate('to_date', '>=', $from->copy()->subDay());
+                    });
+                })
+                ->get();
 
-        // File upload
-        if ($request->hasFile('img')) {
-            $path = $request->file('img')->store('leave_docs', 'public');
-            $leaveRequest->img = $path;
+
+            logger()->info(['dd' => $overlappingShaung]);
+
+            if ($overlappingShaung->count() > 0) {
+                // Keep old SHAUNG start date
+                $oldFrom = Carbon::parse($overlappingShaung->first()->from_date);
+                // Use the max of old SHAUNG end and new leave end
+                $oldTo = $overlappingShaung->max(function ($item) {
+                    return Carbon::parse($item->to_date);
+                });
+                $newTo = Carbon::parse($request->to_date);
+                $from = $oldFrom;
+                $to = $newTo->greaterThan($oldTo) ? $newTo : $oldTo;
+                $days = $from->diffInDays($to) + 1;
+
+                // Delete all old overlapping SHAUNG leaves
+                foreach ($overlappingShaung as $shaung) {
+                    $shaung->delete();
+                }
+            }
         }
 
-        // Status
-        $leaveRequest->status = 'pending';
+        // Leave type rules
+        switch ($request->req_type) {
+            case 'shaung':
+                $from = Carbon::parse($request->from_date);
+                $to   = Carbon::parse($request->to_date ?? $from);
+                if ($from->isWeekend() || $to->isWeekend()) {
+                    return response()->json([
+                        'errors' => ['general' => ['ခွင့် စတင်ရက် သို့မဟုတ် နောက်ဆုံးရက်သည် စနေနေ့/တနင်္ဂနွေနေ့ မဖြစ်ရပါ။']]
+                    ], 422);
+                }
+                if ($days > 3) {
+                    return response()->json(['errors' => ['general' => ['တခါတင် အများဆုံး 3ရက်သာယူနိုင်သည်။']]], 422);
+                }
+                $used = LeaveRequest::where('user_id', $user->id)
+                    ->where('req_type', $request->req_type)
+                    ->whereYear('from_date', now()->year)
+                    ->whereIn('status', ['approved', 'pending'])
+                    ->sum(DB::raw('DATEDIFF(to_date, from_date) + 1'));
+                if ($used + $days > 10) {
+                    return response()->json(['errors' => ['general' => ['ခွင့်သည် တနှစ်လျှင် ၁၀ရက်သာ ရရှိနိုင်ပါသည်']]], 422);
+                }
+                $lastLeave = LeaveRequest::where('user_id', $user->id)
+                    ->where('req_type', $request->req_type)
+                    ->whereIn('status', ['approved', 'pending'])
+                    ->latest('to_date')
+                    ->first();
+                if ($lastLeave && $from->diffInDays(Carbon::parse($lastLeave->to_date)) < 2) {
+                    return response()->json(['errors' => ['general' => ['တရက်ပြန်အလုပ်တက်ပြီးမှ ထပ်တင်နိုင်သည်။']]], 422);
+                }
+                break;
 
-        // Save to database
-        $leaveRequest->save();
+            case 'infection':
+                if ($days > 30) return response()->json(['errors' => ['general' => ['ကူးစက်ရောဂါကာကွယ်ခွင့် 30ရက်ထပ်မကျော်ရ။']]], 422);
+                break;
 
-        // Return JSON response
+            case 'seniority':
+                if ($days > 60) return response()->json(['errors' => ['general' => ['လုပ်သက်ခွင့် ၂လထပ်မကျော်ရ။']]], 422);
+                break;
+
+            case 'medical':
+                if ($days > 365) return response()->json(['errors' => ['general' => ['ဆေးလက်မှတ်ခွင့် ၁၂လထပ်မကျော်ရ။']]], 422);
+                break;
+
+            case 'maternity':
+                if ($days > 180) return response()->json(['errors' => ['general' => ['မီးဖွားခွင့် ၆လထပ်မကျော်ရ။']]], 422);
+
+                break;
+
+            case 'disability':
+                if ($days > 730) return response()->json(['errors' => ['general' => ['အထူးမသန်စွမ်းခွင့် ၂နှစ်ထပ်မကျော်ရ။']]], 422);
+                break;
+        }
+
+        // Save leave
+        $leave = LeaveRequest::create([
+            'user_id'     => $user->id,
+            'req_type'    => $request->req_type,
+            'from_date'   => $from->format('Y-m-d'),
+            'to_date'     => $to->format('Y-m-d'),
+            'duration'    => $days,
+            'description' => $request->description,
+            'status'      => 'pending',
+        ]);
+
         return response()->json([
-            'message' => 'ခွင့်လျှောက်လွှာ အောင်မြင်စွာ တင်သွင်းပြီးပါပြီ။',
-            'leave_request' => $leaveRequest
+            'message' => 'ခွင့်တင်သွင်းမှု အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ။',
+            'leave' => $leave
         ]);
     }
+
+
+    public function suggestToDate(Request $request)
+    {
+        $request->validate([
+            'req_type' => 'required|string',
+            'from_date' => 'required|date'
+        ]);
+
+        $limits = [
+            'long-service' => 60,
+            'medical-certificate' => 365,
+            'maternity' => 180,
+            'disability' => 730,
+            'no-pay' => 10,
+            'contagious' => 30,
+            'volunteer-sick' => 5,
+            'study' => 30
+        ];
+
+        $from = Carbon::parse($request->from_date);
+        $reqType = $request->req_type;
+
+        if (isset($limits[$reqType])) {
+            $to = $from->copy()->addDays($limits[$reqType] - 1);
+            return response()->json([
+                'to_date' => $to->format('Y-m-d'),
+                'max_days' => $limits[$reqType]
+            ]);
+        }
+
+        return response()->json(['to_date' => null]);
+    }
+
 
     public function showSalaryList()
     {

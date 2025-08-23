@@ -99,6 +99,7 @@ Route::get('/employee/dashboard', function () {
     $web = Web::first();
     return view('employee.home', compact('web'));
 })->name('employee.dashboard')->middleware('auth');
+Route::post('/employee/leave/suggest-to-date', [EmployeeController::class, 'suggestToDate'])->name('employee.leave.suggestToDate');
 Route::get('/employee/salary', [EmployeeController::class, 'showSalaryList'])->name('employee.salary.list');
 Route::get('/employee/leave/request', [EmployeeController::class, 'showLeaveRequestForm'])->name('employee.leave.index');
 Route::post('/leave-requests', [EmployeeController::class, 'storeLeaveRequest'])->name('employee.leave.store');
