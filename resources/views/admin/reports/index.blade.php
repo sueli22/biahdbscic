@@ -48,17 +48,15 @@
                 <tbody></tbody>
             </table>
         </div>
-    </div>
-    <div id="chartsContainer" style="display:none;">
-        <div class="row mt-4">
-            <div class="col-md-6">
+        <div id="chartsContainer" style="display:none;margin-left:170px">
+        <div class="row">
+            <div class="col-md-8">
                 <canvas id="departmentPieChart"></canvas>
-            </div>
-            <div class="col-md-6">
-                <canvas id="tenderYearChart"></canvas>
             </div>
         </div>
     </div>
+    </div>
+    
 
     <!-- Create Modal -->
     <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true"
