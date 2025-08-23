@@ -45,10 +45,11 @@
         <nav id="navmenu" class="navmenu">
             <ul>
                 <li>
-                    <a href="#" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('employee.profile.show') }}" class="{{ request()->routeIs('employee.profile.show') ? 'active' : '' }}">
                         <i class="bi bi-house navicon"></i>ပင်မစာမျက်နှာ
                     </a>
                 </li>
+
                 <li>
                     <a href="{{ route('attendance.show') }}"
                         class="{{ request()->routeIs('attendance.show.*') ? 'active' : '' }}">

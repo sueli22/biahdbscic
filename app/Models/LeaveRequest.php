@@ -14,6 +14,7 @@ class LeaveRequest extends Model
     public const STATUS_REJECT = 'reject';
 
     protected $fillable = [
+        'req_type',
         'user_id',
         'leave_type_id',
         'from_date',

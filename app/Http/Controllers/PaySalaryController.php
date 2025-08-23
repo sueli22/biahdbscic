@@ -53,6 +53,7 @@ class PaySalaryController extends Controller
         // Calculate leave duration for the requested salary month
         $totalDuration = LeaveRequest::where('user_id', $request->user_id)
             ->whereNull('leave_type_id')
+            ->where('req_type','no-shaung')
             ->where('status', 'approved')
             ->whereMonth('created_at', $request->salary_month)
             ->sum('duration');

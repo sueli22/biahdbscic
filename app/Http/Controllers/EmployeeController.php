@@ -73,6 +73,7 @@ class EmployeeController extends Controller
 
         // Conditional rules
         if ($request->leave_type === 'casual') {
+
             $rules['from_date'] = 'required|date|after:today';
             $rules['to_date'] = [
                 'required',
@@ -80,56 +81,45 @@ class EmployeeController extends Controller
                 'after_or_equal:from_date',
                 function ($attribute, $value, $fail) use ($request, $user) {
                     $fromDate = Carbon::parse($request->from_date);
-                    $toDate = Carbon::parse($value);
+                    $toDate   = Carbon::parse($value);
 
                     // Check same month
                     if ($fromDate->format('Y-m') !== $toDate->format('Y-m')) {
                         $fail('From date နှင့် To date တို့သည် တစ်လအတွင်း ဖြစ်ရပါမည်။');
                     }
 
-                    // Requested days
                     $requestedDays = $fromDate->diffInDays($toDate) + 1;
 
-                    // Check monthly limit (3 days)
-                    // Check existing leaves in this month
+                    // ✅ Dynamic condition for both shaung / no-shaung
                     $monthLeaves = LeaveRequest::where('user_id', $user->id)
-                        ->whereNull('leave_type_id') // casual leave
+                        ->where('req_type', $request->req_type)
                         ->whereYear('from_date', $fromDate->year)
                         ->whereMonth('from_date', $fromDate->month)
                         ->sum('duration');
 
                     if ($monthLeaves >= 3) {
-                        $fail('ယခုလအတွက် casual leave ၃ ရက်လုံး အသုံးပြုပြီးပါပြီး ထပ်မလျှောက်နိုင်ပါ။');
+                        $fail('ယခုလအတွက် leave ၃ ရက် ယူပြီးပါပြီ။');
                     }
 
-                    // 🚨 Prevent exceeding 3 days in the same month
                     if (($monthLeaves + $requestedDays) > 3) {
-                        $fail('တစ်လအတွင်း casual leave သည် အများဆုံး 3 ရက်သာ ခွင့်ပြုသည်။');
+                        $fail('တစ်လအတွင်း leave သည် အများဆုံး 3 ရက်သာ ခွင့်ပြုသည်။');
                     }
 
-                    $monthApprovedLeaves = LeaveRequest::where('user_id', $user->id)
-                        ->whereNull('leave_type_id')
-                        ->whereMonth('from_date', $fromDate->month)
-                        ->sum('duration');
-                    if ($monthApprovedLeaves > 3) {
-                        $fail('သည်လအတွက် leave သည် 3 ရက်ပြည့်သွားပါပီ');
-                    }
-
-                    // Check yearly limit (10 days)
                     $yearLeaves = LeaveRequest::where('user_id', $user->id)
-                        ->whereNull('leave_type_id') // casual leave
+                        ->where('req_type', $request->req_type)
                         ->whereYear('from_date', $fromDate->year)
                         ->sum('duration');
 
                     if (($yearLeaves + $requestedDays) > 10) {
-                        $fail('ယခုနှစ်အတွင်း casual leave သည် 10 ရက်ထက်  ပိုမရနိုင်ပါ။');
+                        $fail('ယခုနှစ်အတွင်း "' . $request->req_type . '" leave သည် 10 ရက်ထက် မကျော်ရပါ။');
                     }
                 }
             ];
-        } else { // special leave
+        } else {
             $rules['leave_type_id'] = 'required|exists:leave_types,id';
-            $rules['from_date'] = 'required|date|after:today';
+            $rules['from_date']     = 'required|date|after:today';
         }
+
 
         // Custom error messages
         $messages = [
@@ -159,6 +149,7 @@ class EmployeeController extends Controller
             $leaveRequest->leave_type_id = null;
             $leaveRequest->from_date = $request->from_date;
             $leaveRequest->to_date = $request->to_date;
+            $leaveRequest->req_type = $request->req_type;
             $leaveRequest->duration = Carbon::parse($request->from_date)
                 ->diffInDays(Carbon::parse($request->to_date)) + 1;
         } else { // special leave
@@ -166,6 +157,8 @@ class EmployeeController extends Controller
             $leaveRequest->leave_type_id = $leaveType->id;
             $leaveRequest->from_date = $request->from_date;
             $leaveRequest->duration = $leaveType->max_days;
+            $leaveRequest->req_type = $request->req_type;
+            
             $leaveRequest->to_date = Carbon::parse($request->from_date)
                 ->addDays($leaveType->max_days - 1)
                 ->format('Y-m-d');

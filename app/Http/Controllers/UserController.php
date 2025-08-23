@@ -19,7 +19,7 @@ class UserController extends Controller
             if ($user->isSuperUser()) {
                 return redirect()->route('dashboard');
             } else {
-                return redirect()->route('employee.dashboard');
+                return redirect()->route('employee.profile.show');
             }
         }
         return back()
