@@ -27,9 +27,8 @@
                 @foreach ($leaveRequests as $request)
                 <tr>
                     <td>
-                        @if($request->leaveType)
-                        {{ $request->leaveType->title }}
-                        @elseif($request->req_type === 'shaung')
+
+                        @if($request->req_type === 'shaung')
                         ရှောင်တခင်
                         @elseif($request->req_type === 'no-pay')
                         လစာမဲ့ခွင့်
@@ -156,19 +155,7 @@
                         <input type="hidden" name="general" id="general" class="form-control">
                         <div class="invalid-feedback" id="error-general"></div>
 
-                        <div class="mb-3">
-                            <label for="from_date" class="form-label">အစပြုရက်</label>
-                            <input type="date" name="from_date" id="from_date" class="form-control">
-                            <div class="invalid-feedback" id="error-from_date"></div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="to_date" class="form-label">အဆုံးရက်</label>
-                            <input type="date" name="to_date" id="to_date" class="form-control">
-                            <div class="invalid-feedback" id="error-to_date"></div>
-                        </div>
-
-                        <div class="mb-3">
+                         <div class="mb-3">
                             <label for="req_type" class="form-label">လျှောက်ထားသည့်အမျိုးအစား</label>
                             <select name="req_type" id="req_type" class="form-control">
                                 <option value="">-- အမျိုးအစားရွေးချယ်ရန် --</option>
@@ -185,6 +172,18 @@
                             <div class="invalid-feedback" id="error-req_type"></div>
                         </div>
 
+
+                        <div class="mb-3">
+                            <label for="from_date" class="form-label">အစပြုရက်</label>
+                            <input type="date" name="from_date" id="from_date" class="form-control">
+                            <div class="invalid-feedback" id="error-from_date"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="to_date" class="form-label">အဆုံးရက်</label>
+                            <input type="date" name="to_date" id="to_date" class="form-control">
+                            <div class="invalid-feedback" id="error-to_date"></div>
+                        </div>
 
                         <div class="mb-3">
                             <label for="description_casual" class="form-label">ဖော်ပြချက်</label>

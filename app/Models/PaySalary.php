@@ -15,6 +15,8 @@ class PaySalary extends Model
         'user_id',
         'salary_month',
         'basic_salary',
+        'no_pay_de',
+        'medical_de',
         'allowances',
         'deductions',
         'net_salary',

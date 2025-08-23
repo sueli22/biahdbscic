@@ -38,16 +38,28 @@
             <tr>
                 <td>{{ $req->user->name ?? '---' }}</td>
                 <td>
-                    @if($req->leaveType)
-                    {{ $req->leaveType->title }}
-                    @elseif($req->req_type === 'shaung')
-                    ရှောင်တခင်
-                    @elseif($req->req_type === 'no-shaung')
-                    လစာမဲ့ခွင့်
-                    @else
-                    --
-                    @endif
-                </td>
+                        @if($req->req_type === 'shaung')
+                        ရှောင်တခင်
+                        @elseif($req->req_type === 'no-pay')
+                        လစာမဲ့ခွင့်
+                        @elseif($req->req_type === 'maternity')
+                        မီးဖွားခွင့်
+                        @elseif($req->req_type === 'medical-certificate')
+                        ဆေးလက်မှတ်ခွင့်
+                        @elseif($req->req_type === 'long-service')
+                        လုပ်သက်ခွင့်
+                        @elseif($req->req_type === 'contagious')
+                        ကူးစက်ရောဂါ
+                        @elseif($req->req_type === 'disability')
+                        အထူးမသန်စွမ်းခွင့်
+                        @elseif($req->req_type === 'volunteer-sick')
+                        သဘောသားမနာကျန်းခွင့်
+                        @elseif($req->req_type === 'study')
+                        ပညာလေ့လာဆည်းပူခွင့်
+                        @else
+                        အခြား
+                        @endif
+                    </td>
                 <td>{{ $req->from_date ?? '-' }}</td>
                 <td>{{ $req->to_date ?? '-' }}</td>
                 <td>{{ $req->duration ?? '-' }}</td>

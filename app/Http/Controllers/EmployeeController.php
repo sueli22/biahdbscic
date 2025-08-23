@@ -180,33 +180,59 @@ class EmployeeController extends Controller
 
         // Leave type rules
         switch ($request->req_type) {
+
             case 'shaung':
                 $from = Carbon::parse($request->from_date);
                 $to   = Carbon::parse($request->to_date ?? $from);
+
+                // 1. Reject Sat/Sun
                 if ($from->isWeekend() || $to->isWeekend()) {
                     return response()->json([
                         'errors' => ['general' => ['ခွင့် စတင်ရက် သို့မဟုတ် နောက်ဆုံးရက်သည် စနေနေ့/တနင်္ဂနွေနေ့ မဖြစ်ရပါ။']]
                     ], 422);
                 }
+
+                // 2. Max 3 days per request
                 if ($days > 3) {
                     return response()->json(['errors' => ['general' => ['တခါတင် အများဆုံး 3ရက်သာယူနိုင်သည်။']]], 422);
                 }
+
+                // 3. Max 10 days per year
                 $used = LeaveRequest::where('user_id', $user->id)
                     ->where('req_type', $request->req_type)
                     ->whereYear('from_date', now()->year)
                     ->whereIn('status', ['approved', 'pending'])
                     ->sum(DB::raw('DATEDIFF(to_date, from_date) + 1'));
+
                 if ($used + $days > 10) {
                     return response()->json(['errors' => ['general' => ['ခွင့်သည် တနှစ်လျှင် ၁၀ရက်သာ ရရှိနိုင်ပါသည်']]], 422);
                 }
+
+                // 4. Check last leave
                 $lastLeave = LeaveRequest::where('user_id', $user->id)
                     ->where('req_type', $request->req_type)
                     ->whereIn('status', ['approved', 'pending'])
                     ->latest('to_date')
                     ->first();
-                if ($lastLeave && $from->diffInDays(Carbon::parse($lastLeave->to_date)) < 2) {
-                    return response()->json(['errors' => ['general' => ['တရက်ပြန်အလုပ်တက်ပြီးမှ ထပ်တင်နိုင်သည်။']]], 422);
+
+                if ($lastLeave) {
+                    $lastEnd = Carbon::parse($lastLeave->to_date);
+
+                    // must rest at least 1 working day
+                    if ($from->diffInDays($lastEnd) < 2) {
+                        return response()->json([
+                            'errors' => ['general' => ['တရက်ပြန်အလုပ်တက်ပြီးမှ ထပ်တင်နိုင်သည်။']]
+                        ], 422);
+                    }
+
+                    // special case: Friday → Monday is not allowed
+                    if ($lastEnd->isFriday() && $from->isMonday() && $from->diffInDays($lastEnd) === 3) {
+                        return response()->json([
+                            'errors' => ['general' => ['သောကြာခွင့်ယူထားသောကြောင့် တနင်္လာနေ့ ခွင့်တိုင် မရပါ။']]
+                        ], 422);
+                    }
                 }
+
                 break;
 
             case 'infection':

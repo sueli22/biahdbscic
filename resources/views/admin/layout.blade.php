@@ -76,12 +76,7 @@
                         <i class="bi bi-file-earmark-text navicon"></i>ခွင့်တိုင်စာများ
                     </a>
                 </li>
-                <li>
-                    <a href="{{ route('leave_types.index') }}"
-                        class="{{ request()->routeIs('leave_types.index') ? 'active' : '' }}">
-                        <i class="bi bi-file-earmark-text navicon"></i>ခွင့်အမျိူးအစား
-                    </a>
-                </li>
+               
                 <li>
                     <a href="{{ route('staff.list') }}"
                         class="{{ request()->routeIs('staff.list') ? 'active' : '' }}">

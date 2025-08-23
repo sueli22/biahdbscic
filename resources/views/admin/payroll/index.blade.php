@@ -13,6 +13,8 @@
                     <th>၀န်ထမ်းအမည်</th>
                     <th>လစာပေးချေသည့် လ</th>
                     <th>အခြေခံလစာ</th>
+                    <th>ဆေးခွင့်ဖြတ်တောက်ငွေ</th>
+                    <th>လစာမဲ့ခွင့်ဖြတ်တောက်ငွေ</th>
                     <th>အသားတင်လစာ</th>
                     <th>လစာပေးချေသည့်ရက်စွဲ</th>
             </thead>
@@ -41,6 +43,8 @@
                             {{ $months[$paySalary->salary_month] ?? '' }}
                         </td>
                         <td>{{ $paySalary->basic_salary }}</td>
+                        <th>{{ $paySalary->medical_de ?? '0' }}</th>
+                        <th>{{ $paySalary->no_pay_de ?? '0' }}</th>
                         <td>{{ $paySalary->net_salary }}</td>
                         <td>{{ $paySalary->created_at->format('Y-m-d') }}</td>
                     </tr>

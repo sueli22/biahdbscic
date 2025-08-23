@@ -17,6 +17,8 @@ return new class extends Migration
             $table->tinyInteger('salary_month');
             $table->decimal('basic_salary', 12, 2)->default(0);
             $table->decimal('allowances', 12, 2)->default(0);
+            $table->decimal('no_pay_de', 20, 2)->nullable();      // instead of no-pay-de
+            $table->decimal('medical_de', 20, 2)->nullable();
             $table->decimal('deductions', 12, 2)->default(0);
             $table->string('payment_method', 50)->nullable();
             $table->decimal('net_salary', 12, 2);
