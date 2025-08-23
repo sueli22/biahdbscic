@@ -33,9 +33,9 @@ class AttendenceController extends Controller
         $dayEnglish = $today->format('l'); // day of the week, e.g., 'Monday'
 
         // Reject Saturday and Sunday
-        // if (in_array($dayEnglish, ['Saturday', 'Sunday'])) {
-        //     return back()->with('error', 'စနေ နှင့် တနင်္ဂနွေ  သည် ပိတ်ရက်ဖစ်ပါသည်');
-        // }
+        if (in_array($dayEnglish, ['Saturday', 'Sunday'])) {
+            return back()->with('error', 'စနေ နှင့် တနင်္ဂနွေ  သည် ပိတ်ရက်ဖစ်ပါသည်');
+        }
 
         // Allow only between 9:00 AM and 10:00 AM
         $currentHour = $today->format('H'); // 24-hour format, e.g., '09'

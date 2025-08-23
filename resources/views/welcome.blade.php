@@ -27,60 +27,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- Main CSS File -->
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-    <style>
-        /* Hide ugly default Google banner */
-        .goog-te-banner-frame.skiptranslate,
-        .goog-te-gadget-icon {
-            display: none !important;
-        }
-
-        body {
-            top: 0px !important;
-        }
-
-        /* Style the translate dropdown */
-        #google_translate_element {
-            text-align: center;
-            margin: 10px auto;
-        }
-
-        #google_translate_element select {
-            background: #f8f9fa;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 14px;
-            color: #333;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
-
-        #google_translate_element select:hover {
-            background: #e9ecef;
-            border-color: #adb5bd;
-        }
-
-        .goog-te-banner-frame.skiptranslate {
-            display: none !important;
-        }
-
-        .goog-te-gadget-icon {
-            display: none !important;
-        }
-
-        /* Reset body always */
-        body {
-            top: 0px !important;
-            margin-top: 0 !important;
-            position: static !important;
-        }
-
-        .VIpgJd-ZVi9od-ORHb *,
-        .VIpgJd-ZVi9od-ORHb,
-        .VIpgJd-ZVi9od-ORHb img {
-            display: none !important;
-        }
-    </style>
 
 </head>
 
@@ -98,8 +44,6 @@
         <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
             <span class="sitename">စီမံကိန်းနှင့်ဘဏ္ဍာရေးဝန်ကြီးဌာန</span>
         </a>
-
-        <div id="google_translate_element" class="fixed-lan-btn" style="margin: 10px; text-align:center;"></div>
 
         <nav id="navmenu" class="navmenu">
             <ul>
@@ -370,40 +314,7 @@
         });
     </script>
     <!-- 🌍 Google Translate -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'my',
-                includedLanguages: 'my,en,zh-CN,th', // Added Thai (th)
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-            }, 'google_translate_element');
 
-            // Apply CSS via JS
-            const container = document.getElementById('google_translate_element');
-            container.style.fontFamily = 'Arial, sans-serif';
-            container.style.fontSize = '14px';
-            container.style.backgroundColor = '#f0f0f0';
-            container.style.padding = '5px 0px';
-            container.style.borderRadius = '8px';
-            container.style.display = 'inline-block';
-
-            // Style the dropdown after it's rendered
-            setTimeout(() => {
-                const select = container.querySelector('select');
-                if (select) {
-                    select.style.backgroundColor = '#000000';
-                    select.style.border = '1px solid #ccc';
-                    select.style.borderRadius = '4px';
-                    select.style.padding = '2px 5px';
-                    select.style.fontSize = '14px';
-                }
-            }, 500);
-            setTimeout(() => {
-    const banner = document.querySelector('.VIpgJd-yAWNEb-L7lbkb > div');
-    if (banner) banner.style.display = 'none';
-}, 1000); // Wait for the widget to load
-        }
-    </script>
 
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
     </script>
