@@ -47,9 +47,6 @@
                 <div class="col-md-2">
                     <button id="filter" class="btn btn-primary">ရှာဖွေမည်</button>
                 </div>
-                <div class="col-md-2">
-                    <button id="toggleCharts" class="btn btn-info">Show Charts</button>
-                </div>
             </div>
 
             <!-- DataTable -->
@@ -65,10 +62,7 @@
                             <th>စတင်မည့်ကာလ</th>
                             <th>ပြီးဆုံးမည့်ကာလ</th>
                             <th>ဆောင်ရွက်မည့်ဌာန/အဖွဲ့အစည်း</th>
-                            <th>စုစုပေါင်းရင်းနှီးမြှုပ်နှံမည့်ငွေ</th>
                             <th>ဆောင်ရွက်သည့်နှစ်</th>
-                            <th>တိုင်းဒေသကြီးဘတ်ဂျက်</th>
-                            <th>တင်ဒါအောင်မြင်သည့်စျေးနှုန်း</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -97,10 +91,11 @@
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></scrip
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -135,10 +130,7 @@
                                 <td>${report.start_month || ''}</td>
                                 <td>${report.end_month || ''}</td>
                                 <td>${report.department || ''}</td>
-                                <td>${report.total_investment ? report.total_investment + ' ကျပ်' : ''}</td>
                                 <td>${report.operation_year || ''}</td>
-                                <td>${report.regional_budget ? report.regional_budget  : ''}</td>
-                                <td>${report.tender_price ? report.tender_price : ''}</td>
                             </tr>
                         `);
 

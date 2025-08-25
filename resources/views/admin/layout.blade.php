@@ -55,13 +55,13 @@
                 <li>
                     <a href="{{ route('admin.show.attendence.list') }}"
                         class="{{ request()->routeIs('admin.show.attendence.list') ? 'active' : '' }}">
-                        <i class="bi bi-house navicon"></i>နေ့စဥ်အတန်းတတ်လက်မှတ်
+                        <i class="bi bi-house navicon"></i>နေ့စဥ်ရုံးတတ်လက်မှတ်
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.sendmail.list') }}"
                         class="{{ request()->routeIs('admin.sendmail.list') ? 'active' : '' }}">
-                        <i class="bi bi-house navicon"></i>စီမံကိန်းဘဏ္ဍာအကြောင်းပြန်ရန်
+                        <i class="bi bi-house navicon"></i>စီမံကိန်းဘဏ္ဍာ အတွက် အကြောင်းပြန်ရန်
                     </a>
                 </li>
                 <li>
@@ -76,7 +76,7 @@
                         <i class="bi bi-file-earmark-text navicon"></i>ခွင့်တိုင်စာများ
                     </a>
                 </li>
-               
+
                 <li>
                     <a href="{{ route('staff.list') }}"
                         class="{{ request()->routeIs('staff.list') ? 'active' : '' }}">

@@ -4,15 +4,16 @@
 <table id="paySalariesTable" class="table table-bordered">
     <thead>
                 <tr>
-                    <th>အမှတ်</th>
+                    <th>စဥ်</th>
                     <th>အမည်</th>
-                    <th>လစာပေးချေသည့် လ</th>
+                    <th>လစာထုတ်ယူသည့် လ</th>
                     <th>အခြေခံလစာ</th>
                     <th>Allowances</th>
-                    <th>ခွင့်ရက်အတွက် ဖြတ်ငွေ</th>
+                    <th>ဆေးခွင့်ဖြတ်တောက်ငွေ</th>
+                    <th>လစာမဲ့ခွင့်ဖြတ်တောက်ငွေ</th>
                     <th>အသားတင်လစာ</th>
                     <th>ငွေပေးချေမှုနည်းလမ်း</th>
-                    <th>လစာပေးချေသည့်ရက်စွဲ</th>
+                    <th>လစာထုတ်ယူသည့်ရက်စွဲ</th>
                 </tr>
     </thead>
     <tbody>
@@ -41,7 +42,8 @@
                         </td>
                 <td>{{ $paySalary->basic_salary }}</td>
                 <td>{{ $paySalary->allowances }}</td>
-                <td>{{ $paySalary->deductions }}</td>
+                <th>{{ $paySalary->medical_de ?? '0' }}</th>
+                <th>{{ $paySalary->no_pay_de ?? '0' }}</th>
                 <td>{{ $paySalary->net_salary }}</td>
                 <td>{{ $paySalary->payment_method ?? 'N/A' }}</td>
                 <td>{{ $paySalary->created_at->format('Y-m-d') }}</td>

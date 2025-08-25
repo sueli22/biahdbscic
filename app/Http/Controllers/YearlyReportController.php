@@ -51,10 +51,7 @@ class YearlyReportController extends Controller
             'start_month' => 'required|string|max:255',
             'end_month' => 'required|string|max:255',
             'department' => 'required|string|max:255',
-            'total_investment' => 'required|numeric',
             'operation_year' => 'required|integer|digits:4|between:1901,2155',
-            'regional_budget' => 'required|numeric',
-            'tender_price' => 'required|numeric',
         ], [
             'from.required' => 'စတင်မည့်နှစ်ထည့်ရန်လိုအပ်ပါသည်။',
             'from.integer' => 'စတင်မည့်နှစ်သည် ဂဏန်းဖြစ်ရပါမည်။',
@@ -131,10 +128,7 @@ class YearlyReportController extends Controller
             'start_month' => 'required|string|max:255',
             'end_month' => 'required|string|max:255',
             'department' => 'required|string|max:255',
-            'total_investment' => 'required|numeric',
             'operation_year' => 'required|integer|digits:4|between:1901,2155',
-            'regional_budget' => 'required|numeric',
-            'tender_price' => 'required|numeric',
         ], [
             'from.required' => 'စတင်မည့်နှစ်ထည့်ရန်လိုအပ်ပါသည်။',
             'from.integer' => 'စတင်မည့်နှစ်သည် ဂဏန်းဖြစ်ရပါမည်။',

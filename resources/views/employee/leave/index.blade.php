@@ -174,19 +174,19 @@
 
 
                         <div class="mb-3">
-                            <label for="from_date" class="form-label">အစပြုရက်</label>
+                            <label for="from_date" class="form-label">ခွင့် အစပြုရက် (မှ)</label>
                             <input type="date" name="from_date" id="from_date" class="form-control">
                             <div class="invalid-feedback" id="error-from_date"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="to_date" class="form-label">အဆုံးရက်</label>
+                            <label for="to_date" class="form-label">ခွင့် ပြီးဆုံးရက် (ထိ)</label>
                             <input type="date" name="to_date" id="to_date" class="form-control">
                             <div class="invalid-feedback" id="error-to_date"></div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="description_casual" class="form-label">ဖော်ပြချက်</label>
+                            <label for="description_casual" class="form-label">အကြောင်းအရာ</label>
                             <textarea name="description" id="description_casual" class="form-control"></textarea>
                             <div class="invalid-feedback" id="error-description"></div>
                         </div>

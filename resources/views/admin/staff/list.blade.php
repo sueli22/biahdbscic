@@ -202,8 +202,8 @@
                             <label for="staff_married_status" class="form-label">အိမ်ထောင်ဖက် အခြေအနေ</label>
                             <select class="form-select" id="staff_married_status" name="married_status">
                                 <option value="" disabled selected>ရွေးပါ</option>
-                                <option value="0">လက်မထပ်ရသေးပါ</option>
-                                <option value="1">လက်ထပ်ပြီး</option>
+                                <option value="0">အိမ်ထောင်မရှိပါ</option>
+                                <option value="1">အိမ်ထောင်ရှိပါသည်</option>
                             </select>
                             <div class="invalid-feedback" id="edit-error-married_status"></div>
                         </div>
@@ -320,8 +320,8 @@
                             <label for="staff_married_status" class="form-label">အိမ်ထောင်ဖက် အခြေအနေ</label>
                             <select class="form-select" id="staff_married_status" name="married_status">
                                 <option value="" disabled selected>ရွေးပါ</option>
-                                <option value="0">လက်မထပ်ရသေးပါ</option>
-                                <option value="1">လက်ထပ်ပြီး</option>
+                                <option value="0">အိမ်ထောင်မရှိပါ</option>
+                                <option value="1">အိမ်ထောင်ရှိပါသည်</option>
                             </select>
                             <div class="invalid-feedback" id="error-married_status"></div>
                         </div>
@@ -377,7 +377,7 @@
                         <li class="list-group-item"><strong>ဖုန်းနံပါတ်:</strong> <span id="staff_phno_show"></span></li>
                         <li class="list-group-item"><strong>ဌာန:</strong> <span id="staff_department_show"></span></li>
                         <li class="list-group-item"><strong>ရာထူး:</strong> <span id="staff_position_show"></span></li>
-                        <li class="list-group-item"><strong>လက်ထပ်ပြီး:</strong> <span
+                        <li class="list-group-item"><strong>အိမ်ထောင်ဖက် အခြေအနေ:</strong> <span
                                 id="staff_married_status_show"></span></li>
                         <li class="list-group-item"><strong>လိင် :</strong> <span id="staff_gender_show"></span></li>
                     </ul>

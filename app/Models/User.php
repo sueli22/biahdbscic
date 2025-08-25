@@ -68,7 +68,7 @@ class User extends Authenticatable
     // Get married status as string
     public function getMarriedStatusName(): string
     {
-        return $this->married_status ? 'လက်ထပ်ထားသည်' : 'လူလွတ်';
+        return $this->married_status ? 'အိမ်ထောင်ရှိပါသည်' : 'အိမ်ထောင်မရှိပါ';
     }
 
     public function getPositionName(): string

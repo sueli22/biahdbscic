@@ -62,9 +62,9 @@
                     <label class="form-label d-block">လက်ထပ်မှုအခြေအနေ</label>
                     <select name="married_status" class="form-select ">
                         <option value="1" {{ old('married_status', $user->married_status) == 1 ? 'selected' : '' }}>
-                            လက်ထပ်ထားသည်</option>
+                            အိမ်ထောင်ရှိပါသည်</option>
                         <option value="0" {{ old('married_status', $user->married_status) == 0 ? 'selected' : '' }}>
-                            မလက်ထပ်ထား</option>
+                            အိမ်ထောင်မရှိပါ</option>
                     </select>
                 </div>
 

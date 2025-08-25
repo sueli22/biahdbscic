@@ -5,7 +5,7 @@
     <table class="table table-bordered" id="newsTable">
         <thead>
             <tr>
-                <th>အမှတ်စဉ်</th>
+                <th>စဉ်</th>
                 <th>ပုံ</th>
                 <th>ခေါင်းစဉ်</th>
                 <th>အကြောင်းအရာ</th>

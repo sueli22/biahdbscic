@@ -1,13 +1,14 @@
 @extends('admin.layout')
 
 @section('content')
+<h3>နေ့စဥ် ရုံးတတ်ရောက်သူများ စာရင်း</h3>
     <table id="attendanceTable" class="table table-bordered mt-3">
         <thead>
             <tr>
-                <th>အမှတ်</th>
+                <th>စဥ်</th>
                 <th>အမည်</th>
                 <th>ရက်</th>
-                <th>နေ့ (EN)</th>
+                <th>နေ့ (ENG)</th>
                 <th>နေ့ (မြန်မာ)</th>
                 <th>အခြေအနေ</th>
                 <th>လုပ်ဆောင်ချက်</th>

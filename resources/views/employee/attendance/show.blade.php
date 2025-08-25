@@ -11,7 +11,7 @@
     <table id="attendanceTable" class="table table-bordered mt-3">
         <thead>
             <tr>
-                <th>အမှတ်</th>
+                <th>စဥ်</th>
                 <th>ရက်</th>
                 <th>နေ့ (EN)</th>
                 <th>နေ့ (မြန်မာ)</th>

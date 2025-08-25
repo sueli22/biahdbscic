@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container card p-4">
-    <h2>ခွင့်စာ စာရင်း</h2>
+    <h2>ခွင့် မှတ်တမ်း</h2>
 
     <!-- Filter Form -->
     <form method="GET" action="{{ route('admin.leave_request.list') }}" class="mb-3">
@@ -23,11 +23,12 @@
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
+                <th>စဥ်</th>
                 <th>ဝန်ထမ်းအမည်</th>
                 <th>ခွင့်အမျိုးအစား</th>
-                <th>ခွင့်စယူသည့်နေ့</th>
-                <th>နောက်ဆုံးယူမည့်နေ့</th>
-                <th>ကြာချိန်</th>
+                <th>ခွင့်စတင်ယူသည့်နေ့</th>
+                <th>ခွင့်ပီးဆုံးသည့်နေ့</th>
+                <th>ခွင့်ယူသည့် ကာလ</th>
                 <th>အခြေအနေ</th>
                 <th>တင်သွင်းရက်</th>
                 <th>လုပ်ဆောင်ချက်</th>
@@ -36,6 +37,7 @@
         <tbody>
             @foreach ($leaveRequests as $req)
             <tr>
+                <td>{{ $loop->iteration }}</td>
                 <td>{{ $req->user->name ?? '---' }}</td>
                 <td>
                         @if($req->req_type === 'shaung')

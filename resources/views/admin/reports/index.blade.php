@@ -30,7 +30,7 @@
             <table class="table table-bordered" id="reportsTable" style="font-size:12px;">
                 <thead>
                     <tr>
-                        <th>နံပါတ်</th>
+                        <th>စဥ်</th>
                         <th>မှ</th>
                         <th>အထိ</th>
                         <th>လုပ်ငန်းအမည်</th>
@@ -38,10 +38,7 @@
                         <th>စတင်မည့်ကာလ</th>
                         <th>ပြီးဆုံးမည့်ကာလ</th>
                         <th>ဆောင်ရွက်မည့်ဌာန/အဖွဲ့အစည်း</th>
-                        <th>စုစုပေါင်းရင်းနှီးမြှုပ်နှံမည့်ငွေ</th>
                         <th>ဆောင်ရွက်သည့်နှစ်</th>
-                        <th>တိုင်းဒေသကြီးဘတ်ဂျက်</th>
-                        <th>တင်ဒါအောင်မြင်သည့်စျေးနှုန်း</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -56,7 +53,7 @@
         </div>
     </div>
     </div>
-    
+
 
     <!-- Create Modal -->
     <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true"
@@ -113,26 +110,8 @@
                             </div>
 
                             <div class="col-md-6 mb-2">
-                                <label>စုစုပေါင်းရင်းနှီးမြှုပ်နှံမည့်ငွေ</label>
-                                <input type="number" name="total_investment" class="form-control">
-                                <div class="invalid-feedback"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
                                 <label>ဆောင်ရွက်သည့်နှစ်</label>
                                 <input type="text" name="operation_year" class="form-control" min="1900">
-                                <div class="invalid-feedback"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <label>တိုင်းဒေသကြီးဘတ်ဂျက်</label>
-                                <input type="number" name="regional_budget" class="form-control" min="1">
-                                <div class="invalid-feedback"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <label>တင်ဒါအောင်မြင်သည့်စျေးနှုန်း</label>
-                                <input type="number" name="tender_price" class="form-control" min="1">
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -196,31 +175,12 @@
                             <div class="invalid-feedback"></div>
                         </div>
 
-                        <div class="mb-3">
-                            <label>စုစုပေါင်းရင်းနှီးမြှုပ်နှံမည့်ငွေ</label>
-                            <input type="number" class="form-control" id="edit_total_investment"
-                                name="total_investment">
-                            <div class="invalid-feedback"></div>
-                        </div>
 
                         <div class="mb-3">
                             <label>ဆောင်ရွက်မည့်နှစ်</label>
                             <input type="number" class="form-control" id="edit_operation_year" name="operation_year">
                             <div class="invalid-feedback"></div>
                         </div>
-
-                        <div class="mb-3">
-                            <label>တိုင်းဒေသကြီးဘတ်ဂျက်</label>
-                            <input type="number" class="form-control" id="edit_regional_budget" name="regional_budget">
-                            <div class="invalid-feedback"></div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>တင်ဒါအောင်မြင်သည့်စျေးနှုန်း</label>
-                            <input type="number" class="form-control" id="edit_tender_price" name="tender_price">
-                            <div class="invalid-feedback"></div>
-                        </div>
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">မလုပ်ဆောင်ပါ</button>
@@ -288,10 +248,7 @@
                 <td>${report.start_month || ''}</td>
                 <td>${report.end_month || ''}</td>
                 <td>${report.department || ''}</td>
-                <td>${report.total_investment ? report.total_investment + ' ကျပ်' : ''}</td>
                 <td>${report.operation_year || ''}</td>
-                <td>${report.regional_budget ? report.regional_budget  : ''}</td>
-                <td>${report.tender_price ? report.tender_price : ''}</td>
                 <td>
            <div class="dropdown">
                <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -364,54 +321,11 @@
                                 }
                             }
                         });
-
-                        // ---------- Line Chart ----------
-                        let sortedYears = Object.keys(yearlyTender).sort((a, b) => a - b);
-                        const tenderCtx = document.getElementById('tenderYearChart').getContext('2d');
-                        if (window.tenderChart) window.tenderChart.destroy();
-                        window.tenderChart = new Chart(tenderCtx, {
-                            type: 'line',
-                            data: {
-                                labels: sortedYears,
-                                datasets: [{
-                                    label: 'Tender Price (ကျပ်)',
-                                    data: sortedYears.map(y => yearlyTender[y]),
-                                    borderColor: '#36A2EB',
-                                    backgroundColor: 'rgba(54,162,235,0.2)',
-                                    tension: 0.3,
-                                    fill: true
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                plugins: {
-                                    legend: {
-                                        display: true
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: 'Tender Price by Year'
-                                    }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
-                                }
-                            }
-                        });
-
-                        // ---------- DataTable ----------
                         $('#reportsTable').DataTable({
                             dom: 'Bflrtip',
-                            buttons: ['copy', 'excel', 'print'],
-                            paging: true,
-                            pageLength: 10,
-                            lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-                            searching: true,       // keep search box
-                            ordering: true,        // enable sorting
-                            info: true
-
+                            buttons: [
+                                'copy', 'excel', 'print'
+                            ]
                         });
                     },
 

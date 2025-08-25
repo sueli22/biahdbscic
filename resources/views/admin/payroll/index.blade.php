@@ -9,7 +9,7 @@
         <table class="table table-bordered" id="paySalariesTable">
             <thead>
                 <tr>
-                    <th>အမှတ်</th>
+                    <th>စဥ်</th>
                     <th>၀န်ထမ်းအမည်</th>
                     <th>လစာပေးချေသည့် လ</th>
                     <th>အခြေခံလစာ</th>
@@ -68,7 +68,7 @@
                         <div class="mb-3">
                             <label for="user_id" class="form-label">၀န်ထမ်းအမည်</label>
                             <select name="user_id" id="user_id" class="form-select" required>
-                                <option value="">အလုပ်သမားရွေးပါ</option>
+                                <option value="">၀န်ထမ်း ရွေးပါ</option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
                                 @endforeach

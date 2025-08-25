@@ -220,7 +220,7 @@ $(document).ready(function() {
                 $('#staff_position_show').text(data.position_name || 'N/A'); // Adjust if your data has position name
 
                 // Married status display
-                $('#staff_married_status_show').text(data.married_status == 1 ? 'လက်ထပ်ထားပါသည်' : 'လက်မထပ်ရသေးပါ');
+                $('#staff_married_status_show').text(data.married_status == 1 ? 'အိမ်ထောင်ရှိပါသည်' : 'အိမ်ထောင်မရှိပါ');
 
                 // Gender display
                 let genderText = 'Other';

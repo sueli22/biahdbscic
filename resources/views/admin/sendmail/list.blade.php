@@ -94,7 +94,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">စာအကြောင်းအရာ</label>
+                                <label class="form-label">ပေးပို့သူ အမည် နှင့် ရာထူး</label>
                                 <textarea name="body" class="form-control @error('body') is-invalid @enderror" rows="4">{{ old('body') }}</textarea>
                                 @error('body')
                                     <div class="invalid-feedback">{{ $message }}</div>

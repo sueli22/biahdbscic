@@ -103,10 +103,7 @@ class DatabaseSeeder extends Seeder
                 'start_month' => rand(1, 12) . '.2020',
                 'end_month' => rand(1, 12) . '.2020',
                 'department' => $departments[array_rand($departments)],
-                'total_investment' => rand(1000, 100000),  // number only
                 'operation_year' => rand(2000, 2023),
-                'regional_budget' => rand(100, 10000),     // number only
-                'tender_price' => rand(100, 10000),        // number only
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

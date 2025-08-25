@@ -21,10 +21,7 @@ class YearlyReport extends Model
         'start_month',
         'end_month',
         'department',
-        'total_investment',
         'operation_year',
-        'regional_budget',
-        'tender_price',
     ];
 
     // Optional: Cast monetary fields to decimal
