@@ -103,7 +103,7 @@ class PaySalaryController extends Controller
 
         $noPayFee = $eachDayFee * $no_pay_leave;
 
-        $netSalary = $attendDayFee + $medicalDurationFee + $allowances - $noPayFee;
+        $netSalary = $attendDayFee + $medicalDurationFee + $allowances;
 
         // --- Save to database ---
         PaySalary::create([
@@ -114,7 +114,6 @@ class PaySalaryController extends Controller
             'allowances' => $allowances,
             'daily_fee' => $attendDayFee,
             'medical_de' => $medicalDurationFee,
-            'no_pay_de' => $noPayFee,
             'deductions' => $noPayFee,
             'payment_method' => $request->payment_method,
             'net_salary' => $netSalary,

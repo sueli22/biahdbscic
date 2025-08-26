@@ -11,7 +11,6 @@
                     <th>ရက်တွက်ရငွေ</th>
                     <th>Allowances</th>
                     <th>ဆေးခွင့်ဖြတ်တောက်မှုမှ ကျန်ငွေ</th>
-                    <th>လစာမဲ့ခွင့်ဖြတ်တောက်ငွေ</th>
                     <th>ထောက်ပံငွေ</th>
                     <th>အသားတင်လစာ</th>
                     <th>ငွေပေးချေမှုနည်းလမ်း</th>
@@ -46,7 +45,6 @@
                 <td>{{ $paySalary->daily_fee }}</td>
                 <td>{{ $paySalary->allowances }}</td>
                 <th>{{ $paySalary->medical_de ?? '0' }}</th>
-                <th>{{ $paySalary->no_pay_de ?? '0' }}</th>
                 <th>{{ $paySalary->allowances ?? '0' }}</th>
                 <td>{{ $paySalary->net_salary }}</td>
                 <td>{{ $paySalary->payment_method ?? 'N/A' }}</td>
