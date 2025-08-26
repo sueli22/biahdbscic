@@ -220,69 +220,81 @@
 
     @section('scripts')
         <script src="{{ asset('js/sendmail.js') }}"></script>
-           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <script>
             $(document).ready(function() {
-                var sendBackModalEl = document.getElementById('sendBackModal');
-                var sendBackModal = new bootstrap.Modal(sendBackModalEl, {
-                    backdrop: 'static',
-                    keyboard: false
-                });
-
                 var chartVisible = false;
 
+                // Prepare data from backend
                 var mailCounts = @json($otherMails->groupBy('department')->map->count());
                 var chartLabels = Object.keys(mailCounts);
                 var chartData = Object.values(mailCounts);
 
+                // Pie chart configuration
                 var ctx = document.getElementById('otherMailChart').getContext('2d');
                 var mailChart = new Chart(ctx, {
-                    type: 'bar',
+                    type: 'pie', // Pie chart
                     data: {
                         labels: chartLabels,
                         datasets: [{
-                            label: 'အီးမေးလ်အရေအတွက် (ဌာနအလိုက်)',
                             data: chartData,
-                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(255, 99, 132, 0.6)',
+                                'rgba(255, 206, 86, 0.6)',
+                                'rgba(75, 192, 192, 0.6)',
+                                'rgba(153, 102, 255, 0.6)',
+                                'rgba(255, 159, 64, 0.6)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
                             borderWidth: 1
                         }]
                     },
                     options: {
                         responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true
+                        plugins: {
+                            legend: {
+                                position: 'right'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + context.raw;
+                                    }
+                                }
                             }
                         }
                     }
                 });
 
+                // Toggle chart/table
                 $('#toggleChartBtn').click(function() {
                     chartVisible = !chartVisible;
                     if (chartVisible) {
-                        $('#otherMailTableContainer').hide();
                         $('#otherMailChart').show();
                         $('.card').hide();
                         $(this).text('Show Table');
                     } else {
                         $('#otherMailChart').hide();
                         $('.card').show();
-                        $(this).text('Show Bar Chart');
+                        $(this).text('Show Pie Chart');
                     }
                 });
-
-                @if ($errors->any())
-                    sendBackModal.show();
-                @endif
             });
         </script>
     @endsection
