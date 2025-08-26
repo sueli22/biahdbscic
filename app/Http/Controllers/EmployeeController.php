@@ -50,22 +50,22 @@ class EmployeeController extends Controller
     public function showLeaveRequestForm()
     {
         $leaveRules = [
-            'shaung'              => 10,   // တစ်နှစ် ၁၀ ရက်
-            'contagious'          => 30,   // ၃၀ ရက်
-            'long-service'        => 60,   // ၂ လ
+            'shaung' => 10,   // တစ်နှစ် ၁၀ ရက်
+            'contagious' => 30,   // ၃၀ ရက်
+            'long-service' => 60,   // ၂ လ
             'medical-certificate' => 365,  // ၁၂ လ
-            'maternity'           => 180,  // ၆ လ
-            'disability'          => 730,  // ၂ နှစ်
-            'no-pay'              => null,   // တစ်နှစ် ၁၀ ရက်
+            'maternity' => 180,
+            'father' => 14,
+            'disability' => 730,
+            'no-pay' => null,
+            'twin' => 56
         ];
 
         $web = Web::first();
         $user = auth()->user();
         $leaveTypes = LeaveType::all();
         $leaveRequests = LeaveRequest::where('user_id', $user->id)
-            ->with('leaveType') // eager load leave type
             ->get();
-
         // Usage
         $leaveUsages = LeaveRequest::selectRaw('req_type, SUM(duration) as used_days')
             ->where('user_id', $user->id)
@@ -74,19 +74,23 @@ class EmployeeController extends Controller
             ->groupBy('req_type')
             ->pluck('used_days', 'req_type')
             ->toArray();
-
-        // Balance
+        dd($leaveUsages);
         $leaveBalances = [];
         foreach ($leaveRules as $type => $maxDays) {
             $used = $leaveUsages[$type] ?? 0;
-            $left = max($maxDays - $used, 0);
+            if (is_null($maxDays)) {
+                $left = null; // unlimited leave
+            } else {
+                $left = max($maxDays - $used, 0);
+            }
 
             $leaveBalances[$type] = [
-                'max'  => $maxDays,
+                'max' => $maxDays,
                 'used' => $used,
                 'left' => $left,
             ];
         }
+            dd( $leaveBalances);
 
 
         return view('employee.leave.index', compact('user', 'leaveTypes', 'leaveRequests', 'web', 'leaveBalances'));
@@ -111,18 +115,50 @@ class EmployeeController extends Controller
             'to_date.after_or_equal' => 'နောက်ဆုံးခွင်ံရက်သည် စတင်နေ့နှင့် ညီညွတ်ရမည် သို့မဟုတ် နောက်ရက်ဖြစ်ရမည်။',
         ];
 
-        // Validation
-        $request->validate([
-            'req_type'   => 'required|string',
-            'from_date'  => 'required|date|after:today',
-            'to_date'    => $request->req_type === 'maternity' ? 'nullable|date' : 'required|date|after_or_equal:from_date',
+        $rules = [
+            'req_type' => 'required|string',
             'description' => 'nullable|string|max:255',
-            'img'        => 'nullable|image|max:2048',
-        ], $messages);
+            'img' => 'nullable|image|max:2048',
+        ];
 
-        $from = Carbon::parse($request->from_date);
-        $to   = $request->to_date ? Carbon::parse($request->to_date) : $from;
-        $days = $from->diffInDays($to) + 1;
+        if ($request->req_type !== 'twin') {
+            $rules['from_date'] = 'required|date|after:today';
+            $rules['to_date'] = $request->req_type === 'maternity'
+                ? 'nullable|date'
+                : 'required|date|after_or_equal:from_date';
+        }
+
+        $request->validate($rules, $messages);
+        // Check maternity record
+        $maternityRecord = LeaveRequest::where('req_type', 'maternity')
+            ->where('user_id', $user->id)
+            ->whereIn('status', ['approved', 'pending'])
+            ->latest('to_date')
+            ->first();
+
+        if ($request->req_type === 'twin') {
+            // Fetch latest maternity record
+            $maternityRecord = LeaveRequest::where('req_type', 'maternity')
+                ->where('user_id', $user->id)
+                ->whereIn('status', ['approved', 'pending'])
+                ->latest('to_date')
+                ->first();
+
+            if (!$maternityRecord) {
+                return response()->json([
+                    'errors' => ['general' => ['မီးဖွားမှတ်တမ်း မရှိသဖြင့် အမွှာခွင့် တောင်းမရပါ။']]
+                ], 422);
+            }
+
+            $from = Carbon::parse($maternityRecord->to_date)->addDay();
+            $to = $from->copy()->addDays(56 - 1);
+            $days = $from->diffInDays($to) + 1;
+        } else {
+            $from = Carbon::parse($request->from_date);
+            $to = $request->to_date ? Carbon::parse($request->to_date) : $from;
+            $days = $from->diffInDays($to) + 1;
+        }
+
 
         // Check overlapping leaves
         $overlap = LeaveRequest::where('user_id', $user->id)
@@ -183,7 +219,7 @@ class EmployeeController extends Controller
 
             case 'shaung':
                 $from = Carbon::parse($request->from_date);
-                $to   = Carbon::parse($request->to_date ?? $from);
+                $to = Carbon::parse($request->to_date ?? $from);
 
                 // 1. Reject Sat/Sun
                 if ($from->isWeekend() || $to->isWeekend()) {
@@ -236,36 +272,51 @@ class EmployeeController extends Controller
                 break;
 
             case 'infection':
-                if ($days > 30) return response()->json(['errors' => ['general' => ['ကူးစက်ရောဂါကာကွယ်ခွင့် 30ရက်ထပ်မကျော်ရ။']]], 422);
+                if ($days > 30)
+                    return response()->json(['errors' => ['general' => ['ကူးစက်ရောဂါကာကွယ်ခွင့် 30ရက်ထပ်မကျော်ရ။']]], 422);
                 break;
 
             case 'seniority':
-                if ($days > 60) return response()->json(['errors' => ['general' => ['လုပ်သက်ခွင့် ၂လထပ်မကျော်ရ။']]], 422);
+                if ($days > 60)
+                    return response()->json(['errors' => ['general' => ['လုပ်သက်ခွင့် ၂လထပ်မကျော်ရ။']]], 422);
                 break;
 
             case 'medical':
-                if ($days > 365) return response()->json(['errors' => ['general' => ['ဆေးလက်မှတ်ခွင့် ၁၂လထပ်မကျော်ရ။']]], 422);
+                if ($days > 365)
+                    return response()->json(['errors' => ['general' => ['ဆေးလက်မှတ်ခွင့် ၁၂လထပ်မကျော်ရ။']]], 422);
                 break;
 
             case 'maternity':
-                if ($days > 180) return response()->json(['errors' => ['general' => ['မီးဖွားခွင့် ၆လထပ်မကျော်ရ။']]], 422);
+                if ($days > 180)
+                    return response()->json(['errors' => ['general' => ['မီးဖွားခွင့် ၆လထပ်မကျော်ရ။']]], 422);
 
                 break;
 
             case 'disability':
-                if ($days > 730) return response()->json(['errors' => ['general' => ['အထူးမသန်စွမ်းခွင့် ၂နှစ်ထပ်မကျော်ရ။']]], 422);
+                if ($days > 730)
+                    return response()->json(['errors' => ['general' => ['အထူးမသန်စွမ်းခွင့် ၂နှစ်ထပ်မကျော်ရ။']]], 422);
+                break;
+
+            case 'twin':
+                if ($days > 56)
+                    return response()->json(['errors' => ['general' => ['၆ပတ်ထက် မကျော်ရ။']]], 422);
+                break;
+
+            case 'father':
+                if ($days > 14)
+                    return response()->json(['errors' => ['general' => ['၂ပတ်ထက် မကျော်ရ။']]], 422);
                 break;
         }
 
         // Save leave
         $leave = LeaveRequest::create([
-            'user_id'     => $user->id,
-            'req_type'    => $request->req_type,
-            'from_date'   => $from->format('Y-m-d'),
-            'to_date'     => $to->format('Y-m-d'),
-            'duration'    => $days,
+            'user_id' => $user->id,
+            'req_type' => $request->req_type,
+            'from_date' => $from->format('Y-m-d'),
+            'to_date' => $to->format('Y-m-d'),
+            'duration' => $days,
             'description' => $request->description,
-            'status'      => 'pending',
+            'status' => 'pending',
         ]);
 
         return response()->json([
@@ -290,7 +341,9 @@ class EmployeeController extends Controller
             'no-pay' => 10,
             'contagious' => 30,
             'volunteer-sick' => 5,
-            'study' => 30
+            'study' => 30,
+            'father' => 14,
+            'twin' => 56
         ];
 
         $from = Carbon::parse($request->from_date);

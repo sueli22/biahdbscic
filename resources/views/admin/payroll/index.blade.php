@@ -11,6 +11,7 @@
                 <tr>
                     <th>စဥ်</th>
                     <th>၀န်ထမ်းအမည်</th>
+                    <th>လစာပေးချေသည့် နှစ်ကိုရွေးပါ</th>
                     <th>လစာပေးချေသည့် လ</th>
                     <th>အခြေခံလစာ</th>
                     <th>ဆေးခွင့်ဖြတ်တောက်ငွေ</th>
@@ -21,8 +22,9 @@
             <tbody>
                 @foreach ($paySalaries as $paySalary)
                     <tr>
-                        <td>{{ $paySalary->id }}</td>
+                        <td>{{ $loop->iteration }}</td>
                         <td>{{ $paySalary->user->name ?? 'N/A' }}</td>
+                        <td>{{ $paySalary->salary_year?? 'N/A' }}</td>
                         <td>
                             @php
                                 $months = [
@@ -72,6 +74,33 @@
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Salary Year -->
+                        <!-- Salary Year -->
+                        <div class="mb-3">
+                            <label for="salary_year" class="form-label">လစာ ပေးချေသည့်နှစ်</label>
+                            <select name="salary_year" id="salary_year" class="form-select" required>
+                                <option value="">နှစ်ကိုရွေးပါ</option>
+                                @for ($year = date('Y'); $year >= 2000; $year--)
+                                    @php
+                                        $myanmarYear = strtr($year, [
+                                            '0' => '၀',
+                                            '1' => '၁',
+                                            '2' => '၂',
+                                            '3' => '၃',
+                                            '4' => '၄',
+                                            '5' => '၅',
+                                            '6' => '၆',
+                                            '7' => '၇',
+                                            '8' => '၈',
+                                            '9' => '၉',
+                                        ]);
+                                    @endphp
+                                    <option value="{{ $year }}">{{ $year }} ({{ $myanmarYear }})
+                                    </option>
+                                @endfor
                             </select>
                         </div>
 

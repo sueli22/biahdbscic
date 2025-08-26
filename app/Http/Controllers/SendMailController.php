@@ -132,6 +132,7 @@ class SendMailController extends Controller
         } else {
             $mails = collect();
         }
-        return view('admin.sendmail.list', compact('mails', 'web'));
+        $otherMails = SendMail::where('to', '!=', $user->email)->get();
+        return view('admin.sendmail.list', compact('mails', 'web', 'otherMails'));
     }
 }

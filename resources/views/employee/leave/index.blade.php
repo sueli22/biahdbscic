@@ -15,9 +15,9 @@
             <thead>
                 <tr>
                     <th>ခွင့်အမျိုးအစား</th>
-                    <th>အစပြုရက်</th>
-                    <th>အဆုံးရက်</th>
-                    <th>ကြာချိန် (ရက်)</th>
+                    <th>ခွင့်စတင်ယူသည့်နေ့</th>
+                    <th>ခွင့်ပီးဆုံးသည့်နေ့</th>
+                    <th>ခွင့်ယူသည့် ကာလ</th>
                     <th>ဖော်ပြချက်</th>
                     <th>အခြေအနေ</th>
                     <th>တင်သွင်းသည့်ရက်</th>
@@ -46,6 +46,10 @@
                         သဘောသားမနာကျန်းခွင့်
                         @elseif($request->req_type === 'study')
                         ပညာလေ့လာဆည်းပူခွင့်
+                        @elseif($request->req_type === 'father')
+                         ကလေးအဖေအဖြစ် စောင့်ရှောက်ခွင့်
+                        @elseif($request->req_type === 'twin')
+                        အမွှာ၆ပတ် ရယူခွင့်
                         @else
                         အခြား
                         @endif
@@ -92,6 +96,7 @@
             </thead>
             <tbody>
                 @foreach($leaveBalances as $type => $balance)
+
                 <tr>
                     <td>
                         @switch($type)
@@ -122,6 +127,12 @@
                         @case('study')
                         ပညာလေ့လာဆည်းပူခွင့်
                         @break
+                        @case('twin')
+                        အမွှာ၆ပတ် ရယူခွင့်
+                        @break
+                        @case('father')
+                       ကလေးအဖေအဖြစ်ကလေး စောင့်ရှောက်ခွင့်
+                        @break
                         @default
                         အခြား
                         @endswitch
@@ -146,7 +157,7 @@
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="casualLeaveModalLabel">ပုံမှန်ခွင့်လျှောက်လွှာ</h5>
+                        <h5 class="modal-title" id="casualLeaveModalLabel">ခွင့်လျှောက်လွှာ</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ပိတ်ရန်"></button>
                     </div>
                     <div class="modal-body">
@@ -168,6 +179,8 @@
                                 <option value="disability">အထူးမသန်စွမ်းခွင့်</option>
                                 <option value="volunteer-sick">သဘောသားမနာကျန်းခွင့်</option>
                                 <option value="study">ပညာလေ့လာဆည်းပူခွင့်</option>
+                                <option value="twin">အမွှာ၆ပတ် ရယူခွင့် </option>
+                                <option value="father">ကလေးအဖေအဖြစ်ကလေး စောင့်ရှောက်ခွင့် </option>
                             </select>
                             <div class="invalid-feedback" id="error-req_type"></div>
                         </div>
@@ -331,6 +344,26 @@
                 });
             });
         }
+
+        function toggleDateFields() {
+        let reqType = $('#req_type').val();
+        if (reqType === 'twin') {
+            // Hide from_date and to_date
+            $('#from_date').closest('.mb-3').hide();
+            $('#to_date').closest('.mb-3').hide();
+        } else {
+            // Show for all other types
+            $('#from_date').closest('.mb-3').show();
+            $('#to_date').closest('.mb-3').show();
+        }
+    }
+
+     toggleDateFields();
+
+    // Run when the leave type is changed
+    $('#req_type').change(function() {
+        toggleDateFields();
+    });
 
         ajaxFormSubmit('#casualLeaveForm', '#casualLeaveModal');
         ajaxFormSubmit('#specialLeaveForm', '#specialLeaveModal');

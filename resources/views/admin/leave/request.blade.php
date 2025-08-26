@@ -58,6 +58,10 @@
                         သဘောသားမနာကျန်းခွင့်
                         @elseif($req->req_type === 'study')
                         ပညာလေ့လာဆည်းပူခွင့်
+                        @elseif($req->req_type === 'father')
+                         ကလေးအဖေအဖြစ် စောင့်ရှောက်ခွင့်
+                        @elseif($req->req_type === 'twin')
+                        အမွှာ၆ပတ် ရယူခွင့်
                         @else
                         အခြား
                         @endif

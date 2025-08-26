@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->tinyInteger('salary_month');
+            $table->integer('salary_year');
             $table->decimal('basic_salary', 12, 2)->default(0);
             $table->decimal('allowances', 12, 2)->default(0);
             $table->decimal('no_pay_de', 20, 2)->nullable();      // instead of no-pay-de
