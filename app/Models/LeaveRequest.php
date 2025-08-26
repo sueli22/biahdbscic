@@ -29,4 +29,10 @@ class LeaveRequest extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    // Leave type of the request
+    public function leaveType()
+    {
+        return $this->belongsTo(LeaveType::class);
+    }
 }
