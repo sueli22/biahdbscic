@@ -3,10 +3,10 @@
 @section('content')
     <!-- resources/views/admin/profile.blade.php -->
 
-    <div class="card" style="max-width: 800px; margin: 100px auto;">
+    <div class="card" style="max-width: 500px; margin: 100px auto;">
         <div class="card-body text-center">
             <img src="{{ asset('storage/images/' . ($user->image ?? 'default.jpg')) }}" alt="User Image"
-    class="mb-3" style="width: 100%; height: 140px; object-fit: cover;">
+    class="mb-3" style="width: 180px; height: 180px; object-fit: cover;border-radius: 50%;">
 
             <ul class="list-group list-group-flush text-start">
                 <li class="list-group-item"><strong>နာမည်:</strong> {{ $user->name }}</li>

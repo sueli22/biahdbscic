@@ -63,7 +63,7 @@ class AdminController extends Controller
 
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();
-            $request->image->storeAs('public/images', $imageName);
+            $request->image->storeAs('/images', $imageName);
             $validated['image'] = $imageName;
         }
         $user->update($validated);

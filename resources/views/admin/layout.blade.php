@@ -131,10 +131,29 @@
 
     </header>
 
-    <main class="main">
+   <main class="main">
+    {{-- Admin Info Section --}}
+    <div class="admin-info d-flex align-items-center p-3 shadow-sm"
+         style="position: fixed; top: 20px; right: 20px; width: 240px; background:#f8f9fa; border-radius: 12px; z-index: 1000;">
 
-        @yield('content')
-    </main>
+        <img
+            src="{{ asset('storage/images/' . (Auth::user()->image ?? 'default.jpg')) }}"
+            alt="Admin Image"
+            class="rounded-circle me-2"
+            style="width: 50px; height: 50px; object-fit: cover; border:2px solid #ddd;"
+        >
+
+        <span class="fw-bold text-dark">
+            {{ Auth::user()->name ?? 'Admin' }}
+        </span>
+    </div>
+
+    {{-- Page Content --}}
+    @yield('content')
+</main>
+
+
+
        <footer id="footer" class="footer position-relative light-background">
                {!! $web->footer !!}
     </footer>

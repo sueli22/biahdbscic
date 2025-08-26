@@ -3,14 +3,14 @@
 @section('content')
     <!-- resources/views/admin/profile.blade.php -->
 
-    <div class="card" style="max-width: 800px; margin: 100px auto;">
+    <div class="card" style="max-width: 500px; margin: 100px auto;">
         <div class="card-body ">
             <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data" class="">
                 @csrf
                 @method('PATCH')
                 <div class="text-center mb-3">
                     <img src="{{ asset('storage/images/' . ($user->image ?? 'default.jpg')) }}" alt="User Image"
-                        class="mb-3" style="width: 100%; height: 140px; object-fit: cover;">
+     style="width: 180px; height: 180px; object-fit: cover;border-radius: 50%;">
 
                 </div>
 

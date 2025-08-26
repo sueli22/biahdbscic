@@ -3,7 +3,7 @@
     color: white;
 }
 .main{
-    padding: 40px;
+    padding: 100px;
 }
 .list-group-flush>.list-group-item{
     color: rgb(4, 19, 133);;
@@ -89,7 +89,7 @@ table.dataTable thead th:hover::after {
 }
 
 .container{
-    padding: 50px;
+    padding: 10px;
 }
 
 .staff-add{

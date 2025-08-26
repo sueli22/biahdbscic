@@ -54,7 +54,7 @@
                 <table class="table table-bordered" id="reportsTable" style="font-size:12px;">
                     <thead>
                         <tr>
-                            <th>နံပါတ်</th>
+                            <th>စဥ်</th>
                             <th>မှ</th>
                             <th>အထိ</th>
                             <th>လုပ်ငန်းအမည်</th>

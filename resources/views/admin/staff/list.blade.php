@@ -11,7 +11,7 @@
             <table id="staffTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>နံပါတ်</th>
+                        <th>စဥ်</th>
                         <th>အမည်</th>
                         <th>အီးမေးလ်</th>
                         <th>ဝန်ထမ်းအမှတ်</th>
