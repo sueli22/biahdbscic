@@ -37,19 +37,6 @@ class AttendenceController extends Controller
             return back()->with('error', 'စနေ နှင့် တနင်္ဂနွေ  သည် ပိတ်ရက်ဖစ်ပါသည်');
         }
 
-        // Allow only between 9:00 AM and 10:00 AM
-        $currentHour = $today->format('H'); // 24-hour format, e.g., '09'
-        $currentMinute = $today->format('i'); // minutes
-        $currentTime = $today->format('H:i');
-
-        // Define time window
-        $startTime = Carbon::createFromTime(9, 0);  // 9:00 AM
-        $endTime = Carbon::createFromTime(10, 0);   // 10:00 AM
-
-        if ($today->lt($startTime) || $today->gte($endTime)) {
-            return back()->with('error', 'လက်မှတ်တင်နိုင်သည့်အချိန်မှာ မနက် ၉ နာရီမှ ၁၀ နာရီအထိသာ ဖြစ်ပါသည်။');
-        }
-
         // Prevent duplicate entry for today
         if (Attendence::where('user_id', $user->id)->where('date', $today->toDateString())->exists()) {
             return back()->with('error', 'ယနေ့အတွက် ရှိပြီးသား မှတ်တမ်းဖြစ်နေပါသည်!');
