@@ -70,7 +70,6 @@ class EmployeeController extends Controller
         $leaveUsages = LeaveRequest::selectRaw('req_type, SUM(duration) as used_days')
             ->where('user_id', $user->id)
             ->whereIn('status', ['approved', 'pending'])
-            ->whereYear('from_date', now()->year) // သာမန် leave များ yearly reset
             ->groupBy('req_type')
             ->pluck('used_days', 'req_type')
             ->toArray();
@@ -89,7 +88,7 @@ class EmployeeController extends Controller
                 'left' => $left,
             ];
         }
-        
+
 
 
         return view('employee.leave.index', compact('user', 'leaveTypes', 'leaveRequests', 'web', 'leaveBalances'));
