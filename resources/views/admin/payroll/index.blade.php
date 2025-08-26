@@ -6,7 +6,7 @@
         </button>
 
 
-        <table class="table table-bordered" id="paySalariesTable">
+        <table class="table table-bordered" id="paySalariesTable" style="background-color: #010549;">
             <thead>
                 <tr>
                     <th>စဥ်</th>
@@ -14,7 +14,8 @@
                     <th>လစာပေးချေသည့် နှစ်ကိုရွေးပါ</th>
                     <th>လစာပေးချေသည့် လ</th>
                     <th>အခြေခံလစာ</th>
-                    <th>ဆေးခွင့်ဖြတ်တောက်ငွေ</th>
+                    <th>ရက်တွက်ရငွေ</th>
+                    <th>ဆေးခွင့်ဖြတ်တောက်မှုမှ ကျန်ငွေ</th>
                     <th>လစာမဲ့ခွင့်ဖြတ်တောက်ငွေ</th>
                     <th>အသားတင်လစာ</th>
                     <th>လစာပေးချေသည့်ရက်စွဲ</th>
@@ -45,6 +46,7 @@
                             {{ $months[$paySalary->salary_month] ?? '' }}
                         </td>
                         <td>{{ $paySalary->basic_salary }}</td>
+                         <td>{{ $paySalary->daily_fee }}</td>
                         <th>{{ $paySalary->medical_de ?? '0' }}</th>
                         <th>{{ $paySalary->no_pay_de ?? '0' }}</th>
                         <td>{{ $paySalary->net_salary }}</td>

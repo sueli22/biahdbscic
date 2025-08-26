@@ -112,6 +112,7 @@ class PaySalaryController extends Controller
             'salary_year' => $year,
             'basic_salary' => $basicSalary,
             'allowances' => $allowances,
+            'daily_fee' => $attendDayFee,
             'medical_de' => $medicalDurationFee,
             'no_pay_de' => $noPayFee,
             'deductions' => $noPayFee,

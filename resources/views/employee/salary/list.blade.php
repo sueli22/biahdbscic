@@ -8,8 +8,9 @@
                     <th>အမည်</th>
                     <th>လစာထုတ်ယူသည့် လ</th>
                     <th>အခြေခံလစာ</th>
+                    <th>ရက်တွက်ရငွေ</th>
                     <th>Allowances</th>
-                    <th>ဆေးခွင့်ဖြတ်တောက်ငွေ</th>
+                    <th>ဆေးခွင့်ဖြတ်တောက်မှုမှ ကျန်ငွေ</th>
                     <th>လစာမဲ့ခွင့်ဖြတ်တောက်ငွေ</th>
                     <th>အသားတင်လစာ</th>
                     <th>ငွေပေးချေမှုနည်းလမ်း</th>
@@ -41,6 +42,7 @@
                             {{ $months[$paySalary->salary_month] ?? '' }}
                         </td>
                 <td>{{ $paySalary->basic_salary }}</td>
+                <td>{{ $paySalary->daily_fee }}</td>
                 <td>{{ $paySalary->allowances }}</td>
                 <th>{{ $paySalary->medical_de ?? '0' }}</th>
                 <th>{{ $paySalary->no_pay_de ?? '0' }}</th>

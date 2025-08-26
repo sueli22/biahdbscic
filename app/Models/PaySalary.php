@@ -16,6 +16,7 @@ class PaySalary extends Model
         'salary_month',
         'basic_salary',
         'salary_year',
+        'daily_fee',
         'no_pay_de',
         'medical_de',
         'allowances',
