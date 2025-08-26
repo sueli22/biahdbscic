@@ -17,6 +17,7 @@
                     <th>ရက်တွက်ရငွေ</th>
                     <th>ဆေးခွင့်ဖြတ်တောက်မှုမှ ကျန်ငွေ</th>
                     <th>လစာမဲ့ခွင့်ဖြတ်တောက်ငွေ</th>
+                    <th>ထောက်ပံငွေ</th>
                     <th>အသားတင်လစာ</th>
                     <th>လစာပေးချေသည့်ရက်စွဲ</th>
             </thead>
@@ -49,6 +50,7 @@
                          <td>{{ $paySalary->daily_fee }}</td>
                         <th>{{ $paySalary->medical_de ?? '0' }}</th>
                         <th>{{ $paySalary->no_pay_de ?? '0' }}</th>
+                        <th>{{ $paySalary->allowances ?? '0' }}</th>
                         <td>{{ $paySalary->net_salary }}</td>
                         <td>{{ $paySalary->created_at->format('Y-m-d') }}</td>
                     </tr>
