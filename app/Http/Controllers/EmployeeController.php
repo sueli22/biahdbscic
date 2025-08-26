@@ -74,7 +74,6 @@ class EmployeeController extends Controller
             ->groupBy('req_type')
             ->pluck('used_days', 'req_type')
             ->toArray();
-        dd($leaveUsages);
         $leaveBalances = [];
         foreach ($leaveRules as $type => $maxDays) {
             $used = $leaveUsages[$type] ?? 0;
@@ -90,7 +89,7 @@ class EmployeeController extends Controller
                 'left' => $left,
             ];
         }
-            dd( $leaveBalances);
+        
 
 
         return view('employee.leave.index', compact('user', 'leaveTypes', 'leaveRequests', 'web', 'leaveBalances'));
