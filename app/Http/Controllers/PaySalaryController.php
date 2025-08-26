@@ -81,13 +81,18 @@ class PaySalaryController extends Controller
         $startDate = \Carbon\Carbon::create($year, $month, 1)->subYear(); // start from previous year same month
         $endDate = \Carbon\Carbon::create($year, $month, 1)->subDay();    // end at last day of previous month
 
-        $averagesalary = PaySalary::where('user_id', $userId)
+        $salariesQuery = PaySalary::where('user_id', $userId)
             ->where(function ($query) use ($startDate, $endDate) {
-                $query->where(function ($q) use ($startDate, $endDate) {
-                    $q->whereRaw("STR_TO_DATE(CONCAT(salary_year, '-', salary_month, '-01'), '%Y-%m-%d') BETWEEN ? AND ?", [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
-                });
-            })
-            ->sum('net_salary');
+                $query->whereRaw(
+                    "STR_TO_DATE(CONCAT(salary_year, '-', salary_month, '-01'), '%Y-%m-%d') BETWEEN ? AND ?",
+                    [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]
+                );
+            });
+
+        $totalSalary = $salariesQuery->sum('net_salary');
+        $salaryCount = $salariesQuery->count();
+        $averageSalary = $salaryCount > 0 ? $totalSalary / $salaryCount : 0;
+
 
         // --- Attendance Days ---
         $attendDay = max(0, $totalDay - ($medical_leave + $no_pay_leave));
@@ -96,8 +101,7 @@ class PaySalaryController extends Controller
         $eachDayFee = $basicSalary / $totalDay;
         $attendDayFee = $eachDayFee * $attendDay;
 
-        $seconds = $averagesalary / 12;
-        $secondCalc = $seconds / 2;
+        $secondCalc = $averageSalary / 2;
         $ttl = $secondCalc / $totalDay;
         $medicalDurationFee = $medical_leave * $ttl;
 
