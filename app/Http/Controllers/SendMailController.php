@@ -69,12 +69,14 @@ class SendMailController extends Controller
         $superUserEmails = User::where('super_user', 1)->pluck('email')->toArray();
 
         $request->validate([
+            'to' => 'required',
             'department' => 'required|string',
             'phone' => 'nullable|string',
             'title' => 'required|string',
             'body' => 'required|string',
             'file' => 'nullable|file|mimes:pdf,jpg,png,doc,docx,xlsx,xls,csv'
         ], [
+            'to.required' => ' ဖြည့်ရန်လိုအပ်သည်။',
             'department.required' => 'ဌာနကို ဖြည့်ရန်လိုအပ်သည်။',
             'phone.required' => 'ဖုန်းနံပါတ်ကို ဖြည့်ရန်လိုအပ်သည်။',
             'title.required' => 'ခေါင်းစဉ်ကို ဖြည့်ရန်လိုအပ်သည်။',
@@ -90,7 +92,7 @@ class SendMailController extends Controller
         // Save to DB, fix from and to
         $sendMail = SendMail::create([
             'from' =>implode(',', $superUserEmails),               // Sender email
-            'to' => $request->to, // Store super user emails as CSV string or handle differently
+            'to' => $request->to,
             'department' => $request->department,
             'phone' => $request->phone ?? '',        // handle missing phone
             'title' => $request->title,
