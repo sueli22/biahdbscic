@@ -67,7 +67,6 @@ class AdminController extends Controller
             $validated['image'] = $imageName;
         }
         $user->update($validated);
-
         return redirect()->route('admin.profile.show')->with('success', 'Profile updated successfully.');
     }
 
