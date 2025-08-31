@@ -423,7 +423,7 @@
                             data: {
                                 labels: ['ကာလတို', 'ကာလလတ်', 'ကာလရှည်'],
                                 datasets: [{
-                                    label: 'Project Count',
+                                    label: 'အရေအတွက်',
                                     data: [termCounts.short, termCounts.mid, termCounts
                                         .long
                                     ],
