@@ -18,7 +18,8 @@
                 <button id="toggleBtn" class="btn btn-primary">Show Charts</button>
             </div>
             <div class="col-md-2">
-                <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createModal" style="font-size: 12px">
+                <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#createModal"
+                    style="font-size: 12px">
                     စီမံကိန်းအသစ်ထည့်မည်
                 </button>
             </div>
@@ -35,10 +36,11 @@
                         <th>အထိ</th>
                         <th>လုပ်ငန်းအမည်</th>
                         <th>တည်နေရာ</th>
-                        <th>စတင်မည့်ကာလ</th>
-                        <th>ပြီးဆုံးမည့်ကာလ</th>
                         <th>ဆောင်ရွက်မည့်ဌာန/အဖွဲ့အစည်း</th>
                         <th>ဆောင်ရွက်သည့်နှစ်</th>
+                        <th>ဘဏ္ဍာငွေ သန်းပေါင်း</th>
+                        <th>ဆောင်ရွက်မှု အခြေနေ</th>
+                        <th>အချိန်ကာလ</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -46,12 +48,22 @@
             </table>
         </div>
         <div id="chartsContainer" style="display:none;margin-left:170px">
-        <div class="row">
-            <div class="col-md-8">
-                <canvas id="departmentPieChart"></canvas>
+            <div class="row">
+                <div class="col-md-10 mt-5 mb-3">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 mt-5 mb-3">
+                    <canvas id="termCountChart"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 mt-5 mb-3">
+                    <canvas id="statusChart"></canvas>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 
 
@@ -92,18 +104,6 @@
                             </div>
 
                             <div class="col-md-6 mb-2">
-                                <label>စတင်မည့်ကာလ</label>
-                                <input type="text" name="start_month" class="form-control">
-                                <div class="invalid-feedback"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
-                                <label>ပြီးစီးမည့်ကာလ</label>
-                                <input type="text" name="end_month" class="form-control">
-                                <div class="invalid-feedback"></div>
-                            </div>
-
-                            <div class="col-md-6 mb-2">
                                 <label>ဌာန/အဖွဲ့အစည်း</label>
                                 <input type="text" name="department" class="form-control">
                                 <div class="invalid-feedback"></div>
@@ -112,6 +112,23 @@
                             <div class="col-md-6 mb-2">
                                 <label>ဆောင်ရွက်သည့်နှစ်</label>
                                 <input type="text" name="operation_year" class="form-control" min="1900">
+                                <div class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                                <label>ဘဏ္ဍာငွေ သန်းပေါင်း</label>
+                                <input type="number" step="0.01" name="total_budget" class="form-control">
+                                <div class="invalid-feedback"></div>
+                            </div>
+
+                            <div class="col-md-6 mb-2">
+                                <label>ဆောင်ရွက်မှု အခြေနေ</label>
+                                <select name="status_report" class="form-control">
+                                    <option value="">-- ရွေးချယ်ရန် --</option>
+                                    <option value="finish">ပြီး</option>
+                                    <option value="unfinish">မပြီးစီး</option>
+                                    <option value="containue">ဆောင်ရွက်ဆဲ</option>
+                                </select>
                                 <div class="invalid-feedback"></div>
                             </div>
                         </div>
@@ -158,18 +175,6 @@
                         </div>
 
                         <div class="mb-3">
-                            <label>စတင်မည့်လ</label>
-                            <input type="text" class="form-control" id="edit_start_month" name="start_month">
-                            <div class="invalid-feedback"></div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label>ပြီးဆုံးမည့်လ</label>
-                            <input type="text" class="form-control" id="edit_end_month" name="end_month">
-                            <div class="invalid-feedback"></div>
-                        </div>
-
-                        <div class="mb-3">
                             <label>ဌာန/အဖွဲ့အစည်း</label>
                             <input type="text" class="form-control" id="edit_department" name="department">
                             <div class="invalid-feedback"></div>
@@ -179,6 +184,24 @@
                         <div class="mb-3">
                             <label>ဆောင်ရွက်မည့်နှစ်</label>
                             <input type="number" class="form-control" id="edit_operation_year" name="operation_year">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label>ဘဏ္ဍာငွေ သန်းပေါင်း</label>
+                            <input type="number" step="0.01" class="form-control" id="edit_total_budget"
+                                name="total_budget">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label>ဆောင်ရွက်မှု အခြေနေ</label>
+                            <select class="form-control" id="edit_status_report" name="status_report">
+                                <option value="">-- ရွေးချယ်ရန် --</option>
+                                <option value="finish">ပြီးစီး</option>
+                                <option value="unfinish">မပြီးစီး</option>
+                                <option value="containue">ဆောင်ရွက်ဆဲ</option>
+                            </select>
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
@@ -219,6 +242,10 @@
 
     <script>
         $(document).ready(function() {
+            let budgetChart = null;
+            let termChart = null;
+            let statusChart = null;
+
             // Load table function
             function loadTable(from = '', to = '') {
                 $.ajax({
@@ -234,9 +261,17 @@
                         }
                         $('#reportsTable tbody').empty();
 
-                        let departmentData = {}; // Pie chart
-                        let yearlyTender = {}; // Line chart
-
+                        let budgetByDepartment = {};
+                        let termCounts = {
+                            short: 0,
+                            mid: 0,
+                            long: 0
+                        };
+                        let statusCounts = {
+                            finish: 0,
+                            unfinish: 0,
+                            containue: 0
+                        };
                         $.each(data, function(index, report) {
                             $('#reportsTable tbody').append(`
             <tr>
@@ -245,10 +280,30 @@
                 <td>${report.to || ''}</td>
                 <td>${report.name || ''}</td>
                 <td>${report.location || ''}</td>
-                <td>${report.start_month || ''}</td>
-                <td>${report.end_month || ''}</td>
                 <td>${report.department || ''}</td>
                 <td>${report.operation_year || ''}</td>
+                <td>${report.total_budget ?? ''}</td>
+
+<td>
+  ${report.title_report === 'mid'
+        ? 'ကာလလတ်'
+        : report.title_report === 'long'
+            ? 'ကာလရှည်'
+            : report.title_report === 'short'
+                ? 'ကာလတို'
+                : ''}
+</td>
+
+<td>
+  ${report.status_report === 'finish'
+        ? 'ပြီးစီး'
+        : report.status_report === 'unfinish'
+            ? 'မပြီးစီး'
+            : report.status_report === 'containue'
+                ? 'ဆောင်ရွက်ဆဲ'
+                : ''}
+</td>
+
                 <td>
            <div class="dropdown">
                <button class="btn btn-light btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -278,54 +333,120 @@
             </tr>
         `);
 
-                            // Department count
-                            if (report.department) {
-                                departmentData[report.department] = (departmentData[report
-                                    .department] || 0) + 1;
+                            if (report.department && report.total_budget) {
+                                budgetByDepartment[report.department] = (budgetByDepartment[
+                                    report.department] || 0) + parseFloat(report
+                                    .total_budget);
                             }
 
-                            // Tender price sum per year
-                            if (report.operation_year && report.tender_price) {
-                                let price = parseFloat(report.tender_price);
-                                if (!isNaN(price)) {
-                                    yearlyTender[report.operation_year] = (yearlyTender[report
-                                        .operation_year] || 0) + price;
-                                }
-                            }
+
+                            if (report.status_report === 'finish') statusCounts.finish++;
+                            else if (report.status_report === 'unfinish') statusCounts
+                                .unfinish++;
+                            else if (report.status_report === 'containue') statusCounts
+                                .containue++;
+
+                            // Term Counts
+                            if (report.title_report === 'short') termCounts.short++;
+                            else if (report.title_report === 'mid') termCounts.mid++;
+                            else if (report.title_report === 'long') termCounts.long++;
                         });
 
-                        // ---------- Pie Chart ----------
-                        const deptCtx = document.getElementById('departmentPieChart').getContext('2d');
-                        if (window.departmentChart) window.departmentChart.destroy();
-                        window.departmentChart = new Chart(deptCtx, {
-                            type: 'pie',
+                        // Budget Bar Chart
+                        const budgetCtx = document.getElementById('budgetChart').getContext('2d');
+                        if (budgetChart) budgetChart.destroy();
+                        budgetChart = new Chart(budgetCtx, {
+                            type: 'bar',
                             data: {
-                                labels: Object.keys(departmentData),
+                                labels: Object.keys(budgetByDepartment),
                                 datasets: [{
-                                    data: Object.values(departmentData),
-                                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56',
-                                        '#4BC0C0', '#9966FF', '#FF9F40'
+                                    label: 'စုစုပေါင်းဘဏ္ဍာငွေ',
+                                    data: Object.values(budgetByDepartment),
+                                    backgroundColor: ['#F02E5D', '#8530E6', '#E0A051',
+                                        '#3DCC88'
                                     ]
                                 }]
                             },
                             options: {
                                 responsive: true,
                                 plugins: {
-                                    legend: {
-                                        position: 'bottom'
-                                    },
                                     title: {
                                         display: true,
-                                        text: 'Reports by Department'
+                                        text: 'ဌာနအလိုက် ဘဏ္ဍာငွေ ဆောင်ရွက်မှု အခြေအနေ'
+                                    },
+                                    legend: {
+                                        display: false
                                     }
                                 }
                             }
                         });
+
+                        const statusCtx = document.getElementById('statusChart').getContext('2d');
+                        if (statusChart) statusChart.destroy();
+                        statusChart = new Chart(statusCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['ပြီးစီး(လက်ရှိပြီးစီး)',
+                                    'မပြီးစီး(စီမံကိန်း ကာလအတွင်း ဆောင်ရွက်‌နေဆဲ)',
+                                    'ကာလလွန်'
+                                ],
+                                datasets: [{
+                                    label: 'ဆောင်ရွက်မှု အခြေအနေ',
+                                    data: [statusCounts.finish, statusCounts.unfinish,
+                                        statusCounts.containue
+                                    ],
+                                    backgroundColor: ['#63DDE0', '#28a745', '#dc3545',
+                                        '#ffc107', '#E84699'
+                                    ]
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'ဆောင်ရွက်ပြီးစီးမှု အလိုက် နှစ်စဥ် ဆောင်ရွက်မှု အခြေအနေ'
+                                    },
+                                    legend: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        });
+
+
+                        // Term Count Chart
+                        const termCtx = document.getElementById('termCountChart').getContext('2d');
+                        if (termChart) termChart.destroy();
+                        termChart = new Chart(termCtx, {
+                            type: 'bar',
+                            data: {
+                                labels: ['ကာလတို', 'ကာလလတ်', 'ကာလရှည်'],
+                                datasets: [{
+                                    label: 'Project Count',
+                                    data: [termCounts.short, termCounts.mid, termCounts
+                                        .long
+                                    ],
+                                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                plugins: {
+                                    title: {
+                                        display: true,
+                                        text: 'ကာလ အလိုက် နှစ်စဥ် ဆောင်ရွက်မှု အခြေအနေ'
+                                    },
+                                    legend: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        });
+
                         $('#reportsTable').DataTable({
                             dom: 'Bflrtip',
-                            buttons: [
-                                'copy', 'excel', 'print'
-                            ]
+                            buttons: ['copy', 'excel', 'print']
                         });
                     },
 
@@ -432,18 +553,26 @@
                     url: '/yearly_reports/' + id,
                     type: 'GET',
                     success: function(data) {
+                        let reportType = '';
+                        if (data.title_report === 'short') reportType = 'ကာလတို';
+                        else if (data.title_report === 'mid') reportType = 'ကာလလတ်';
+                        else if (data.title_report === 'long') reportType = 'ကာလရှည်';
+
+                        let reportStatus = '';
+                        if (data.status_report === 'finish') reportStatus = 'ပြီးစီး';
+                        else if (data.status_report === 'unfinish') reportStatus = 'မပြီးစီး';
+                        else if (data.status_report === 'containue') reportStatus =
+                            'ဆောင်ရွက်ဆဲ';
                         var content = `
                          <p><strong>From:</strong> ${data.from}</p>
                           <p><strong>To:</strong> ${data.to}</p>
                 <p><strong>စီမံကိန်းအမည်:</strong> ${data.name}</p>
                 <p><strong>တည်နေရာ:</strong> ${data.location}</p>
-                <p><strong>စတင်မည့်ကာလ:</strong> ${data.start_month}</p>
-                <p><strong>ပြီးဆုံးမည့်ကာလ:</strong> ${data.end_month}</p>
                 <p><strong>ဌာန/အဖွဲ့အစည်း:</strong> ${data.department}</p>
-                <p><strong>စုစုပေါင်းရင်းနှီးမြှုပ်နှံမည့်ငွေ:</strong> ${data.total_investment}</p>
+                <p><strong>စုစုပေါင်းဘဏ္ဍာငွေ:</strong> ${data.total_budget ?? ''}</p>
                 <p><strong>ဆောင်ရွက်သည့်နှစ်:</strong> ${data.operation_year}</p>
-                <p><strong>တိုင်းဒေသကြီးဘတ်ဂျက်:</strong> ${data.regional_budget}</p>
-                <p><strong>တင်ဒါအောင်မြင်သည့်စျေးနှုန်း:</strong> ${data.tender_price}</p>
+                  <p><strong>အချိန်ကာလ:</strong> ${reportType}</p>
+            <p><strong>ဆောင်ရွက်သည့်အခြေအနေ:</strong> ${reportStatus}</p>
             `;
                         $('#viewContent').html(content);
                         var viewModal = new bootstrap.Modal(document.getElementById(
@@ -473,14 +602,12 @@
                         $('#edit_id').val(data.id);
                         $('#edit_name').val(data.name);
                         $('#edit_location').val(data.location);
-                        $('#edit_start_month').val(data.start_month);
-                        $('#edit_end_month').val(data.end_month);
                         $('#edit_department').val(data.department);
                         $('#edit_total_investment').val(data.total_investment);
                         $('#edit_operation_year').val(data.operation_year);
-                        $('#edit_regional_budget').val(data.regional_budget);
-                        $('#edit_tender_price').val(data.tender_price);
-
+                        $('#edit_total_budget').val(data.total_budget ?? '');
+                        $('#edit_status_report').val(data.status_report ?? '');
+                        $('#edit_title_report').val(data.title_report ?? '');
                         // Show the modal
                         editModal.show();
                     },

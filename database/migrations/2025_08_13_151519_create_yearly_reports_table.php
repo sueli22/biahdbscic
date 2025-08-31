@@ -16,10 +16,12 @@ return new class extends Migration {
             $table->integer('to')->nullable();
             $table->string('name')->nullable(); // စီမံကိန်းအမည်
             $table->string('location')->nullable(); // လုပ်ငန်းတည်နေရာ
-            $table->string('start_month')->nullable(); // စီမံကိန်းစတင်မည့်ကာလ
-            $table->string('end_month')->nullable(); // စီမံကိန်းပြီးစီးမည့်ကာလ
             $table->string('department')->nullable(); // ဆောင်ရွက်မည့်ဌာန/အဖွဲ့အစည်း
             $table->year('operation_year')->nullable(); // လုပ်ငန်းဆောင်ရွက်သည့်နှစ်
+
+            $table->decimal('total_budget', 25, 2)->nullable();
+            $table->string('title_report')->nullable();
+            $table->string('status_report')->nullable();
             $table->timestamps();
         });
     }

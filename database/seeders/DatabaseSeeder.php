@@ -92,18 +92,22 @@ class DatabaseSeeder extends Seeder
             'အမျိုးသားစိုက်ပျိုးရေးစီမံကိန်းဌာန',
         ];
 
+        $statuses = ['finish', 'unfinish', 'containue'];
+        $terms = ['short', 'mid', 'long'];
+
         for ($i = 1; $i <= 30; $i++) {
             $from = rand(2000, 2022); // max 2022, so that 'to' can be at least 1 year later
-        $to = rand($from + 1, 2023);
+            $to = rand($from + 1, 2023);
             DB::table('yearly_reports')->insert([
                 'from' => $from,
                 'to' => $to,
                 'name' => 'စီမံကိန်း ' . $i,
                 'location' => $locations[array_rand($locations)],
-                'start_month' => rand(1, 12) . '.2020',
-                'end_month' => rand(1, 12) . '.2020',
                 'department' => $departments[array_rand($departments)],
                 'operation_year' => rand(2000, 2023),
+                'total_budget' => rand(50, 1000),
+                'status_report' => $statuses[array_rand($statuses)],
+                'title_report' => $terms[array_rand($terms)],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

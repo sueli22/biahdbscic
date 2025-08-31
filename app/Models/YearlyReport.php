@@ -22,9 +22,11 @@ class YearlyReport extends Model
         'end_month',
         'department',
         'operation_year',
+        'total_budget',
+        'title_report',
+        'status_report'
     ];
 
-    // Optional: Cast monetary fields to decimal
     protected $casts = [
         'total_investment' => 'decimal:2',
         'regional_budget' => 'decimal:2',

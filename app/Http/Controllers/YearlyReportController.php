@@ -48,10 +48,10 @@ class YearlyReportController extends Controller
             'to' => 'required|integer|digits:4',
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'start_month' => 'required|string|max:255',
-            'end_month' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'operation_year' => 'required|integer|digits:4|between:1901,2155',
+            'total_budget' => 'required|numeric|min:0',
+            'status_report' => 'required|in:finish,unfinish,containue',
         ], [
             'from.required' => 'စတင်မည့်နှစ်ထည့်ရန်လိုအပ်ပါသည်။',
             'from.integer' => 'စတင်မည့်နှစ်သည် ဂဏန်းဖြစ်ရပါမည်။',
@@ -64,8 +64,7 @@ class YearlyReportController extends Controller
 
             'name.required' => 'စီမံကိန်းအမည်ထည့်ရန်လိုအပ်ပါသည်။',
             'location.required' => 'တည်နေရာထည့်ရန်လိုအပ်ပါသည်။',
-            'start_month.required' => 'စတင်မည့်ကာလထည့်ရန်လိုအပ်ပါသည်။',
-            'end_month.required' => 'ပြီးဆုံးမည့်ကာလထည့်ရန်လိုအပ်ပါသည်။',
+
             'department.required' => 'ဆောင်ရွက်မည့်ဌာန/အဖွဲ့အစည်းထည့်ရန်လိုအပ်ပါသည်။',
 
             'total_investment.required' => 'စုစုပေါင်းရင်းနှီးမြှုပ်နှံမည့်ငွေထည့်ရန်လိုအပ်ပါသည်။',
@@ -76,14 +75,26 @@ class YearlyReportController extends Controller
             'operation_year.digits' => 'ဆောင်ရွက်မည့်နှစ်သည် ဂဏန်း 4 လုံးဖြစ်ရပါမည်။',
             'operation_year.between' => 'ဆောင်ရွက်မည့်နှစ်သည် 1901 မှ 2155 အတွင်းရှိရပါမည်။',
 
-            'regional_budget.required' => 'တိုင်းဒေသကြီးဘတ်ဂျက်ထည့်ရန်လိုအပ်ပါသည်။',
-            'regional_budget.numeric' => 'တိုင်းဒေသကြီးဘတ်ဂျက်ကို နံပါတ်ဖြင့်ထည့်ရန်လိုအပ်ပါသည်။',
+            'total_budget.required' => 'စုစုပေါင်းဘဏ္ဍာငွေထည့်ရန်လိုအပ်ပါသည်။',
+            'total_budget.numeric' => 'စုစုပေါင်းဘဏ္ဍာငွေကို နံပါတ်ဖြင့်ထည့်ရန်လိုအပ်ပါသည်။',
 
-            'tender_price.required' => 'တင်ဒါအောင်မြင်သည့်စျေးနှုန်းထည့်ရန်လိုအပ်ပါသည်။',
-            'tender_price.numeric' => 'တင်ဒါအောင်မြင်သည့်စျေးနှုန်းကို နံပါတ်ဖြင့်ထည့်ရန်လိုအပ်ပါသည်။',
+            'status_report.required' => 'Report Status ကို ရွေးချယ်ရန်လိုအပ်ပါသည်။',
+            'status_report.in' => 'Report Status သည် (ပီးစီး, မပီးစီး, ဆောင်ရွက်ဆဲ) မှသာ ရွေးချယ်နိုင်ပါသည်။',
         ]);
+        $duration = $data['to'] - $data['from'];
+
+        if ($duration == 1) {
+            $data['title_report'] = 'short';
+        } elseif (in_array($duration, [2, 3])) {
+            $data['title_report'] = 'mid';
+        } elseif ($duration >= 4 && $duration <= 20) {
+            $data['title_report'] = 'long';
+        } else {
+            $data['title_report'] = null;
+        }
 
         YearlyReport::create($data);
+
 
         return response()->json([
             'success' => true,
@@ -125,10 +136,10 @@ class YearlyReportController extends Controller
             'to' => 'required|integer|digits:4',
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'start_month' => 'required|string|max:255',
-            'end_month' => 'required|string|max:255',
             'department' => 'required|string|max:255',
             'operation_year' => 'required|integer|digits:4|between:1901,2155',
+            'total_budget' => 'nullable|numeric|min:0',
+            'status_report' => 'required|in:finish,unfinish,containue',
         ], [
             'from.required' => 'စတင်မည့်နှစ်ထည့်ရန်လိုအပ်ပါသည်။',
             'from.integer' => 'စတင်မည့်နှစ်သည် ဂဏန်းဖြစ်ရပါမည်။',
@@ -158,8 +169,20 @@ class YearlyReportController extends Controller
 
             'tender_price.required' => 'တင်ဒါအောင်မြင်သည့်စျေးနှုန်းထည့်ရန်လိုအပ်ပါသည်။',
             'tender_price.numeric' => 'တင်ဒါအောင်မြင်သည့်စျေးနှုန်းကို နံပါတ်ဖြင့်ထည့်ရန်လိုအပ်ပါသည်။',
+            'total_budget.numeric' => 'စုစုပေါင်းဘဏ္ဍာငွေကို ဂဏန်းဖြင့်ထည့်ပါ။',
+            'status_report.in' => 'Report Status သည် (ပီးစီး/မပီးစီး/ဆောင်ရွက်ဆဲ) တစ်ခု ဖြစ်ရပါမည်။',
         ]);
 
+
+
+        $duration = (int) $validated['to'] - (int) $validated['from'];
+        if ($duration === 1) {
+            $validated['title_report'] = 'short'; // short
+        } elseif ($duration >= 2 && $duration <= 3) {
+            $validated['title_report'] = 'mid'; // mid
+        } else {
+            $validated['title_report'] = 'long'; // long
+        }
         $report->update($validated);
 
         return response()->json(['success' => 'စီမံကိန်းကို အောင်မြင်စွာ update ပြီးပါပြီ']);

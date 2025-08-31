@@ -33,9 +33,9 @@ class AttendenceController extends Controller
         $dayEnglish = $today->format('l'); // day of the week, e.g., 'Monday'
 
         // Reject Saturday and Sunday
-        if (in_array($dayEnglish, ['Saturday', 'Sunday'])) {
-            return back()->with('error', 'စနေ နှင့် တနင်္ဂနွေ  သည် ပိတ်ရက်ဖစ်ပါသည်');
-        }
+        // if (in_array($dayEnglish, ['Saturday', 'Sunday'])) {
+        //     return back()->with('error', 'စနေ နှင့် တနင်္ဂနွေ  သည် ပိတ်ရက်ဖစ်ပါသည်');
+        // }
 
         // Prevent duplicate entry for today
         if (Attendence::where('user_id', $user->id)->where('date', $today->toDateString())->exists()) {
@@ -49,6 +49,8 @@ class AttendenceController extends Controller
             'Wednesday' => 'ဗုဒ္ဓဟူး',
             'Thursday' => 'ကြာသပတေး',
             'Friday' => 'သောကြာ',
+            'Saturday'=> 'စနေ',
+            'Sunday'=> 'တနင်္ဂနွေ'
         };
 
         // Store attendance

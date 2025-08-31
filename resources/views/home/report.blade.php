@@ -30,8 +30,8 @@
         <div class="mt-4">
             <div class="d-flex align-items-center mb-3">
                 <a href="{{ url('/') }}">
-                    <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}" alt="logo"
-                        style="max-width: 40px; height: 40px; margin-right: 20px; border-radius: 20%;">
+                    <img src="{{ !empty($web->logoimg) ? asset('logo/' . $web->logoimg) : asset('img/logo/logo.jpg') }}"
+                        alt="logo" style="max-width: 40px; height: 40px; margin-right: 20px; border-radius: 20%;">
                 </a>
                 <h2 class="mb-0">စီမံကိန်းနှစ်ပတ်လည်အစီရင်ခံစာများ</h2>
             </div>
@@ -59,10 +59,11 @@
                             <th>အထိ</th>
                             <th>လုပ်ငန်းအမည်</th>
                             <th>တည်နေရာ</th>
-                            <th>စတင်မည့်ကာလ</th>
-                            <th>ပြီးဆုံးမည့်ကာလ</th>
                             <th>ဆောင်ရွက်မည့်ဌာန/အဖွဲ့အစည်း</th>
                             <th>ဆောင်ရွက်သည့်နှစ်</th>
+                            <th>ဘဏ္ဍာငွေ သန်းပေါင်း</th>
+                            <th>ဆောင်ရွက်မှု အခြေနေ</th>
+                            <th>အချိန်ကာလ</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -95,8 +96,10 @@
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></scrip
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js">
+        < /scrip <
+        script src = "https://cdn.jsdelivr.net/npm/sweetalert2@11" >
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
@@ -127,10 +130,30 @@
                                 <td>${report.to || ''}</td>
                                 <td>${report.name || ''}</td>
                                 <td>${report.location || ''}</td>
-                                <td>${report.start_month || ''}</td>
-                                <td>${report.end_month || ''}</td>
                                 <td>${report.department || ''}</td>
                                 <td>${report.operation_year || ''}</td>
+                                <td>${report.total_budget ?? ''}</td>
+
+
+
+<td>
+  ${report.status_report === 'finish'
+        ? 'ပြီးစီး'
+        : report.status_report === 'unfinish'
+            ? 'မပြီးစီး'
+            : report.status_report === 'containue'
+                ? 'ဆောင်ရွက်ဆဲ'
+                : ''}
+</td>
+<td>
+  ${report.title_report === 'mid'
+        ? 'ကာလလတ်'
+        : report.title_report === 'long'
+            ? 'ကာလရှည်'
+            : report.title_report === 'short'
+                ? 'ကာလတို'
+                : ''}
+</td>
                             </tr>
                         `);
 
